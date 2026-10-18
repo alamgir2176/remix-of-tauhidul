@@ -29,10 +29,11 @@ export const Route = createFileRoute("/")({
 
 const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
 const NAV = [["The person", "#about"], ["Perspective", "#perspective"], ["Beyond the page", "#beyond"]] as const;
+const SECTIONS = ["about", "perspective", "beyond", "contact"];
 const PERSPECTIVES = [
-  { title: "Think deeply.", subtitle: "PHILOSOPHY & ANALYSIS", text: "Good questions open doors. Studying philosophy taught me to look beyond the obvious, challenge assumptions, and find clarity in complex ideas.", detail: "Critical thinking · Analysis · Problem-solving · Clear writing" },
-  { title: "Connect honestly.", subtitle: "PEOPLE & COMMUNICATION", text: "Listening is where understanding begins. I value empathy, thoughtful communication, and the shared energy of people working toward something meaningful.", detail: "Active listening · Communication · Teamwork · Leadership" },
-  { title: "Keep exploring.", subtitle: "CREATIVITY & DIGITAL", text: "Curiosity doesn't stay in one discipline. From digital content and design to emerging technology, I'm interested in new ways of bringing ideas to life.", detail: "Canva · WordPress · Digital content · Microsoft Office" },
+  { title: "Think deeply.", subtitle: "PHILOSOPHY & ANALYSIS", text: "Philosophy trained me to read slowly, question what seems obvious, and say complicated things plainly.", detail: "Critical thinking · Analysis · Problem-solving · Clear writing" },
+  { title: "Connect honestly.", subtitle: "PEOPLE & COMMUNICATION", text: "Most misunderstandings begin with not listening. I try to hear people out fully, speak with care, and carry my share when working with others.", detail: "Active listening · Communication · Teamwork · Leadership" },
+  { title: "Keep exploring.", subtitle: "CREATIVITY & DIGITAL", text: "Curiosity doesn't stay in one discipline. I make digital content and simple designs, build with WordPress, and keep an eye on where new technology is heading.", detail: "Canva · WordPress · Digital content · Microsoft Office" },
 ];
 
 function Index() {
@@ -40,6 +41,9 @@ function Index() {
   const [expanded, setExpanded] = useState<number | null>(0);
   const [backgroundOpen, setBackgroundOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [active, setActive] = useState("");
+  const progress = useRef<HTMLSpanElement>(null);
   const heroPhoto = useRef<HTMLImageElement>(null);
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -48,38 +52,49 @@ function Index() {
     }, { threshold: 0.12 });
     document.querySelectorAll(".scroll-reveal").forEach((el) => { if (!reduced) el.classList.add("reveal-ready"); observer.observe(el); });
     setScrolled(window.scrollY > 24);
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    SECTIONS.forEach((id) => { const el = document.getElementById(id); if (el) sectionObserver.observe(el); });
+    let lastY = window.scrollY;
     let frame = 0;
     const onScroll = () => {
       if (frame) return;
       frame = requestAnimationFrame(() => {
         if (!reduced && heroPhoto.current) heroPhoto.current.style.transform = `translateY(${Math.min(window.scrollY * 0.12, 100)}px)`;
-        setScrolled(window.scrollY > 24);
+        const y = window.scrollY;
+        setScrolled(y > 24);
+        setHidden(y > 400 && y > lastY + 4 ? true : y < lastY - 4 || y < 400 ? false : (h) => h);
+        lastY = y;
+        if (progress.current) { const max = document.documentElement.scrollHeight - window.innerHeight; progress.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`; }
         frame = 0;
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { observer.disconnect(); window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
+    return () => { observer.disconnect(); sectionObserver.disconnect(); window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
   }, []);
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.documentElement.classList.add("menu-open");
+    return () => { document.removeEventListener("keydown", onKey); document.documentElement.classList.remove("menu-open"); };
   }, [menuOpen]);
 
   return (
     <div id="top">
       <Link to="/" hash="main" className="skip-link">Skip to content</Link>
-      <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
+      <header className={`site-header${scrolled ? " is-scrolled" : ""}${hidden && !menuOpen ? " is-hidden" : ""}`}>
+        <span ref={progress} className="header-progress" aria-hidden="true" />
         <Link to="/" hash="top" className="wordmark" aria-label="Tauhidul Islam, home">tauhidul<span className="text-muted-foreground">.</span></Link>
         <nav aria-label="Primary" className="hidden items-center gap-9 md:flex">
-          {NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href} className="nav-link">{label}</Link>)}
+          {NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href} className={`nav-link${active === href.slice(1) ? " is-active" : ""}`} aria-current={active === href.slice(1) ? "location" : undefined}>{label}</Link>)}
         </nav>
         <div className="flex shrink-0 items-center gap-4">
           <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
         </div>
-        {menuOpen && <nav id="mobile-menu" aria-label="Mobile" className="mobile-menu">{NAV.map(([label, href], i) => <Link to="/" hash={href.slice(1)} key={href} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>)}</nav>}
+        {menuOpen && <nav id="mobile-menu" aria-label="Mobile" className="mobile-menu">{[...NAV, ["Let’s talk", "#contact"] as const].map(([label, href], i) => <Link to="/" hash={href.slice(1)} key={href} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>)}<p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p></nav>}
       </header>
       <main id="main" tabIndex={-1}>
         <section className="identity-hero" aria-label="Introduction">
@@ -97,7 +112,7 @@ function Index() {
         <section id="about" className="about-section section-space">
           <div className="section-label"><span>01 — The person</span><span>More than a title</span></div>
           <div className="about-layout">
-            <div className="scroll-reveal"><h2 className="statement">Thoughtful by nature.<br />Curious by <span className="font-editorial italic">choice.</span></h2><p className="about-lead">I’m Tauhidul — a philosophy graduate with an interest in the space where ideas, people, and possibilities meet.</p><div className="about-body"><p>My roots are in Bangladesh. My outlook is shaped by philosophy, literature, community, and the simple belief that there is always more to understand.</p><p>I bring a thoughtful, open-minded approach to what I do — whether that’s unravelling a complex idea, creating something new, or connecting with the people around me.</p></div><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">A conversation starts here <ArrowUpRight /></a></Button></div>
+            <div className="scroll-reveal"><h2 className="statement">Thoughtful by nature.<br />Curious by <span className="font-editorial italic">choice.</span></h2><p className="about-lead">I’m Tauhidul — a philosophy graduate drawn to the places where big ideas meet everyday life — and the people living it.</p><div className="about-body"><p>My roots are in Bangladesh. My outlook is shaped by philosophy, literature, community, and the simple belief that there is always more to understand.</p><p>Philosophy taught me to pause before deciding what something means. I try to carry that habit everywhere — into a difficult text, a new project, or a conversation with someone I’ve only just met.</p></div><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">A conversation starts here <ArrowUpRight /></a></Button></div>
           </div>
         </section>
 
@@ -109,7 +124,7 @@ function Index() {
         <section id="beyond" className="beyond-section section-space">
           <div className="section-label"><span>03 — Beyond the page</span><span>What makes me, me</span></div>
           <h2 className="section-heading scroll-reveal">A life isn't a résumé.<br />It's a collection of <span className="font-editorial italic">experiences.</span></h2>
-          <div className="beyond-layout"><figure className="beyond-portrait scroll-reveal"><img src={portraitUrl(navy)} alt="Black-and-white portrait of Md Tauhidul Islam in a navy suit with a maroon tie" loading="lazy" className="photo-mono" /><figcaption>Grounded in who I am. Open to who I’ll become.</figcaption></figure><div className="experience-stories"><article className="scroll-reveal"><span className="micro-label">On the stage</span><h3>A different kind of voice.</h3><p>As a member of Jahangirnagar Theatre, I helped bring theatre festivals to life and performed in “Nikhoj Songbad” at Selim Al Din Muktomoncho. A reminder that expression goes well beyond words on a page.</p></article><article className="scroll-reveal"><span className="micro-label">In the community</span><h3>Small actions. Real meaning.</h3><p>From winter-clothing drives and student welcome events to volunteering with Bandhan’s blood-donation initiatives — contributing to a community has been an important part of my journey.</p></article><article className="scroll-reveal"><span className="micro-label">In the everyday</span><h3>Books, places, perspectives.</h3><p>A growing collection of Bengali novels. An interest in unfamiliar cultures and landscapes. The things I return to are the things that keep widening my world.</p></article></div></div>
+          <div className="beyond-layout"><figure className="beyond-portrait scroll-reveal"><img src={portraitUrl(navy)} alt="Black-and-white portrait of Md Tauhidul Islam in a navy suit with a maroon tie" loading="lazy" className="photo-mono" /><figcaption>Still learning. Still listening.</figcaption></figure><div className="experience-stories"><article className="scroll-reveal"><span className="micro-label">On the stage</span><h3>A different kind of voice.</h3><p>As a member of Jahangirnagar Theatre, I helped bring theatre festivals to life and performed in “Nikhoj Songbad” at Selim Al Din Muktomoncho. A reminder that expression goes well beyond words on a page.</p></article><article className="scroll-reveal"><span className="micro-label">In the community</span><h3>Small actions. Real meaning.</h3><p>From winter-clothing drives and student welcome events to volunteering with Bandhan’s blood-donation initiatives — belonging, I’ve found, is something you take part in.</p></article><article className="scroll-reveal"><span className="micro-label">In the everyday</span><h3>Books, places, perspectives.</h3><p>A growing collection of Bengali novels. An interest in unfamiliar cultures and landscapes. The things I return to are the things that keep widening my world.</p></article></div></div>
           <div className="background-row"><div><span className="micro-label">The foundation</span><p>Rooted in philosophy.<br /><span className="text-muted-foreground">Jahangirnagar University.</span></p></div><Button variant="ghost" className="background-toggle" aria-expanded={backgroundOpen} aria-controls="background-details" onClick={() => setBackgroundOpen(!backgroundOpen)}>Education & continued learning {backgroundOpen ? <Minus /> : <Plus />}</Button></div>
           <div id="background-details" hidden={!backgroundOpen} className="background-details"><div><h3>Education</h3>{[["M.A. in Philosophy", "Jahangirnagar University, Dhaka"],["B.A. in Philosophy", "Jahangirnagar University, Dhaka"],["HSC, Humanities", "Govt. Syed Hatem Ali College, Barishal"],["SSC, Humanities", "Amua Bandar Amir Molla Secondary School, Jhalokati"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div><div><h3>Continued learning</h3>{[["Fundamentals of Digital Marketing", "Google Digital Garage · 2021"],["Elements of AI", "University of Helsinki & Reaktor · 2021"],["Learn Blockchain Features in a Simple Way", "upGrad · 2021"],["Covid-19 Awareness and Prevention", "Muktopaath"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div></div>
         </section>
