@@ -276,8 +276,10 @@ body { font-feature-settings: "ss01", "kern"; text-rendering: optimizeLegibility
 .site-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; background: var(--ink); color: var(--paper); text-align: center; cursor: pointer; animation: intro-failsafe .6s ease 5s forwards; transition: opacity .7s ease, visibility .7s; }
 .site-intro.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
 .intro-skip .site-intro { display: none; }
+.intro-mark span { opacity: .5; }
 .intro-mark { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; opacity: .6; }
-.intro-line { max-width: 18ch; min-height: 2.4em; margin: 0; font-size: clamp(30px, 6vw, 56px); line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; animation: intro-line .9s ease both; }
+.intro-stage { display: grid; place-items: center; min-height: calc(2 * 1.15 * clamp(30px, 6vw, 56px)); width: 100%; }
+.intro-line { max-width: 16ch; margin: 0; font-size: clamp(30px, 6vw, 56px); line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; animation: intro-line .9s ease both; }
 .intro-progress { width: min(160px, 40vw); height: 1px; background: color-mix(in oklab, var(--paper) 18%, transparent); overflow: hidden; }
 .intro-progress span { display: block; height: 100%; background: var(--paper); transform-origin: left; transition: transform .3s ease; }
 .intro-skip-btn { position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: inherit; opacity: .6; background: none; border: 0; padding: 12px; min-height: 44px; cursor: pointer; }
