@@ -86,7 +86,7 @@
 .mobile-menu { animation: menu-in .4s cubic-bezier(.2,.7,.2,1) both; height: calc(100dvh - 88px); overflow-y: auto; }
 .mobile-menu a { opacity: 0; animation: rise .5s cubic-bezier(.2,.7,.2,1) forwards; transform: translateY(8px); }
 .mobile-menu-note { display: flex; justify-content: space-between; margin-top: 32px; font-size: 12px; color: var(--muted-foreground); opacity: 0; animation: fade .5s ease .35s forwards; }
-.mobile-menu-note a { display: inline; padding: 0; border: 0; font-size: 12px; opacity: 1; animation: none; transform: none; color: var(--foreground); }
+.mobile-menu .mobile-menu-note a { display: inline; grid-template-columns: none; padding: 0; border: 0; font-size: 12px; opacity: 1; animation: none; transform: none; color: var(--foreground); }
 .perspective-detail:not([hidden]), .faq-answer:not([hidden]), .background-details:not([hidden]) { animation: detail-in .5s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes header-in { from { opacity: 0; transform: translateY(-10px); } }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
