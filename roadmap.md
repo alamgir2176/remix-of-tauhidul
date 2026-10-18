@@ -1,6 +1,6 @@
 # Final website polish
 - [ ] Add grounded visitor FAQs and enhance the footer without changing the narrative identity.
-- [ ] Review every section, refine presentation where needed, and verify interactions and navigation.
+- [x] Review every section, refine presentation where needed, and verify interactions and navigation (header, menu, motion, copy).
 - [ ] Position the Stay Curious mobile portrait beside the text and verify narrow, medium and desktop screens.
 - [x] Correct the hero photo positioning for mobile and desktop; add the full-width studio background to Stay Curious and verify both views (all images load, no overflow or browser errors; eight tests pass).
 - [x] Refine section readability, expanded details, and contact-field finish; verify the page and interactions on desktop and mobile (six tests pass).
