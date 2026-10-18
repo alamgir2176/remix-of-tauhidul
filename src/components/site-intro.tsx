@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 
 const SEEN_KEY = "tauhidul-intro-seen";
 // Original lines, drawn from the site's own voice: curiosity, conversation, people.
-const MESSAGES = ["Begin with a question.", "The rest is a conversation."];
-const READ_FIRST = 1300; // minimum time the first line stays readable
-const READ_SECOND = 1100; // time given to the closing line
-const MAX_WAIT = 4200; // hard ceiling — the site always wins
-const EXIT_MS = 700;
+const MESSAGES = ["Some questions don’t want answers.", "They want company."];
+const READ_FIRST = 1700; // minimum time the first line stays readable
+const READ_SECOND = 1600; // time given to the closing line
+const MAX_WAIT = 5000; // hard ceiling — the site always wins
+const EXIT_MS = 1000;
 
 /**
  * Brief, once-per-session intro. Failsafes, strongest first:
@@ -87,7 +87,9 @@ export function SiteIntro() {
     <div className={`site-intro${leaving ? " is-leaving" : ""}`} onClick={finish}>
       <span className="intro-mark" aria-hidden="true">tauhidul<span>.</span></span>
       <div className="intro-stage" role="status" aria-live="polite">
-        <p key={index} className="intro-line font-editorial">{MESSAGES[index]}</p>
+        {MESSAGES.map((m, i) => (
+          <p key={m} className={`intro-line font-editorial${i === index ? " is-current" : ""}`} aria-hidden={i !== index}>{m}</p>
+        ))}
       </div>
       <div className="intro-progress" aria-hidden="true"><span style={{ transform: `scaleX(${progress})` }} /></div>
       <button type="button" className="intro-skip-btn" onClick={(e) => { e.stopPropagation(); finish(); }}>Enter site</button>
