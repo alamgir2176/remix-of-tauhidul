@@ -12,7 +12,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteIntro, INTRO_SKIP_SCRIPT } from "../components/site-intro";
+import { SiteIntro } from "../components/site-intro";
+import { INTRO_SKIP_SCRIPT } from "../lib/site-loading";
 
 function NotFoundComponent() {
   return (
