@@ -287,21 +287,33 @@ body { font-feature-settings: "ss01", "kern"; text-rendering: optimizeLegibility
 @keyframes rise { to { opacity: 1; transform: none; } }
 @keyframes fade { to { opacity: 1; } }
 
-/* Session intro — self-dismisses via CSS even if scripts fail */
-.site-intro { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(28px, 5vh, 44px); padding: 24px; background: var(--ink); color: var(--paper); text-align: center; cursor: pointer; animation: intro-failsafe .8s ease 6.2s forwards; transition: opacity 1s cubic-bezier(.4,0,.2,1), visibility 1s; }
-.site-intro.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
-.site-intro.is-leaving .intro-stage { transform: translateY(-8px); filter: blur(3px); opacity: 0; }
-.intro-skip .site-intro { display: none; }
-.intro-mark { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; opacity: 0; animation: intro-soft 1.2s ease .1s forwards; }
-.intro-mark span { opacity: .5; }
-.intro-stage { display: grid; place-items: center; width: 100%; min-height: calc(2 * 1.2 * clamp(28px, 5.4vw, 52px)); transition: transform .9s cubic-bezier(.4,0,.2,1), filter .9s ease, opacity .8s ease; }
-.intro-line { grid-area: 1 / 1; max-width: 15ch; margin: 0; font-size: clamp(28px, 5.4vw, 52px); line-height: 1.2; letter-spacing: -.005em; text-wrap: balance; opacity: 0; transform: translateY(6px); filter: blur(4px); transition: opacity 1.1s cubic-bezier(.4,0,.2,1), transform 1.1s cubic-bezier(.4,0,.2,1), filter 1.1s ease; }
-.intro-line.is-current { opacity: 1; transform: none; filter: none; transition-delay: .25s; }
-.intro-progress { width: min(120px, 32vw); height: 1px; background: color-mix(in oklab, var(--paper) 14%, transparent); overflow: hidden; opacity: 0; animation: intro-soft 1.2s ease .4s forwards; }
-.intro-progress span { display: block; height: 100%; background: color-mix(in oklab, var(--paper) 70%, transparent); transform-origin: left; transition: transform .8s cubic-bezier(.4,0,.2,1); }
-.intro-skip-btn { position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: inherit; opacity: .45; background: none; border: 0; padding: 12px 16px; min-height: 44px; cursor: pointer; transition: opacity .3s ease; }
-.intro-skip-btn:hover, .intro-skip-btn:focus-visible { opacity: 1; outline: 1px solid color-mix(in oklab, var(--paper) 40%, transparent); outline-offset: 2px; }
-@keyframes intro-soft { to { opacity: .55; } }
+/* A real loading threshold: hidden without the early bootstrap, independently recoverable. */
+:root {
+  --intro-background: oklch(0.105 0 0);
+  --intro-foreground: var(--paper);
+  --intro-muted: oklch(0.74 0 0);
+  --intro-track: oklch(0.29 0 0);
+  --intro-indicator: oklch(0.78 0 0);
+}
+.site-intro { display: none; position: fixed; inset: 0; z-index: 100; padding: 32px; background: var(--intro-background); color: var(--intro-foreground); text-align: center; transition: opacity .45s ease, visibility .45s; }
+.intro-active .site-intro { display: grid; grid-template-rows: auto minmax(0,1fr) auto; align-items: center; animation: intro-failsafe 0s 12s forwards; }
+.intro-ready .site-intro { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-mark { justify-self: center; font-size: 18px; line-height: 1.5; font-weight: 500; padding-top: max(12px, env(safe-area-inset-top)); }
+.intro-mark span { color: var(--intro-muted); }
+.intro-stage { display: grid; place-items: center; width: min(100%, 760px); justify-self: center; }
+.intro-quotation { grid-area: 1 / 1; margin: 0; width: 100%; opacity: 0; visibility: hidden; transition: opacity .5s ease, visibility .5s; }
+.intro-quotation.is-current { opacity: 1; visibility: visible; transition-delay: .5s; }
+.intro-quotation:first-child.is-current { transition-delay: 0s; }
+.intro-line { margin: 0 auto; max-width: 27ch; font-size: 44px; line-height: 1.28; text-wrap: balance; }
+.intro-source { max-width: 52ch; margin: 28px auto 0; font-size: 12px; line-height: 1.8; text-transform: none; color: var(--intro-muted); text-wrap: balance; }
+.intro-bottom { display: grid; justify-items: center; gap: 16px; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+.intro-progress { width: 96px; height: 1px; background: var(--intro-track); overflow: hidden; }
+.intro-progress span { display: block; width: 40%; height: 100%; background: var(--intro-indicator); animation: intro-loading 2.4s ease-in-out infinite; }
+.intro-skip-btn { height: 44px; padding: 12px 16px; border-radius: 0; font-size: 11px; font-weight: 400; color: var(--intro-muted); background: transparent; }
+.intro-skip-btn:hover, .intro-skip-btn:focus-visible { color: var(--intro-foreground); background: transparent; outline: 1px solid var(--intro-track); outline-offset: 2px; }
+@keyframes intro-loading { 0% { transform: translateX(-110%); } 100% { transform: translateX(360%); } }
 @keyframes intro-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-@media (prefers-reduced-motion: reduce) { .intro-line, .site-intro .intro-stage { transition: none; transform: none; filter: none; } .intro-mark, .intro-progress { animation: none; opacity: .55; } .site-intro { animation-delay: 2.5s; transition-duration: .2s; } }
+@media (max-width: 767px) { .site-intro { padding: 24px; } .intro-line { font-size: 32px; max-width: 23ch; } .intro-source { max-width: 34ch; margin-top: 24px; } .intro-mark { font-size: 16px; } }
+@media (max-width: 359px), (max-height: 480px) { .site-intro { padding: 16px; } .intro-line { font-size: 28px; } .intro-source { margin-top: 16px; font-size: 11px; } .intro-bottom { gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { .intro-active .site-intro { animation: intro-failsafe 0s 12s forwards !important; } .intro-progress span { animation: none; transform: translateX(75%); } }
 .menu-open .site-header { background: var(--background); }
