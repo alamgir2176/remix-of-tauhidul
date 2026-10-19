@@ -1,4 +1,5 @@
 # Final website polish
+- [ ] Implement and test the genuine quotation loading experience: fast/slow loading, recovery, reduced motion, navigation, and mobile/tablet/desktop.
 - [ ] Add grounded visitor FAQs and enhance the footer without changing the narrative identity.
 - [x] Review every section, refine presentation where needed, and verify interactions and navigation (header, menu, motion, copy).
 - [ ] Position the Stay Curious mobile portrait beside the text and verify narrow, medium and desktop screens.

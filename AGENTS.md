@@ -7,3 +7,4 @@
 - Resolve portraits through asset pointers by default and a configurable portrait folder for external hosting; Lovable media paths are not hosted by other platforms.
 - Register Netlify Forms in a static detection file and post to that file; SSR HTML alone is not scanned by Netlify form detection.
 - Keep visitor FAQs in an isolated, accessible disclosure component within the contact section; answers must use verified public biography and contact options, never inferred services or response promises.
+- Keep loading readiness in a browser-safe shared module with an early head bootstrap and a React overlay; eager image decoding and fonts determine readiness, while independent dismissal keeps available content accessible before hydration or on failure.
