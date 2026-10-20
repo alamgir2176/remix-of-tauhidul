@@ -21,7 +21,7 @@ export function SiteIntro() {
     let removal = 0;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const advance = window.setInterval(() => {
-      if (!root.classList.contains("intro-ready")) setIndex((current) => Math.min(current + 1, QUOTATIONS.length - 1));
+      if (!root.classList.contains("intro-ready") && !root.classList.contains("intro-loaded")) setIndex((current) => Math.min(current + 1, QUOTATIONS.length - 1));
     }, QUOTE_INTERVAL_MS);
     const onFinished = () => {
       clearInterval(advance);
@@ -48,7 +48,7 @@ export function SiteIntro() {
         ))}
       </div>
       <div className="intro-bottom">
-        <div className="intro-progress" role="status" aria-label="Loading website"><span aria-hidden="true" /></div>
+        <div className="intro-progress" aria-hidden="true"><span /></div>
         <Button variant="ghost" className="intro-skip-btn" onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>Enter site</Button>
       </div>
     </div>

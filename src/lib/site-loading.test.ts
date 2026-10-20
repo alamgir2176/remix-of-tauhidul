@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { bootstrapIntro, INTRO_RECOVERY_MS, INTRO_SEEN_KEY } from "./site-loading";
+import { bootstrapIntro, INTRO_READING_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY } from "./site-loading";
 
 const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
 
@@ -18,7 +18,7 @@ describe("Genuine website loading", () => {
     vi.restoreAllMocks();
   });
 
-  const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS);
+  const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_READING_MS);
   const pendingImage = (lazy = false) => {
     const image = document.createElement("img");
     if (lazy) image.loading = "lazy";
@@ -27,9 +27,13 @@ describe("Genuine website loading", () => {
     return image;
   };
 
-  it("reveals a ready website without advancing a timer or enforcing a reading duration", async () => {
+  it("keeps the first quotation readable for 4.2 seconds, without pretending resources are still loading", async () => {
     start();
     await flush();
+    expect(document.documentElement).toHaveClass("intro-loaded");
+    await vi.advanceTimersByTimeAsync(4199);
+    expect(document.documentElement).not.toHaveClass("intro-ready");
+    await vi.advanceTimersByTimeAsync(1);
     expect(document.documentElement).toHaveClass("intro-ready");
     expect(sessionStorage.getItem(INTRO_SEEN_KEY)).toBe("1");
   });
@@ -45,6 +49,7 @@ describe("Genuine website loading", () => {
     image.dispatchEvent(new Event("load"));
     await flush();
     expect(document.documentElement).not.toHaveClass("intro-ready");
+    await vi.advanceTimersByTimeAsync(4200);
     decode?.();
     await flush();
     expect(document.documentElement).toHaveClass("intro-ready");
@@ -54,6 +59,7 @@ describe("Genuine website loading", () => {
     pendingImage(true);
     start();
     await flush();
+    await vi.advanceTimersByTimeAsync(4200);
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
@@ -62,6 +68,7 @@ describe("Genuine website loading", () => {
     start();
     image.dispatchEvent(new Event("error"));
     await flush();
+    await vi.advanceTimersByTimeAsync(4200);
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
@@ -90,6 +97,13 @@ describe("Genuine website loading", () => {
     pendingImage();
     start();
     document.dispatchEvent(new KeyboardEvent("keydown", { key }));
+    expect(document.documentElement).toHaveClass("intro-ready");
+  });
+
+  it("allows immediate entry during the reading window", async () => {
+    start();
+    await flush();
+    window.dispatchEvent(new Event("intro-dismiss"));
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 });
