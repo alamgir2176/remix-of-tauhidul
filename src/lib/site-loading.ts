@@ -12,7 +12,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
   } catch { /* Storage or navigation timing may be unavailable. */ }
 
   root.classList.add("intro-active");
-  root.dataset.introProgress = "0";
+  root.dataset["introProgress"] = "0";
   let finished = false;
   let readingTimer = 0;
   const finish = () => {
@@ -65,7 +65,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
         if (finished) return;
         completed += 1;
         const percent = Math.floor(completed / total * 100);
-        root.dataset.introProgress = String(percent);
+        root.dataset["introProgress"] = String(percent);
         window.dispatchEvent(new CustomEvent("intro-progress", { detail: percent }));
       };
       report(); // The document is parsed.

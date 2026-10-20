@@ -21,7 +21,7 @@ export function SiteIntro() {
       return;
     }
     let removal = 0;
-    const onProgress = () => setProgress(Number(root.dataset.introProgress ?? 0));
+    const onProgress = () => setProgress(Number(root.dataset["introProgress"] ?? 0));
     onProgress();
     window.addEventListener("intro-progress", onProgress);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
