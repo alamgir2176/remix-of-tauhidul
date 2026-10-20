@@ -8,6 +8,7 @@ describe("Genuine website loading", () => {
     vi.useFakeTimers();
     sessionStorage.clear();
     document.documentElement.className = "";
+    delete document.documentElement.dataset.introProgress;
     document.body.innerHTML = "";
     window.history.replaceState(null, "", "/");
     vi.spyOn(document, "readyState", "get").mockReturnValue("complete");
@@ -105,5 +106,24 @@ describe("Genuine website loading", () => {
     await flush();
     window.dispatchEvent(new Event("intro-dismiss"));
     expect(document.documentElement).toHaveClass("intro-ready");
+  });
+
+  it("reports completed resources, including image decoding, without timer-based progress", async () => {
+    const first = pendingImage();
+    const second = pendingImage();
+    const fonts = Promise.resolve();
+    vi.spyOn(document, "fonts", "get").mockReturnValue({ ready: fonts } as unknown as FontFaceSet);
+    start();
+    expect(document.documentElement.dataset.introProgress).toBe("25");
+    await flush();
+    expect(document.documentElement.dataset.introProgress).toBe("50");
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(document.documentElement.dataset.introProgress).toBe("50");
+    first.dispatchEvent(new Event("error"));
+    await flush();
+    expect(document.documentElement.dataset.introProgress).toBe("75");
+    second.dispatchEvent(new Event("error"));
+    await flush();
+    expect(document.documentElement.dataset.introProgress).toBe("100");
   });
 });
