@@ -1,5 +1,5 @@
 # Final website polish
-- [ ] Make fast-loading quotations readable with a brief skippable window and verify timing and immediate entry.
+- [x] Make fast-loading quotations readable with a brief skippable window and verify timing and immediate entry.
 - [x] Implement and test the genuine quotation loading experience: fast/slow loading, recovery, reduced motion, navigation, and mobile/tablet/desktop.
 - [ ] Add grounded visitor FAQs and enhance the footer without changing the narrative identity.
 - [x] Review every section, refine presentation where needed, and verify interactions and navigation (header, menu, motion, copy).
