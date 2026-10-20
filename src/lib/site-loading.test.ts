@@ -15,6 +15,7 @@ describe("Genuine website loading", () => {
   });
   afterEach(() => {
     window.dispatchEvent(new Event("intro-dismiss"));
+    Reflect.deleteProperty(document, "fonts");
     vi.useRealTimers();
     vi.restoreAllMocks();
   });
@@ -112,7 +113,7 @@ describe("Genuine website loading", () => {
     const first = pendingImage();
     const second = pendingImage();
     const fonts = Promise.resolve();
-    vi.spyOn(document, "fonts", "get").mockReturnValue({ ready: fonts } as unknown as FontFaceSet);
+    Object.defineProperty(document, "fonts", { configurable: true, value: { ready: fonts } });
     start();
     expect(document.documentElement.dataset.introProgress).toBe("25");
     await flush();
