@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
 import { VisitorFaq } from "@/components/visitor-faq";
 import { portraitUrl } from "@/lib/portrait-url";
+import { publicHomepage } from "@/lib/site-metadata";
+
+const HOMEPAGE = publicHomepage(import.meta.env['VITE_SITE_URL']);
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -18,12 +21,12 @@ export const Route = createFileRoute("/")({
     { property: "og:description", content: "An independent perspective on ideas, people and possibilities. Discover the story of Md Tauhidul Islam and start a conversation." },
     { property: "og:type", content: "profile" },
     { property: "og:site_name", content: "Md Tauhidul Islam" },
-    { property: "og:url", content: "/" },
+    ...(HOMEPAGE ? [{ property: "og:url", content: HOMEPAGE }] : []),
     { property: "og:locale", content: "en_US" },
     { name: "twitter:title", content: "Md Tauhidul Islam — Ideas, People & Possibilities" },
     { name: "twitter:description", content: "A philosophy graduate in Dhaka exploring ideas, people, and meaningful possibilities." },
     { name: "twitter:card", content: "summary_large_image" },
-  ], links: [{ rel: "canonical", href: "/" }] }),
+  ], links: HOMEPAGE ? [{ rel: "canonical", href: HOMEPAGE }] : [] }),
   component: Index,
 });
 
@@ -49,7 +52,7 @@ function Index() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); } });
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: "0px 0px 40px 0px" });
     document.querySelectorAll(".scroll-reveal").forEach((el) => { if (!reduced) el.classList.add("reveal-ready"); observer.observe(el); });
     setScrolled(window.scrollY > 24);
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -102,9 +105,9 @@ function Index() {
           <div className="hero-shade" aria-hidden="true" />
           <div className="hero-topline"><span>A personal perspective</span><span>Dhaka, Bangladesh</span></div>
           <div className="hero-copy">
-            <p className="hero-intro enter">A curious mind. A human perspective.</p>
+            <p className="hero-intro enter">Philosophy graduate · Jahangirnagar University</p>
             <h1 className="enter">Md Tauhidul<br /><span className="font-editorial italic">Islam.</span></h1>
-            <div className="hero-bottom enter"><p>Exploring ideas. Connecting with people.<br />Always open to what's next.</p><Link to="/" hash="about" className="round-link" aria-label="Discover my story"><ArrowDown /></Link></div>
+            <div className="hero-bottom enter"><p>Philosophy, theatre, and everyday life.<br />A story rooted in Bangladesh.</p><Link to="/" hash="about" className="round-link" aria-label="Discover my story"><ArrowDown /></Link></div>
           </div>
           <span className="hero-index">01 / A life in progress</span>
         </section>
@@ -118,7 +121,7 @@ function Index() {
 
         <section id="perspective" className="perspective-section section-space">
           <div className="section-label"><span>02 — Perspective</span><span>A way of approaching the world</span></div>
-          <div className="perspective-layout"><div className="scroll-reveal"><h2 className="section-heading">Ideas matter.<br /><span className="font-editorial italic">People, more.</span></h2><p className="section-intro">Not a list of skills. A way of thinking,<br className="hidden sm:block" /> working, and moving forward.</p><div className="perspective-mark" aria-hidden="true">↗</div></div><div className="perspective-list scroll-reveal">{PERSPECTIVES.map((item, i) => <article key={item.title} className="perspective-item"><Button variant="ghost" className="perspective-trigger" aria-expanded={expanded === i} aria-controls={`perspective-${i}`} onClick={() => setExpanded(expanded === i ? null : i)}><span className="item-number">0{i + 1}</span><span>{item.title}</span>{expanded === i ? <Minus /> : <Plus />}</Button><div id={`perspective-${i}`} hidden={expanded !== i} className="perspective-detail"><p className="micro-label">{item.subtitle}</p><p>{item.text}</p><p className="detail-tools">{item.detail}</p></div></article>)}</div></div>
+          <div className="perspective-layout"><div className="scroll-reveal"><h2 className="section-heading">Ideas matter.<br /><span className="font-editorial italic">People, more.</span></h2><p className="section-intro">Not a list of skills. A way of thinking,<br className="hidden sm:block" /> working, and moving forward.</p></div><div className="perspective-list scroll-reveal">{PERSPECTIVES.map((item, i) => <article key={item.title} className="perspective-item"><Button variant="ghost" className="perspective-trigger" aria-expanded={expanded === i} aria-controls={`perspective-${i}`} onClick={() => setExpanded(expanded === i ? null : i)}><span className="item-number">0{i + 1}</span><span>{item.title}</span>{expanded === i ? <Minus /> : <Plus />}</Button><div id={`perspective-${i}`} hidden={expanded !== i} className="perspective-detail"><p className="micro-label">{item.subtitle}</p><p>{item.text}</p><p className="detail-tools">{item.detail}</p></div></article>)}</div></div>
         </section>
 
         <section id="beyond" className="beyond-section section-space">
@@ -135,7 +138,7 @@ function Index() {
       </main>
       <footer className="site-footer">
         <div className="footer-main">
-          <div className="footer-identity"><span className="micro-label">Ideas. People. Possibilities.</span><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul.</Link><p>Dhaka, Bangladesh.<br />A perspective that keeps evolving.</p></div>
+          <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul.</Link><p>Dhaka, Bangladesh.</p></div>
           <nav className="footer-nav" aria-label="Footer"><span className="micro-label">Explore</span>{NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}<Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link></nav>
           <div className="footer-connect"><span className="micro-label">Keep in touch</span><Button asChild variant="link" className="footer-link"><Link to="/" hash="contact">Start a conversation <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button></div>
         </div>

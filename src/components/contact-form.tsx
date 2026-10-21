@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { contactSchema } from "@/lib/contact-schema";
@@ -8,9 +8,22 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+  const submitting = useRef(false);
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    }
+  }, [errors]);
+  useEffect(() => {
+    if (status === "sent") successRef.current?.focus();
+  }, [status]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitting.current) return;
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
     const parsed = contactSchema.safeParse(data);
@@ -22,6 +35,7 @@ export function ContactForm() {
     }
     setErrors({});
     setServerError("");
+    submitting.current = true;
     setStatus("sending");
     try {
       const provider = getContactProvider(import.meta.env['VITE_CONTACT_PROVIDER']);
@@ -39,12 +53,14 @@ export function ContactForm() {
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Something went wrong.");
       setStatus("error");
+    } finally {
+      submitting.current = false;
     }
   }
 
   if (status === "sent") {
     return (
-      <div className="contact-success" role="status">
+      <div ref={successRef} className="contact-success" role="status" tabIndex={-1}>
         <p className="font-display text-3xl">Thank you.</p>
         <p className="mt-2 text-muted-foreground">Your message has been received.</p>
         <Button onClick={() => setStatus("idle")} variant="link" className="mt-6 px-0">
@@ -55,7 +71,7 @@ export function ContactForm() {
   }
 
   return (
-    <form name="contact" onSubmit={onSubmit} noValidate className="space-y-9" aria-busy={status === "sending"}>
+    <form ref={formRef} name="contact" onSubmit={onSubmit} noValidate className="space-y-9" aria-busy={status === "sending"}>
       <input type="hidden" name="form-name" value="contact" />
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <div className="grid gap-8 sm:grid-cols-2">
@@ -78,6 +94,7 @@ export function ContactForm() {
         {errors["message"] && <p id="message-error" role="alert" className="mt-1 text-sm text-destructive">{errors["message"]}</p>}
       </div>
       {status === "error" && <p role="alert" className="text-sm text-destructive">{serverError}</p>}
+      <p role="status" aria-live="polite" className="sr-only">{status === "sending" ? "Sending your message…" : ""}</p>
       <Button
         type="submit"
         disabled={status === "sending"}
