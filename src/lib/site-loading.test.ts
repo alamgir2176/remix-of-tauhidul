@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { bootstrapIntro, INTRO_READING_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY } from "./site-loading";
+import { bootstrapIntro, INTRO_READING_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY, INTRO_SKIP_SCRIPT } from "./site-loading";
 
 const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
 
@@ -21,6 +21,14 @@ describe("Genuine website loading", () => {
   });
 
   const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_READING_MS);
+  it("runs the serialized head bootstrap independently of module bindings", async () => {
+    window.eval(INTRO_SKIP_SCRIPT);
+    await flush();
+    expect(document.documentElement.dataset["introProgress"]).toBe("100");
+    expect(document.documentElement).toHaveClass("intro-loaded");
+    await vi.advanceTimersByTimeAsync(4200);
+    expect(document.documentElement).toHaveClass("intro-ready");
+  });
   const pendingImage = (lazy = false) => {
     const image = document.createElement("img");
     if (lazy) image.loading = "lazy";
