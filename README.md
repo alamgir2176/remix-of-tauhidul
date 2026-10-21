@@ -40,6 +40,18 @@ Netlify's public output is `dist/client` and its generated functions are in
 `.netlify/functions-internal`; Vercel uses the generated `.vercel/output`.
 The Lovable editor keeps its own managed hosting target.
 
+### Public homepage address
+
+Set `VITE_SITE_URL` to the final HTTPS website address on your chosen host,
+then redeploy. The homepage uses that origin for its canonical and Open Graph
+address. Until configured, it omits those tags rather than publishing a relative
+or invented address. Its existing title and descriptions remain available.
+
+Before launch, confirm message receipt in the selected provider, decide who
+can access messages and how long they are retained, and supply those verified
+practices for a contact privacy notice. No retention or privacy promises are
+invented by the application.
+
 ### Portraits on external hosting
 
 Lovable's relative media URLs are not served by Vercel or Netlify. Before an
