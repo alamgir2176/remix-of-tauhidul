@@ -28,6 +28,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
     window.removeEventListener("intro-dismiss", finish);
     window.removeEventListener("pagehide", finish);
     window.dispatchEvent(new Event("intro-finished"));
+    root.classList.remove("intro-active");
   };
   const onKey = (event: KeyboardEvent) => {
     if (event.key === "Escape" || event.key === "Tab") finish();

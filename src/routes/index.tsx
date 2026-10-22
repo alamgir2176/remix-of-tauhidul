@@ -86,7 +86,7 @@ function Index() {
 
   return (
     <div id="top">
-      <Link to="/" hash="main" className="skip-link">Skip to content</Link>
+      <Link to="/" hash="main" className="skip-link" onClick={() => document.getElementById("main")?.focus()}>Skip to content</Link>
       <header className={`site-header${scrolled ? " is-scrolled" : ""}${hidden && !menuOpen ? " is-hidden" : ""}`}>
         <span ref={progress} className="header-progress" aria-hidden="true" />
         <Link to="/" hash="top" className="wordmark" aria-label="Tauhidul Islam, home">tauhidul<span className="text-muted-foreground">.</span></Link>
