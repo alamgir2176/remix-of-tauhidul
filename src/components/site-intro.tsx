@@ -9,7 +9,7 @@ const QUOTATIONS = [
 ] as const;
 
 export function SiteIntro() {
-  const [index, setIndex] = useState(() => Number(document.documentElement.dataset["introQuote"] ?? 0) || 0);
+  const [index, setIndex] = useState(0);
   const [gone, setGone] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -19,6 +19,7 @@ export function SiteIntro() {
       setGone(true);
       return;
     }
+    setIndex(Number(root.dataset["introQuote"] ?? 0) || 0);
     let removal = 0;
     const onProgress = () => setProgress(Number(root.dataset["introProgress"] ?? 0));
     // The head bootstrap owns the sequence; this overlay only mirrors it.
