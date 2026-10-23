@@ -71,9 +71,6 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
 
   const loaded = () => {
     if (finished) return;
-    // Explicit browser ownership keeps serialized head code independent of SSR shims.
-    const now = () => window.performance?.now?.() ?? Date.now();
-    void now;
     root.classList.add("intro-loaded");
     window.dispatchEvent(new Event("intro-loaded"));
     resourcesReady = true;

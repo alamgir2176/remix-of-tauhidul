@@ -5,6 +5,7 @@
 - [x] Refine the quotation layout and add measured loading progress; verify resource counts, sequence, skipping and screen sizes.
 - [x] Make fast-loading quotations readable with a brief skippable window and verify timing and immediate entry.
 - [x] Implement and test the genuine quotation loading experience: fast/slow loading, recovery, reduced motion, navigation, and mobile/tablet/desktop.
+- [x] Play the full three-quotation sequence on every fresh visit (user's option A) while keeping Enter site and keyboard dismissal immediate; verify timing in the browser.
 - [x] Add grounded visitor FAQs and enhance the footer without changing the narrative identity.
 - [x] Review every section, refine presentation where needed, and verify interactions and navigation (header, menu, motion, copy).
 - [x] Position the Stay Curious mobile portrait beside the text and verify narrow, medium and desktop screens.
