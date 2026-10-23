@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { bootstrapIntro, INTRO_READING_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY, INTRO_SKIP_SCRIPT } from "./site-loading";
+import { bootstrapIntro, INTRO_QUOTE_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY, INTRO_SKIP_SCRIPT, QUOTATION_COUNT } from "./site-loading";
 
 const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
 
@@ -9,6 +9,7 @@ describe("Genuine website loading", () => {
     sessionStorage.clear();
     document.documentElement.className = "";
     delete document.documentElement.dataset["introProgress"];
+    delete document.documentElement.dataset["introQuote"];
     document.body.innerHTML = "";
     window.history.replaceState(null, "", "/");
     vi.spyOn(document, "readyState", "get").mockReturnValue("complete");
@@ -20,15 +21,37 @@ describe("Genuine website loading", () => {
     vi.restoreAllMocks();
   });
 
-  const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_READING_MS);
+  const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_QUOTE_MS, QUOTATION_COUNT);
+  const sequenceMs = INTRO_QUOTE_MS * QUOTATION_COUNT;
+
   it("runs the serialized head bootstrap independently of module bindings", async () => {
     window.eval(INTRO_SKIP_SCRIPT);
     await flush();
     expect(document.documentElement.dataset["introProgress"]).toBe("100");
     expect(document.documentElement).toHaveClass("intro-loaded");
-    await vi.advanceTimersByTimeAsync(4200);
+    await vi.advanceTimersByTimeAsync(sequenceMs);
     expect(document.documentElement).toHaveClass("intro-ready");
   });
+
+  it("plays all three quotations in sequence on every fresh visit", async () => {
+    start();
+    await flush();
+    expect(document.documentElement).toHaveClass("intro-loaded");
+    expect(document.documentElement.dataset["introQuote"]).toBe("0");
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS - 1);
+    expect(document.documentElement.dataset["introQuote"]).toBe("0");
+    expect(document.documentElement).not.toHaveClass("intro-ready");
+    await vi.advanceTimersByTimeAsync(1);
+    expect(document.documentElement.dataset["introQuote"]).toBe("1");
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS);
+    expect(document.documentElement.dataset["introQuote"]).toBe("2");
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS - 1);
+    expect(document.documentElement).not.toHaveClass("intro-ready");
+    await vi.advanceTimersByTimeAsync(1);
+    expect(document.documentElement).toHaveClass("intro-ready");
+    expect(sessionStorage.getItem(INTRO_SEEN_KEY)).toBe("1");
+  });
+
   const pendingImage = (lazy = false) => {
     const image = document.createElement("img");
     if (lazy) image.loading = "lazy";
@@ -37,29 +60,19 @@ describe("Genuine website loading", () => {
     return image;
   };
 
-  it("keeps the first quotation readable for 4.2 seconds, without pretending resources are still loading", async () => {
-    start();
-    await flush();
-    expect(document.documentElement).toHaveClass("intro-loaded");
-    await vi.advanceTimersByTimeAsync(4199);
-    expect(document.documentElement).not.toHaveClass("intro-ready");
-    await vi.advanceTimersByTimeAsync(1);
-    expect(document.documentElement).toHaveClass("intro-ready");
-    expect(sessionStorage.getItem(INTRO_SEEN_KEY)).toBe("1");
-  });
-
-  it("waits for an eager photo to decode, then immediately reveals", async () => {
+  it("holds the last quotation until an eager photo decodes, then reveals", async () => {
     const image = pendingImage();
     vi.spyOn(image, "naturalWidth", "get").mockReturnValue(800);
     let decode: (() => void) | undefined;
     image.decode = () => new Promise<void>((resolve) => { decode = resolve; });
     start();
     await flush();
+    await vi.advanceTimersByTimeAsync(sequenceMs);
+    expect(document.documentElement.dataset["introQuote"]).toBe("2");
     expect(document.documentElement).not.toHaveClass("intro-ready");
     image.dispatchEvent(new Event("load"));
     await flush();
     expect(document.documentElement).not.toHaveClass("intro-ready");
-    await vi.advanceTimersByTimeAsync(4200);
     decode?.();
     await flush();
     expect(document.documentElement).toHaveClass("intro-ready");
@@ -69,7 +82,7 @@ describe("Genuine website loading", () => {
     pendingImage(true);
     start();
     await flush();
-    await vi.advanceTimersByTimeAsync(4200);
+    await vi.advanceTimersByTimeAsync(sequenceMs);
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
@@ -78,14 +91,14 @@ describe("Genuine website loading", () => {
     start();
     image.dispatchEvent(new Event("error"));
     await flush();
-    await vi.advanceTimersByTimeAsync(4200);
+    await vi.advanceTimersByTimeAsync(sequenceMs);
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
   it("recovers at 12 seconds if a resource never settles", async () => {
     pendingImage();
     start();
-    await vi.advanceTimersByTimeAsync(11999);
+    await vi.advanceTimersByTimeAsync(INTRO_RECOVERY_MS - 1);
     expect(document.documentElement).not.toHaveClass("intro-ready");
     await vi.advanceTimersByTimeAsync(1);
     expect(document.documentElement).toHaveClass("intro-ready");
@@ -110,7 +123,7 @@ describe("Genuine website loading", () => {
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
-  it("allows immediate entry during the reading window", async () => {
+  it("allows immediate entry during the sequence", async () => {
     start();
     await flush();
     window.dispatchEvent(new Event("intro-dismiss"));

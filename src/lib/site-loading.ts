@@ -1,10 +1,10 @@
-export const INTRO_SEEN_KEY = "tauhidul-intro-seen-v3";
+export const INTRO_SEEN_KEY = "tauhidul-intro-seen-v4";
 export const INTRO_RECOVERY_MS = 12000;
-export const INTRO_READING_MS = 4200;
-export const QUOTE_INTERVAL_MS = 4200;
+export const INTRO_QUOTE_MS = 2600;
+export const QUOTATION_COUNT = 3;
 
 // Standalone so the head bootstrap can run before React or application modules.
-export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: number) {
+export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: number, quotationCount: number) {
   const root = document.documentElement;
   try {
     const navigation = window.performance?.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
@@ -13,15 +13,18 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
 
   root.classList.add("intro-active");
   root.dataset["introProgress"] = "0";
+  root.dataset["introQuote"] = "0";
   let finished = false;
-  let readingTimer = 0;
+  let resourcesReady = false;
+  let sequenceDone = false;
+  let sequenceTimer = 0;
   const finish = () => {
     if (finished) return;
     finished = true;
     root.classList.add("intro-ready");
     try { sessionStorage.setItem(seenKey, "1"); } catch { /* Private browsing. */ }
     clearTimeout(timeout);
-    clearTimeout(readingTimer);
+    clearTimeout(sequenceTimer);
     document.removeEventListener("keydown", onKey);
     document.removeEventListener("click", onClick);
     document.removeEventListener("focusin", onFocus);
@@ -29,6 +32,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
     window.removeEventListener("pagehide", finish);
     window.dispatchEvent(new Event("intro-finished"));
     root.classList.remove("intro-active");
+  };
+  // The site opens once the quotation sequence has played AND real loading has settled.
+  const checkFinish = () => {
+    if (resourcesReady && sequenceDone) finish();
   };
   const onKey = (event: KeyboardEvent) => {
     if (event.key === "Escape" || event.key === "Tab") finish();
@@ -46,19 +53,31 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
   window.addEventListener("intro-dismiss", finish);
   window.addEventListener("pagehide", finish);
 
+  // The sequence runs on its own clock from first paint, so every fresh visit
+  // sees all quotations; slow loading only holds the last one longer.
+  let step = 0;
+  const advance = () => {
+    step += 1;
+    if (step >= quotationCount) {
+      sequenceDone = true;
+      checkFinish();
+      return;
+    }
+    root.dataset["introQuote"] = String(step);
+    window.dispatchEvent(new CustomEvent("intro-quotation", { detail: step }));
+    sequenceTimer = window.setTimeout(advance, quoteMs);
+  };
+  sequenceTimer = window.setTimeout(advance, quoteMs);
+
+  const loaded = () => {
+    if (finished) return;
+    root.classList.add("intro-loaded");
+    window.dispatchEvent(new Event("intro-loaded"));
+    resourcesReady = true;
+    checkFinish();
+  };
   const ready = () => {
     if (finished) return;
-    // Explicit browser ownership keeps serialized head code independent of SSR shims.
-    const now = () => window.performance?.now?.() ?? Date.now();
-    const visibleAt = now();
-    const loaded = () => {
-      if (finished) return;
-      root.classList.add("intro-loaded");
-      window.dispatchEvent(new Event("intro-loaded"));
-      const remaining = Math.max(0, readingMs - (now() - visibleAt));
-      if (remaining === 0) finish();
-      else readingTimer = window.setTimeout(finish, remaining);
-    };
     try {
       const images = Array.from(document.images).filter((image) => image.loading !== "lazy");
       // Completed readiness tasks, not a guessed byte-download percentage.
@@ -93,10 +112,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, readingMs: n
       void document.body.offsetHeight;
       if (document.fonts) pending.push(document.fonts.ready.then(report, report));
       Promise.all(pending).then(loaded, loaded);
-    } catch { finish(); }
+    } catch { loaded(); }
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready, { once: true });
   else ready();
 }
 
-export const INTRO_SKIP_SCRIPT = `(${bootstrapIntro.toString()})(${JSON.stringify(INTRO_SEEN_KEY)},${INTRO_RECOVERY_MS},${INTRO_READING_MS});`;
+export const INTRO_SKIP_SCRIPT = `(${bootstrapIntro.toString()})(${JSON.stringify(INTRO_SEEN_KEY)},${INTRO_RECOVERY_MS},${INTRO_QUOTE_MS},${QUOTATION_COUNT});`;

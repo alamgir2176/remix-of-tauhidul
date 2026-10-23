@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { QUOTE_INTERVAL_MS } from "@/lib/site-loading";
 
 const QUOTATIONS = [
   { text: "“Nature never did betray the heart that loved her.”", source: "— William Wordsworth, Tintern Abbey" },
@@ -20,24 +19,23 @@ export function SiteIntro() {
       setGone(true);
       return;
     }
+    setIndex(Number(root.dataset["introQuote"] ?? 0) || 0);
     let removal = 0;
     const onProgress = () => setProgress(Number(root.dataset["introProgress"] ?? 0));
+    // The head bootstrap owns the sequence; this overlay only mirrors it.
+    const onQuotation = (event: Event) => setIndex((event as CustomEvent<number>).detail);
     onProgress();
     window.addEventListener("intro-progress", onProgress);
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const advance = window.setInterval(() => {
-      if (!root.classList.contains("intro-ready") && !root.classList.contains("intro-loaded")) setIndex((current) => Math.min(current + 1, QUOTATIONS.length - 1));
-    }, QUOTE_INTERVAL_MS);
+    window.addEventListener("intro-quotation", onQuotation);
     const onFinished = () => {
-      clearInterval(advance);
-      removal = window.setTimeout(() => setGone(true), reduced ? 0 : 450);
+      removal = window.setTimeout(() => setGone(true), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 450);
     };
     window.addEventListener("intro-finished", onFinished);
     return () => {
-      clearInterval(advance);
       clearTimeout(removal);
       window.removeEventListener("intro-finished", onFinished);
       window.removeEventListener("intro-progress", onProgress);
+      window.removeEventListener("intro-quotation", onQuotation);
     };
   }, []);
 
