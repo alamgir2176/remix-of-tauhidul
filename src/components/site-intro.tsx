@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QUOTATION_COUNT } from "@/lib/site-loading";
 
 const QUOTATIONS = [
   { text: "“Nature never did betray the heart that loved her.”", source: "— William Wordsworth, Tintern Abbey" },
@@ -20,26 +21,27 @@ export function SiteIntro() {
       return;
     }
     setIndex(Number(root.dataset["introQuote"] ?? 0) || 0);
+    setProgress(Number(root.dataset["introProgress"] ?? 0));
     let removal = 0;
-    const onProgress = () => setProgress(Number(root.dataset["introProgress"] ?? 0));
     // The head bootstrap owns the sequence; this overlay only mirrors it.
+    const onProgress = (event: Event) => setProgress((event as CustomEvent<number>).detail);
     const onQuotation = (event: Event) => setIndex((event as CustomEvent<number>).detail);
-    onProgress();
-    window.addEventListener("intro-progress", onProgress);
-    window.addEventListener("intro-quotation", onQuotation);
     const onFinished = () => {
       removal = window.setTimeout(() => setGone(true), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 450);
     };
+    window.addEventListener("intro-progress", onProgress);
+    window.addEventListener("intro-quotation", onQuotation);
     window.addEventListener("intro-finished", onFinished);
     return () => {
       clearTimeout(removal);
-      window.removeEventListener("intro-finished", onFinished);
       window.removeEventListener("intro-progress", onProgress);
       window.removeEventListener("intro-quotation", onQuotation);
+      window.removeEventListener("intro-finished", onFinished);
     };
   }, []);
 
   if (gone) return null;
+  const ready = progress === 100;
   return (
     <div className="site-intro" aria-label="Website loading">
       <span className="intro-mark" aria-hidden="true">tauhidul<span>.</span></span>
@@ -53,14 +55,18 @@ export function SiteIntro() {
         ))}
         </div>
         <div className="intro-meter">
-          <div className="intro-meter-label"><span>{progress === 100 ? "Ready" : "Loading"}</span><span className="intro-percent">{progress}<span>%</span></span></div>
-          <div className="intro-progress" role="progressbar" aria-label="Website resources loaded" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={`${progress}% of readiness tasks complete`}>
+          <div className={`intro-meter-label${ready ? " is-ready" : ""}`}>
+            <span className="intro-counter" aria-hidden="true">{ready ? "Ready" : `${String(index + 1).padStart(2, "0")} / ${String(QUOTATION_COUNT).padStart(2, "0")}`}</span>
+            <span className="intro-percent">{progress}<span>%</span></span>
+          </div>
+          <div className="intro-progress" role="progressbar" aria-label="Opening sequence progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={`${progress}% of the opening quotations shown`} data-full={ready ? "" : undefined} style={{ "--intro-fill": `${progress}%` } as CSSProperties}>
             <span style={{ transform: `scaleX(${progress / 100})` }} />
           </div>
         </div>
       </div>
       <div className="intro-bottom">
         <Button variant="ghost" className="intro-skip-btn" onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>Enter site <ArrowUpRight aria-hidden="true" /></Button>
+        <span className="intro-hint" aria-hidden="true">or press Esc</span>
       </div>
     </div>
   );
