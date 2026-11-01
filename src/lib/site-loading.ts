@@ -12,12 +12,12 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
   } catch { /* Storage or navigation timing may be unavailable. */ }
 
   root.classList.add("intro-active");
-  root.dataset["introProgress"] = "0";
   root.dataset["introQuote"] = "0";
   let finished = false;
   let resourcesReady = false;
   let sequenceDone = false;
   let sequenceTimer = 0;
+  let firstFillTimer = 0;
   const finish = () => {
     if (finished) return;
     finished = true;
@@ -25,6 +25,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     try { sessionStorage.setItem(seenKey, "1"); } catch { /* Private browsing. */ }
     clearTimeout(timeout);
     clearTimeout(sequenceTimer);
+    clearTimeout(firstFillTimer);
     document.removeEventListener("keydown", onKey);
     document.removeEventListener("click", onClick);
     document.removeEventListener("focusin", onFocus);
@@ -53,6 +54,18 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
   window.addEventListener("intro-dismiss", finish);
   window.addEventListener("pagehide", finish);
 
+  // The bar mirrors the quotation sequence — one third per quotation — so it
+  // always moves with what the visitor is reading. Real loading still decides
+  // when the site opens; it does not drive the bar. Shared DOM state and
+  // events keep the numbers accurate across hydration.
+  const report = (percent: number) => {
+    if (finished) return;
+    root.dataset["introProgress"] = String(percent);
+    window.dispatchEvent(new CustomEvent("intro-progress", { detail: percent }));
+  };
+  const percentFor = (step: number) => Math.round(((step + 1) / quotationCount) * 100);
+  report(0);
+
   // The sequence runs on its own clock from first paint, so every fresh visit
   // sees all quotations; slow loading only holds the last one longer.
   let step = 0;
@@ -64,9 +77,13 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
       return;
     }
     root.dataset["introQuote"] = String(step);
+    report(percentFor(step));
     window.dispatchEvent(new CustomEvent("intro-quotation", { detail: step }));
     sequenceTimer = window.setTimeout(advance, quoteMs);
   };
+  // The first quotation counts toward the bar as well; ease from 0% to one
+  // third shortly after first paint so the first fill is visible.
+  firstFillTimer = window.setTimeout(() => report(percentFor(0)), 90);
   sequenceTimer = window.setTimeout(advance, quoteMs);
 
   const loaded = () => {
@@ -80,17 +97,6 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     if (finished) return;
     try {
       const images = Array.from(document.images).filter((image) => image.loading !== "lazy");
-      // Completed readiness tasks, not a guessed byte-download percentage.
-      const total = 1 + images.length + (document.fonts ? 1 : 0);
-      let completed = 0;
-      const report = () => {
-        if (finished) return;
-        completed += 1;
-        const percent = Math.floor(completed / total * 100);
-        root.dataset["introProgress"] = String(percent);
-        window.dispatchEvent(new CustomEvent("intro-progress", { detail: percent }));
-      };
-      report(); // The document is parsed.
       const pending = images.map((image) => new Promise<void>((resolve) => {
         let settling = false;
         const settled = () => {
@@ -107,10 +113,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
           image.addEventListener("load", settled, { once: true });
           image.addEventListener("error", settled, { once: true });
         }
-      }).then(report));
-      // Force font selection now, then wait for actual font readiness, not a percentage.
+      }));
+      // Force font selection now, then wait for actual font readiness.
       void document.body.offsetHeight;
-      if (document.fonts) pending.push(document.fonts.ready.then(report, report));
+      if (document.fonts) pending.push(document.fonts.ready.then(() => undefined, () => undefined));
       Promise.all(pending).then(loaded, loaded);
     } catch { loaded(); }
   };

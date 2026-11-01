@@ -293,36 +293,45 @@ body { font-feature-settings: "ss01", "kern"; text-rendering: optimizeLegibility
 /* A real loading threshold: hidden without the early bootstrap, independently recoverable. */
 :root {
   --intro-background: oklch(0.105 0 0);
+  --intro-sheen: oklch(0.155 0 0);
   --intro-foreground: var(--paper);
   --intro-muted: oklch(0.74 0 0);
   --intro-track: oklch(0.29 0 0);
+  --intro-line: oklch(0.4 0 0);
   --intro-indicator: oklch(0.78 0 0);
 }
-.site-intro { display: none; position: fixed; inset: 0; z-index: 100; padding: 40px; background: var(--intro-background); color: var(--intro-foreground); text-align: center; transition: opacity .45s ease, visibility .45s; }
+.site-intro { display: none; position: fixed; inset: 0; z-index: 100; padding: 40px; background: radial-gradient(120% 100% at 50% 0%, var(--intro-sheen) 0%, var(--intro-background) 60%); color: var(--intro-foreground); text-align: center; transition: opacity .45s ease, visibility .45s, transform .45s ease; }
 .intro-active .site-intro { display: grid; grid-template-rows: auto minmax(0,1fr) auto; align-items: center; animation: intro-failsafe 0s 12s forwards; }
-.intro-ready .site-intro { opacity: 0; visibility: hidden; pointer-events: none; }
-.intro-mark { justify-self: center; font-size: 20px; line-height: 1.5; font-weight: 500; padding-top: max(8px, env(safe-area-inset-top)); }
+.intro-ready .site-intro { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(.985); }
+.intro-mark { justify-self: center; font-size: 20px; line-height: 1.5; font-weight: 500; padding-top: max(8px, env(safe-area-inset-top)); animation: intro-fade .9s ease both; }
 .intro-mark span { color: var(--intro-muted); }
-.intro-stage { display: grid; justify-items: center; gap: 48px; width: min(100%, 760px); justify-self: center; animation: intro-arrive .85s ease both; }
+.intro-stage { display: grid; justify-items: center; gap: 46px; width: min(100%, 760px); justify-self: center; animation: intro-arrive .9s cubic-bezier(.2,.7,.2,1) .15s both; }
 .intro-quotes { display: grid; place-items: center; width: 100%; min-height: 190px; }
-.intro-quotation { grid-area: 1 / 1; margin: 0; width: 100%; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .5s ease, transform .7s ease, visibility .5s; }
-.intro-quotation.is-current { opacity: 1; visibility: visible; transform: none; transition-delay: .5s; }
+.intro-quotation { grid-area: 1 / 1; margin: 0; width: 100%; opacity: 0; visibility: hidden; transform: translateY(10px); filter: blur(3px); transition: opacity .55s ease, transform .8s cubic-bezier(.2,.7,.2,1), filter .55s ease, visibility .55s; }
+.intro-quotation.is-current { opacity: 1; visibility: visible; transform: none; filter: none; transition-delay: .45s; }
 .intro-quotation:first-child.is-current { transition-delay: 0s; }
-.intro-line { margin: 0 auto; max-width: 27ch; font-size: 48px; line-height: 1.25; text-wrap: balance; }
-.intro-source { max-width: 52ch; margin: 28px auto 0; font-size: 12px; line-height: 1.8; text-transform: none; color: var(--intro-muted); text-wrap: balance; }
-.intro-bottom { display: grid; justify-items: center; gap: 16px; padding-bottom: max(0px, env(safe-area-inset-bottom)); }
-.intro-meter { width: min(240px, 100%); }
+.intro-line { margin: 0 auto; max-width: 26ch; font-size: clamp(34px, 6vw, 54px); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+.intro-source { max-width: 52ch; margin: 30px auto 0; font-size: 12px; line-height: 1.8; color: var(--intro-muted); text-wrap: balance; }
+.intro-source::before { content: ""; display: block; width: 26px; height: 1px; margin: 0 auto 20px; background: var(--intro-line); }
+.intro-bottom { display: grid; justify-items: center; gap: 14px; padding-bottom: max(0px, env(safe-area-inset-bottom)); animation: intro-fade .9s ease .3s both; }
+.intro-meter { width: min(280px, 100%); }
 .intro-meter-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; color: var(--intro-muted); font-size: 11px; line-height: 1.5; }
+.intro-counter { font-variant-numeric: tabular-nums; letter-spacing: .18em; }
+.intro-meter-label.is-ready .intro-counter { color: var(--intro-foreground); }
 .intro-percent { font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
 .intro-percent span { margin-left: 2px; }
-.intro-progress { width: 100%; height: 2px; background: var(--intro-track); overflow: hidden; }
-.intro-progress span { display: block; width: 100%; height: 100%; background: var(--intro-indicator); transform-origin: left; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.intro-skip-btn { height: 44px; padding: 12px 16px; gap: 10px; border-radius: 0; font-size: 12px; font-weight: 400; color: var(--intro-muted); background: transparent; }
+.intro-progress { position: relative; width: 100%; height: 2px; background: var(--intro-track); }
+.intro-progress span { display: block; width: 100%; height: 100%; background: var(--intro-indicator); transform-origin: left; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.intro-progress::after { content: ""; position: absolute; top: 50%; left: var(--intro-fill, 0%); width: 5px; height: 5px; border-radius: 50%; background: var(--intro-indicator); transform: translate(-50%, -50%); transition: left .7s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+.intro-progress[data-full]::after { opacity: 0; }
+.intro-skip-btn { height: 44px; padding: 12px 18px; gap: 10px; border-radius: 0; font-size: 12px; font-weight: 400; color: var(--intro-muted); background: transparent; border-bottom: 1px solid var(--intro-line); transition: color .3s ease, border-color .3s ease; }
 .intro-skip-btn svg { width: 14px; height: 14px; }
-.intro-skip-btn:hover, .intro-skip-btn:focus-visible { color: var(--intro-foreground); background: transparent; outline: 1px solid var(--intro-track); outline-offset: 2px; }
-@keyframes intro-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.intro-skip-btn:hover, .intro-skip-btn:focus-visible { color: var(--intro-foreground); background: transparent; border-color: var(--intro-foreground); }
+.intro-hint { font-size: 11px; letter-spacing: .04em; color: var(--intro-muted); opacity: .8; }
+@keyframes intro-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes intro-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes intro-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-@media (max-width: 767px) { .site-intro { padding: 28px 24px; } .intro-stage { gap: 36px; } .intro-quotes { min-height: 180px; } .intro-line { font-size: 34px; max-width: 23ch; } .intro-source { max-width: 34ch; margin-top: 24px; } .intro-mark { font-size: 18px; } .intro-meter { width: 216px; } }
-@media (max-width: 359px), (max-height: 480px) { .site-intro { padding: 16px; } .intro-line { font-size: 28px; } .intro-source { margin-top: 16px; font-size: 11px; } .intro-stage { gap: 24px; } .intro-quotes { min-height: 150px; } .intro-bottom { gap: 10px; } }
-@media (prefers-reduced-motion: reduce) { .intro-active .site-intro { animation: intro-failsafe 0s 12s forwards !important; } .intro-stage { animation: none; } .intro-quotation { transform: none; transition: none; } .intro-progress span { transition: none; } }
+@media (max-width: 767px) { .site-intro { padding: 28px 24px; } .intro-stage { gap: 34px; } .intro-quotes { min-height: 180px; } .intro-line { font-size: clamp(30px, 9vw, 38px); max-width: 22ch; } .intro-source { max-width: 34ch; margin-top: 24px; } .intro-source::before { margin-bottom: 16px; } .intro-mark { font-size: 18px; } .intro-meter { width: 236px; } }
+@media (max-width: 359px), (max-height: 480px) { .site-intro { padding: 16px; } .intro-line { font-size: 27px; } .intro-source { margin-top: 16px; font-size: 11px; } .intro-source::before { margin-bottom: 14px; } .intro-stage { gap: 22px; } .intro-quotes { min-height: 150px; } .intro-bottom { gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { .intro-active .site-intro { animation: intro-failsafe 0s 12s forwards !important; transition: opacity .01s linear, visibility .01s linear, transform .01s linear; } .intro-mark, .intro-stage, .intro-bottom { animation: none; } .intro-quotation { transform: none; filter: none; transition: none; } .intro-progress span, .intro-progress::after { transition: none; } }
 .menu-open .site-header { background: var(--background); }
