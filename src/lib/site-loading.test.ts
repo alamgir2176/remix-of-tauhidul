@@ -27,10 +27,12 @@ describe("Genuine website loading", () => {
   it("runs the serialized head bootstrap independently of module bindings", async () => {
     window.eval(INTRO_SKIP_SCRIPT);
     await flush();
-    expect(document.documentElement.dataset["introProgress"]).toBe("100");
     expect(document.documentElement).toHaveClass("intro-loaded");
+    await vi.advanceTimersByTimeAsync(90);
+    expect(document.documentElement.dataset["introProgress"]).toBe("33");
     await vi.advanceTimersByTimeAsync(sequenceMs);
     expect(document.documentElement).toHaveClass("intro-ready");
+    expect(document.documentElement.dataset["introProgress"]).toBe("100");
   });
 
   it("plays all three quotations in sequence on every fresh visit", async () => {
@@ -130,22 +132,28 @@ describe("Genuine website loading", () => {
     expect(document.documentElement).toHaveClass("intro-ready");
   });
 
-  it("reports completed resources, including image decoding, without timer-based progress", async () => {
+  it("fills the bar one third per quotation, independent of real loading", async () => {
     const first = pendingImage();
     const second = pendingImage();
     const fonts = Promise.resolve();
     Object.defineProperty(document, "fonts", { configurable: true, value: { ready: fonts } });
     start();
-    expect(document.documentElement.dataset["introProgress"]).toBe("25");
+    expect(document.documentElement.dataset["introProgress"]).toBe("0");
     await flush();
-    expect(document.documentElement.dataset["introProgress"]).toBe("50");
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(document.documentElement.dataset["introProgress"]).toBe("50");
+    // Real resource completion does not move the bar; the quotation sequence does.
     first.dispatchEvent(new Event("error"));
     await flush();
-    expect(document.documentElement.dataset["introProgress"]).toBe("75");
-    second.dispatchEvent(new Event("error"));
-    await flush();
+    expect(document.documentElement.dataset["introProgress"]).toBe("0");
+    await vi.advanceTimersByTimeAsync(90);
+    expect(document.documentElement.dataset["introProgress"]).toBe("33");
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS);
+    expect(document.documentElement.dataset["introProgress"]).toBe("67");
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS);
     expect(document.documentElement.dataset["introProgress"]).toBe("100");
+    // The site still waits for the last quotation's window before opening.
+    expect(document.documentElement).not.toHaveClass("intro-ready");
+    second.dispatchEvent(new Event("error"));
+    await vi.advanceTimersByTimeAsync(INTRO_QUOTE_MS);
+    expect(document.documentElement).toHaveClass("intro-ready");
   });
 });

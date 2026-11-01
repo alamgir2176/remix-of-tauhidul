@@ -2,6 +2,7 @@
 - [x] Apply the review's readability, content simplification, form accessibility, loading reliability and public-address fixes; verify affected flows and layouts.
 - [ ] Supply authentic selected work/current focus and verified message-handling practices before adding those optional items (owner material required).
 - [ ] Set the final public HTTPS address and verify external hosting and provider receipt (chosen host/address and owner provider access required).
+- [x] Fill the loading bar one third per quotation (reaching 100% at the final quote) and refine the opening screen's finish; verify timing, sequence and layouts.
 - [x] Refine the quotation layout and add measured loading progress; verify resource counts, sequence, skipping and screen sizes.
 - [x] Make fast-loading quotations readable with a brief skippable window and verify timing and immediate entry.
 - [x] Implement and test the genuine quotation loading experience: fast/slow loading, recovery, reduced motion, navigation, and mobile/tablet/desktop.
