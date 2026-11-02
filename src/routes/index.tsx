@@ -79,9 +79,10 @@ function Index() {
   useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
-    document.addEventListener("keydown", onKey);
+    // Capture phase: page-level handlers can stop key events from bubbling back to the document.
+    document.addEventListener("keydown", onKey, true);
     document.documentElement.classList.add("menu-open");
-    return () => { document.removeEventListener("keydown", onKey); document.documentElement.classList.remove("menu-open"); };
+    return () => { document.removeEventListener("keydown", onKey, true); document.documentElement.classList.remove("menu-open"); };
   }, [menuOpen]);
 
   return (
