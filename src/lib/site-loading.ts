@@ -26,9 +26,9 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     clearTimeout(timeout);
     clearTimeout(sequenceTimer);
     clearTimeout(firstFillTimer);
-    document.removeEventListener("keydown", onKey);
-    document.removeEventListener("click", onClick);
-    document.removeEventListener("focusin", onFocus);
+    document.removeEventListener("keydown", onKey, true);
+    document.removeEventListener("click", onClick, true);
+    document.removeEventListener("focusin", onFocus, true);
     window.removeEventListener("intro-dismiss", finish);
     window.removeEventListener("pagehide", finish);
     window.dispatchEvent(new Event("intro-finished"));
@@ -48,9 +48,12 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     if (event.target instanceof Element && !event.target.closest(".site-intro")) finish();
   };
   const timeout = window.setTimeout(finish, recoveryMs);
-  document.addEventListener("keydown", onKey);
-  document.addEventListener("click", onClick);
-  document.addEventListener("focusin", onFocus);
+  // Capture phase: something on the page stops real key events from bubbling
+  // back to the document, which would leave Escape/Tab/click dismissal dead.
+  // The head bootstrap registers first, so capture listeners here always run.
+  document.addEventListener("keydown", onKey, true);
+  document.addEventListener("click", onClick, true);
+  document.addEventListener("focusin", onFocus, true);
   window.addEventListener("intro-dismiss", finish);
   window.addEventListener("pagehide", finish);
 
