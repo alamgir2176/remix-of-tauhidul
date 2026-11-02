@@ -18,6 +18,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
   let sequenceDone = false;
   let sequenceTimer = 0;
   let firstFillTimer = 0;
+  let lateFillTimer = 0;
   const finish = () => {
     if (finished) return;
     finished = true;
@@ -26,9 +27,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     clearTimeout(timeout);
     clearTimeout(sequenceTimer);
     clearTimeout(firstFillTimer);
-    document.removeEventListener("keydown", onKey);
-    document.removeEventListener("click", onClick);
-    document.removeEventListener("focusin", onFocus);
+    clearTimeout(lateFillTimer);
+    document.removeEventListener("keydown", onKey, true);
+    document.removeEventListener("click", onClick, true);
+    document.removeEventListener("focusin", onFocus, true);
     window.removeEventListener("intro-dismiss", finish);
     window.removeEventListener("pagehide", finish);
     window.dispatchEvent(new Event("intro-finished"));
@@ -48,9 +50,12 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     if (event.target instanceof Element && !event.target.closest(".site-intro")) finish();
   };
   const timeout = window.setTimeout(finish, recoveryMs);
-  document.addEventListener("keydown", onKey);
-  document.addEventListener("click", onClick);
-  document.addEventListener("focusin", onFocus);
+  // Capture phase: something on the page stops real key events from bubbling
+  // back to the document, which would leave Escape/Tab/click dismissal dead.
+  // The head bootstrap registers first, so capture listeners here always run.
+  document.addEventListener("keydown", onKey, true);
+  document.addEventListener("click", onClick, true);
+  document.addEventListener("focusin", onFocus, true);
   window.addEventListener("intro-dismiss", finish);
   window.addEventListener("pagehide", finish);
 
@@ -82,8 +87,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     sequenceTimer = window.setTimeout(advance, quoteMs);
   };
   // The first quotation counts toward the bar as well; ease from 0% to one
-  // third shortly after first paint so the first fill is visible.
+  // third shortly after first paint. The later repeat catches the overlay if
+  // it mounts between the two reports.
   firstFillTimer = window.setTimeout(() => report(percentFor(0)), 90);
+  lateFillTimer = window.setTimeout(() => report(percentFor(0)), 700);
   sequenceTimer = window.setTimeout(advance, quoteMs);
 
   const loaded = () => {
