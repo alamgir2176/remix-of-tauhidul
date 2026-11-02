@@ -18,6 +18,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
   let sequenceDone = false;
   let sequenceTimer = 0;
   let firstFillTimer = 0;
+  let lateFillTimer = 0;
   const finish = () => {
     if (finished) return;
     finished = true;
@@ -26,6 +27,7 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     clearTimeout(timeout);
     clearTimeout(sequenceTimer);
     clearTimeout(firstFillTimer);
+    clearTimeout(lateFillTimer);
     document.removeEventListener("keydown", onKey, true);
     document.removeEventListener("click", onClick, true);
     document.removeEventListener("focusin", onFocus, true);
@@ -85,8 +87,10 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     sequenceTimer = window.setTimeout(advance, quoteMs);
   };
   // The first quotation counts toward the bar as well; ease from 0% to one
-  // third shortly after first paint so the first fill is visible.
+  // third shortly after first paint. The later repeat catches the overlay if
+  // it mounts between the two reports.
   firstFillTimer = window.setTimeout(() => report(percentFor(0)), 90);
+  lateFillTimer = window.setTimeout(() => report(percentFor(0)), 700);
   sequenceTimer = window.setTimeout(advance, quoteMs);
 
   const loaded = () => {
