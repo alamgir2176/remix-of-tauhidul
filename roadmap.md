@@ -1,4 +1,5 @@
 # Final website polish
+- [x] Checked search demand and who ranks for the name, and strengthened the Google/social cards with ProfilePage structured data.
 - [x] Apply the review's readability, content simplification, form accessibility, loading reliability and public-address fixes; verify affected flows and layouts.
 - [ ] Supply authentic selected work/current focus and verified message-handling practices before adding those optional items (owner material required).
 - [ ] Set the final public HTTPS address and verify external hosting and provider receipt (chosen host/address and owner provider access required).

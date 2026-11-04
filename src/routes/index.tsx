@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
 import { VisitorFaq } from "@/components/visitor-faq";
 import { portraitUrl } from "@/lib/portrait-url";
-import { publicHomepage } from "@/lib/site-metadata";
+import { profileJsonLd, publicHomepage } from "@/lib/site-metadata";
 
 const HOMEPAGE = publicHomepage(import.meta.env['VITE_SITE_URL']);
 
@@ -26,7 +26,8 @@ export const Route = createFileRoute("/")({
     { name: "twitter:title", content: "Md Tauhidul Islam — Ideas, People & Possibilities" },
     { name: "twitter:description", content: "A philosophy graduate in Dhaka exploring ideas, people, and meaningful possibilities." },
     { name: "twitter:card", content: "summary_large_image" },
-  ], links: HOMEPAGE ? [{ rel: "canonical", href: HOMEPAGE }] : [] }),
+  ], links: HOMEPAGE ? [{ rel: "canonical", href: HOMEPAGE }] : [],
+  scripts: [{ type: "application/ld+json", children: JSON.stringify(profileJsonLd()) }] }),
   component: Index,
 });
 
