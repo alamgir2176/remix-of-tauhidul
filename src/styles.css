@@ -124,11 +124,11 @@
 .round-link svg { width: 18px; }
 .hero-index { position: absolute; bottom: 26px; left: 5%; font-size: 10px; text-transform: uppercase; color: var(--inverse-muted); }
 .section-space { position: relative; padding: 65px 7% 110px; }
-.section-mark { position: absolute; top: 18px; right: 6%; font-family: var(--font-editorial); font-size: clamp(140px, 15vw, 240px); line-height: 1; color: transparent; -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 16%, transparent); pointer-events: none; user-select: none; }
-.scroll-reveal .section-heading::after, .scroll-reveal.section-heading::after { content: ""; display: block; width: 72px; height: 1px; margin-top: 30px; background: color-mix(in oklab, var(--foreground) 40%, transparent); transform-origin: left; }
+.section-mark { position: absolute; top: 18px; right: 6%; font-family: var(--font-editorial); font-size: clamp(128px, 13vw, 198px); line-height: 1; color: transparent; -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 10%, transparent); pointer-events: none; user-select: none; }
+.scroll-reveal .section-heading::after, .scroll-reveal.section-heading::after, .scroll-reveal .statement::after { content: ""; display: block; width: 72px; height: 1px; margin-top: 30px; background: color-mix(in oklab, var(--foreground) 40%, transparent); transform-origin: left; }
 @media (prefers-reduced-motion: no-preference) {
-  .scroll-reveal .section-heading::after, .scroll-reveal.section-heading::after { transform: scaleX(0); transition: transform 1.2s cubic-bezier(.2,.7,.2,1) .25s; }
-  .scroll-reveal.is-visible .section-heading::after, .scroll-reveal.is-visible.section-heading::after { transform: scaleX(1); }
+  .scroll-reveal .section-heading::after, .scroll-reveal.section-heading::after, .scroll-reveal .statement::after { transform: scaleX(0); transition: transform 1.2s cubic-bezier(.2,.7,.2,1) .25s; }
+  .scroll-reveal.is-visible .section-heading::after, .scroll-reveal.is-visible.section-heading::after, .scroll-reveal.is-visible .statement::after { transform: scaleX(1); }
 }
 .section-label { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 20px; font-size: 10px; line-height: 1.6; text-transform: uppercase; padding-bottom: 25px; border-bottom: 1px solid var(--border); color: var(--muted-foreground); }
 .about-layout { margin-top: 75px; }
