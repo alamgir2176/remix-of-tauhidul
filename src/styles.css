@@ -341,3 +341,84 @@ body { font-feature-settings: "ss01", "kern"; text-rendering: optimizeLegibility
 @media (max-width: 359px), (max-height: 480px) { .site-intro { padding: 16px; } .intro-line { font-size: 27px; } .intro-source { margin-top: 16px; font-size: 11px; } .intro-source::before { margin-bottom: 14px; } .intro-stage { gap: 22px; } .intro-quotes { min-height: 150px; } .intro-bottom { gap: 10px; } }
 @media (prefers-reduced-motion: reduce) { .intro-active .site-intro { animation: intro-failsafe 0s 12s forwards !important; transition: opacity .01s linear, visibility .01s linear, transform .01s linear; } .intro-mark, .intro-stage, .intro-bottom { animation: none; } .intro-quotation { transform: none; filter: none; transition: none; } .intro-progress span, .intro-progress::after { transition: none; } }
 .menu-open .site-header { background: var(--background); }
+
+/* V2 — a quieter, more deliberate editorial system across the existing story. */
+:root {
+  --chapter-rule: color-mix(in oklab, var(--foreground) 16%, transparent);
+  --chapter-wash: color-mix(in oklab, var(--foreground) 3%, var(--background));
+}
+.site-header { height: 80px; }
+.site-header::before { content: ""; position: absolute; inset: 0 5% auto; height: 1px; background: var(--chapter-rule); }
+.site-header.is-scrolled { background: color-mix(in oklab, var(--background) 94%, transparent); }
+.wordmark { transition: opacity .25s ease; }
+.wordmark:hover { opacity: .62; }
+.identity-hero { height: min(840px, calc(100svh - 120px)); min-height: 680px; }
+.hero-image img { object-position: center 31%; }
+.hero-topline { align-items: center; }
+.hero-topline > span:first-child::before { content: ""; display: inline-block; width: 22px; height: 1px; margin: 0 10px 3px 0; background: currentColor; opacity: .55; }
+.hero-copy h1 { line-height: .98; }
+.hero-bottom { max-width: 640px; }
+.round-link:focus-visible, .perspective-trigger:focus-visible, .background-toggle:focus-visible, .faq-trigger:focus-visible { outline: 1px solid currentColor; outline-offset: 5px; }
+.section-space { padding-top: 82px; padding-bottom: 125px; }
+.section-label { position: relative; align-items: center; min-height: 46px; padding-bottom: 18px; }
+.section-label > span:first-child { display: inline-flex; align-items: center; gap: 12px; }
+.section-label > span:first-child::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .65; }
+.about-layout { margin-top: 86px; }
+.statement, .section-heading { text-wrap: pretty; }
+.perspective-section .section-label { color: color-mix(in oklab, var(--paper) 72%, transparent); }
+.perspective-item { transition: border-color .3s ease; }
+.perspective-item:has(.perspective-trigger:hover), .perspective-item:has(.perspective-trigger[aria-expanded="true"]) { border-color: color-mix(in oklab, var(--foreground) 52%, transparent); }
+.perspective-trigger { transition: color .25s ease, padding-left .35s cubic-bezier(.2,.7,.2,1); }
+.perspective-trigger:hover { padding-left: 8px; }
+.perspective-detail { border-left: 1px solid var(--chapter-rule); margin-left: 4px; padding-left: 36px; }
+.beyond-section > h2 { max-width: 900px; }
+.beyond-portrait figcaption { display: flex; align-items: center; gap: 12px; }
+.beyond-portrait figcaption::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+.experience-stories { counter-reset: story; gap: 0; }
+.experience-stories article { display: grid; grid-template-columns: 42px minmax(0, 1fr); column-gap: 20px; padding: 30px 0 32px; }
+.experience-stories article::before { counter-increment: story; content: counter(story, decimal-leading-zero); grid-column: 1; grid-row: 1 / span 3; padding-top: 4px; color: var(--muted-foreground); font-size: 10px; font-variant-numeric: tabular-nums; }
+.experience-stories article > * { grid-column: 2; }
+.experience-stories article:first-child { padding-top: 0; }
+.experience-stories h3 { margin-top: 12px; }
+.background-row { border-top-color: var(--chapter-rule); }
+.interlude { min-height: 410px; display: flex; align-items: center; }
+.interlude-inner { width: 58%; }
+.interlude-inner > p { line-height: 1.04; }
+.contact-layout { align-items: start; }
+.contact-form-wrap { border-top: 1px solid var(--chapter-rule); padding-top: 26px; }
+.contact-form-wrap input, .contact-form-wrap textarea { transition: border-color .25s ease, box-shadow .25s ease; }
+.contact-form-wrap input:focus, .contact-form-wrap textarea:focus { box-shadow: 0 1px 0 var(--foreground); }
+.visitor-faq { border-top-color: var(--chapter-rule); }
+.faq-item { transition: border-color .25s ease; }
+.faq-item:has(.faq-trigger[aria-expanded="true"]) { border-color: color-mix(in oklab, var(--foreground) 52%, transparent); }
+.site-footer { position: relative; }
+.site-footer::before { content: ""; position: absolute; inset: 0 7% auto; height: 1px; background: color-mix(in oklab, var(--paper) 20%, transparent); }
+.footer-bottom { font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) {
+  .identity-hero { min-height: 720px; }
+  .contact-form-wrap { margin-top: 2px; }
+}
+@media (max-width: 767px) {
+  .site-header { height: 74px; }
+  .site-header::before { inset-inline: 6%; }
+  .identity-hero { height: min(820px, calc(100svh - 105px)); min-height: 620px; }
+  .hero-image img { object-position: 50% 14%; }
+  .section-space { padding-top: 52px; padding-bottom: 78px; }
+  .about-layout { margin-top: 52px; }
+  .experience-stories article { grid-template-columns: 27px minmax(0, 1fr); column-gap: 12px; padding: 25px 0; }
+  .perspective-detail { margin-left: 2px; padding-left: 24px; }
+  .interlude { min-height: 390px; }
+  .interlude-inner { width: 58%; }
+  .contact-form-wrap { border-top: 1px solid var(--chapter-rule); padding-top: 24px; }
+  .site-footer::before { inset-inline: 6%; }
+}
+@media (max-width: 420px) {
+  .identity-hero { min-height: 600px; }
+  .hero-copy h1 { line-height: 1; }
+  .section-label { gap: 12px; }
+  .section-label > span:first-child { gap: 8px; }
+  .interlude-inner { width: 62%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .perspective-trigger, .wordmark, .perspective-item, .faq-item { transition: none !important; }
+}
