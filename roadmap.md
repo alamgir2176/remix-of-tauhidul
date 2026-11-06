@@ -20,4 +20,4 @@
 - [x] Run tests and browser-check images, metadata and errors.
 - [x] Integrate the wide studio portrait as the interlude background (desktop + mobile verified).
 - [ ] Vercel only: supply a real Formspree endpoint (needs the owner's Formspree account).
-- [ ] Finish the latest visual pass: balance decorative section numerals, extend heading-line detail, and verify motion/layout across devices.
+- [x] Finish the latest visual pass: balance decorative section numerals, extend heading-line detail, and verify motion/layout across devices.
