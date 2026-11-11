@@ -1,7 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { bootstrapIntro, INTRO_QUOTE_MS, INTRO_RECOVERY_MS, INTRO_SEEN_KEY, INTRO_SKIP_SCRIPT, QUOTATION_COUNT } from "./site-loading";
+import {
+  bootstrapIntro,
+  INTRO_QUOTE_MS,
+  INTRO_RECOVERY_MS,
+  INTRO_SEEN_KEY,
+  INTRO_SKIP_SCRIPT,
+  QUOTATION_COUNT,
+} from "./site-loading";
 
-const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
+const flush = async () => {
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+};
 
 describe("Genuine website loading", () => {
   beforeEach(() => {
@@ -21,7 +30,8 @@ describe("Genuine website loading", () => {
     vi.restoreAllMocks();
   });
 
-  const start = () => bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_QUOTE_MS, QUOTATION_COUNT);
+  const start = () =>
+    bootstrapIntro(INTRO_SEEN_KEY, INTRO_RECOVERY_MS, INTRO_QUOTE_MS, QUOTATION_COUNT);
   const sequenceMs = INTRO_QUOTE_MS * QUOTATION_COUNT;
 
   it("runs the serialized head bootstrap independently of module bindings", async () => {
@@ -66,7 +76,10 @@ describe("Genuine website loading", () => {
     const image = pendingImage();
     vi.spyOn(image, "naturalWidth", "get").mockReturnValue(800);
     let decode: (() => void) | undefined;
-    image.decode = () => new Promise<void>((resolve) => { decode = resolve; });
+    image.decode = () =>
+      new Promise<void>((resolve) => {
+        decode = resolve;
+      });
     start();
     await flush();
     await vi.advanceTimersByTimeAsync(sequenceMs);

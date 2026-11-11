@@ -6,7 +6,9 @@ describe("Profile structured data", () => {
     const jsonLd = profileJsonLd();
     expect(jsonLd["@type"]).toBe("ProfilePage");
     expect(jsonLd.mainEntity.name).toBe("Md Tauhidul Islam");
-    expect(jsonLd.mainEntity.sameAs).toContain("https://www.linkedin.com/in/md-tauhidul-islam-910612331");
+    expect(jsonLd.mainEntity.sameAs).toContain(
+      "https://www.linkedin.com/in/md-tauhidul-islam-910612331",
+    );
     expect(jsonLd.mainEntity.alumniOf.name).toBe("Jahangirnagar University");
     expect(jsonLd.mainEntity.address.addressLocality).toBe("Dhaka");
   });

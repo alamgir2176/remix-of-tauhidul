@@ -4,12 +4,21 @@ export const INTRO_QUOTE_MS = 2600;
 export const QUOTATION_COUNT = 3;
 
 // Standalone so the head bootstrap can run before React or application modules.
-export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: number, quotationCount: number) {
+export function bootstrapIntro(
+  seenKey: string,
+  recoveryMs: number,
+  quoteMs: number,
+  quotationCount: number,
+) {
   const root = document.documentElement;
   try {
-    const navigation = window.performance?.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
-    if (sessionStorage.getItem(seenKey) || location.hash || navigation?.type === "back_forward") return;
-  } catch { /* Storage or navigation timing may be unavailable. */ }
+    const navigation = window.performance?.getEntriesByType?.("navigation")[0] as
+      PerformanceNavigationTiming | undefined;
+    if (sessionStorage.getItem(seenKey) || location.hash || navigation?.type === "back_forward")
+      return;
+  } catch {
+    /* Storage or navigation timing may be unavailable. */
+  }
 
   root.classList.add("intro-active");
   root.dataset["introQuote"] = "0";
@@ -23,7 +32,11 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     if (finished) return;
     finished = true;
     root.classList.add("intro-ready");
-    try { sessionStorage.setItem(seenKey, "1"); } catch { /* Private browsing. */ }
+    try {
+      sessionStorage.setItem(seenKey, "1");
+    } catch {
+      /* Private browsing. */
+    }
     clearTimeout(timeout);
     clearTimeout(sequenceTimer);
     clearTimeout(firstFillTimer);
@@ -104,30 +117,45 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
     if (finished) return;
     try {
       const images = Array.from(document.images).filter((image) => image.loading !== "lazy");
-      const pending = images.map((image) => new Promise<void>((resolve) => {
-        let settling = false;
-        const settled = () => {
-          if (settling) return;
-          settling = true;
-          image.removeEventListener("load", settled);
-          image.removeEventListener("error", settled);
-          if (image.naturalWidth > 0 && typeof image.decode === "function") {
-            image.decode().catch(() => undefined).then(() => resolve());
-          } else resolve();
-        };
-        if (image.complete) settled();
-        else {
-          image.addEventListener("load", settled, { once: true });
-          image.addEventListener("error", settled, { once: true });
-        }
-      }));
+      const pending = images.map(
+        (image) =>
+          new Promise<void>((resolve) => {
+            let settling = false;
+            const settled = () => {
+              if (settling) return;
+              settling = true;
+              image.removeEventListener("load", settled);
+              image.removeEventListener("error", settled);
+              if (image.naturalWidth > 0 && typeof image.decode === "function") {
+                image
+                  .decode()
+                  .catch(() => undefined)
+                  .then(() => resolve());
+              } else resolve();
+            };
+            if (image.complete) settled();
+            else {
+              image.addEventListener("load", settled, { once: true });
+              image.addEventListener("error", settled, { once: true });
+            }
+          }),
+      );
       // Force font selection now, then wait for actual font readiness.
       void document.body.offsetHeight;
-      if (document.fonts) pending.push(document.fonts.ready.then(() => undefined, () => undefined));
+      if (document.fonts)
+        pending.push(
+          document.fonts.ready.then(
+            () => undefined,
+            () => undefined,
+          ),
+        );
       Promise.all(pending).then(loaded, loaded);
-    } catch { loaded(); }
+    } catch {
+      loaded();
+    }
   };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready, { once: true });
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", ready, { once: true });
   else ready();
 }
 

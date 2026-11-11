@@ -16,32 +16,40 @@ export async function submitHostedContact(
   data: ContactData,
   config?: string,
 ): Promise<void> {
-  if (provider === "formspree" && (!config || !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(config))) {
+  if (
+    provider === "formspree" &&
+    (!config || !/^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(config))
+  ) {
     throw new Error(NOT_CONFIGURED);
   }
   if (provider === "web3forms" && (!config || !/^[0-9a-f-]{36}$/i.test(config))) {
     throw new Error(NOT_CONFIGURED);
   }
-  const url = provider === "netlify" ? "/__forms.html"
-    : provider === "web3forms" ? "https://api.web3forms.com/submit"
-    : config ?? "";
-  const body = provider === "netlify"
-    ? new URLSearchParams({ "form-name": "contact", ...data })
-    : provider === "web3forms"
-      ? JSON.stringify({
-          access_key: config,
-          name: data.name,
-          email: data.email,
-          subject: data.subject || `New message from ${data.name}`,
-          message: data.message,
-          from_name: "tauhidul. website",
-          botcheck: data.website,
-        })
-      : JSON.stringify(data);
+  const url =
+    provider === "netlify"
+      ? "/__forms.html"
+      : provider === "web3forms"
+        ? "https://api.web3forms.com/submit"
+        : (config ?? "");
+  const body =
+    provider === "netlify"
+      ? new URLSearchParams({ "form-name": "contact", ...data })
+      : provider === "web3forms"
+        ? JSON.stringify({
+            access_key: config,
+            name: data.name,
+            email: data.email,
+            subject: data.subject || `New message from ${data.name}`,
+            message: data.message,
+            from_name: "tauhidul. website",
+            botcheck: data.website,
+          })
+        : JSON.stringify(data);
   const response = await fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": provider === "netlify" ? "application/x-www-form-urlencoded" : "application/json",
+      "Content-Type":
+        provider === "netlify" ? "application/x-www-form-urlencoded" : "application/json",
       Accept: "application/json",
     },
     body,

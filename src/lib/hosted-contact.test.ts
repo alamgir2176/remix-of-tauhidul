@@ -1,7 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getContactProvider, submitHostedContact } from "./hosted-contact";
 
-const data = { name: "Test", email: "test@example.com", subject: "", message: "A test message.", website: "" };
+const data = {
+  name: "Test",
+  email: "test@example.com",
+  subject: "",
+  message: "A test message.",
+  website: "",
+};
 afterEach(() => vi.unstubAllGlobals());
 
 describe("hosted contact delivery", () => {
@@ -32,7 +38,9 @@ describe("hosted contact delivery", () => {
   });
   it("reports unsuccessful hosted submissions", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("", { status: 500 })));
-    await expect(submitHostedContact("formspree", data, "https://formspree.io/f/abc123")).rejects.toThrow("Could not send");
+    await expect(
+      submitHostedContact("formspree", data, "https://formspree.io/f/abc123"),
+    ).rejects.toThrow("Could not send");
   });
   it("sends Web3Forms with the access key and requires success", async () => {
     const key = "12345678-1234-1234-1234-123456789abc";
@@ -42,7 +50,10 @@ describe("hosted contact delivery", () => {
     const [url, options] = fetchMock.mock.calls[0] as [string, { body: string }];
     expect(url).toBe("https://api.web3forms.com/submit");
     expect(JSON.parse(options.body).access_key).toBe(key);
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: false }))));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: false }))),
+    );
     await expect(submitHostedContact("web3forms", data, key)).rejects.toThrow("Could not send");
   });
   it("requires a Web3Forms key before sending", async () => {
