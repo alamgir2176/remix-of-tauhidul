@@ -1,90 +1,164 @@
-# Welcome to your Lovable project
+Md Tauhidul Islam
 
-This project was built with [Lovable](https://lovable.dev).
+Personal Portfolio Website
 
-## Build with Lovable
+Welcome to my personal portfolio website.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+This project is built with modern web technologies and deployed on Vercel.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+🌐 Live Website: "tauhidul.vercel.app" (https://tauhidul.vercel.app)
 
-## Development
+---
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+🛠️ Built With
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+- TanStack Start — Application framework
+- TypeScript — Programming language
+- React — UI library
+- Tailwind CSS — Styling framework
 
-## Built with
+---
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+💻 Local Development
 
-## Deploy from GitHub to Netlify or Vercel
+To run the project on your local machine, you need Node.js and Bun installed.
 
-Keep TanStack Start's server rendering and Nitro adapter. Do not add an SPA
-rewrite to `index.html`: this app has one page with section hashes; fragments
-are not sent to the server, so `/#about` and `/#contact` refresh at `/`.
+1. Clone the project
 
-Import the connected repository. Use `bun install` and `bun run build`.
-Set `NITRO_PRESET=netlify` on Netlify or `NITRO_PRESET=vercel` on Vercel.
-Netlify's public output is `dist/client` and its generated functions are in
-`.netlify/functions-internal`; Vercel uses the generated `.vercel/output`.
-The Lovable editor keeps its own managed hosting target.
+git clone <repository-url>
+cd <project-directory>
 
-### Public homepage address
+2. Install dependencies
 
-Set `VITE_SITE_URL` to the final HTTPS website address on your chosen host,
-then redeploy. The homepage uses that origin for its canonical and Open Graph
-address. Until configured, it omits those tags rather than publishing a relative
-or invented address. Its existing title and descriptions remain available.
+bun install
 
-Before launch, confirm message receipt in the selected provider, decide who
-can access messages and how long they are retained, and supply those verified
-practices for a contact privacy notice. No retention or privacy promises are
-invented by the application.
+3. Start the development server
 
-### Portraits on external hosting
+bun run dev
 
-Lovable's relative media URLs are not served by Vercel or Netlify. Before an
-external deployment, put the original three remaining portraits on that host
-at `/portraits/portrait-navy-2.jpg`, `/portraits/portrait-navy.jpg` and
-`/portraits/portrait-studio-wide.jpg` and set
-`VITE_PORTRAIT_BASE_URL=/portraits`. Alternatively use an HTTPS media-folder
-URL with those same filenames. The light-blazer portrait is not used.
-Keep the existing asset pointers for Lovable previews.
+---
 
-### Contact delivery without a database
+🚀 Deployment
 
-**Netlify (no email required):** set `VITE_CONTACT_PROVIDER=netlify`, enable
-form detection in Netlify, then deploy. The static `public/__forms.html`
-registers the fields; the visible form posts to that path to bypass SSR.
-Messages appear in Netlify's Forms area. Do not add email notifications.
-Submit a real test after deployment and confirm it appears there.
+This project supports deployment to Vercel and Netlify.
 
-**Email delivery on Vercel or Netlify (recommended, free):** get an access key
-at https://web3forms.com using your email address, then set
-`VITE_CONTACT_PROVIDER=web3forms` and `VITE_WEB3FORMS_KEY=<your key>` in the
-host's environment variables. Every message is emailed to that address.
+Keep TanStack Start's server rendering and Nitro adapter enabled. Do not add an SPA rewrite to "index.html". This application uses section hashes, and routes such as "/#about" and "/#contact" should refresh correctly.
 
-**Alternative:** create a Formspree form, set `VITE_CONTACT_PROVIDER=formspree`
-and `VITE_FORMSPREE_ENDPOINT` to its real `https://formspree.io/f/...` URL.
-Use the provider's inbox and disable email notifications in its settings.
-This setup is pending until a real endpoint is supplied; no placeholder
-endpoint is used. Confirm a test in the provider's inbox before going live.
+Use the following build commands:
 
-**Lovable preview:** the default `cloud` provider preserves existing validated
-contact storage in Lovable Cloud. No owner email notifications are enabled.
-External form providers require no application database credentials.
+bun install
+bun run build
 
-Environment variables starting with `VITE_` are public build-time settings;
-never place a private key in them. Redeploy after changing them. External
-deployment and hosted inbox delivery cannot be verified from a local preview.
+Configure the appropriate Nitro preset:
+
+Hosting Platform| Environment Variable
+Vercel| "NITRO_PRESET=vercel"
+Netlify| "NITRO_PRESET=netlify"
+
+- Netlify public output: "dist/client"
+- Netlify generated functions: ".netlify/functions-internal"
+- Vercel output: ".vercel/output"
+
+The Lovable editor maintains its own managed hosting target.
+
+---
+
+🌐 Website URL Configuration
+
+Set the following environment variable to your final HTTPS website address:
+
+VITE_SITE_URL=https://your-domain.com
+
+This value is used for the homepage's canonical URL and Open Graph metadata.
+
+Redeploy after changing the environment variable.
+
+---
+
+🖼️ Portrait Image Configuration
+
+For external hosting on Vercel or Netlify, the original portrait images must be available at these paths:
+
+/portraits/portrait-navy-2.jpg
+/portraits/portrait-navy.jpg
+/portraits/portrait-studio-wide.jpg
+
+Configure the image base path:
+
+VITE_PORTRAIT_BASE_URL=/portraits
+
+Alternatively, use an HTTPS media-folder URL containing the same filenames.
+
+Keep the existing asset pointers for Lovable previews. The light-blazer portrait is not used.
+
+---
+
+📩 Contact Form Configuration
+
+The project supports three contact form providers.
+
+1. Web3Forms — Email Delivery
+
+For Vercel or Netlify, Web3Forms can deliver submitted messages to your email address.
+
+1. Create an access key at "Web3Forms" (https://web3forms.com).
+2. Add these environment variables to your hosting platform:
+
+VITE_CONTACT_PROVIDER=web3forms
+VITE_WEB3FORMS_KEY=<your-access-key>
+
+3. Redeploy and submit a test message.
+4. Confirm that the message arrives in your email.
+
+2. Netlify Forms
+
+Set:
+
+VITE_CONTACT_PROVIDER=netlify
+
+Enable form detection in Netlify and deploy the project.
+
+The static "public/__forms.html" file registers the form fields. Submitted messages appear in the Netlify Forms area.
+
+Submit a test message and confirm that it appears there.
+
+3. Formspree
+
+Create a form at "Formspree" (https://formspree.io) and configure:
+
+VITE_CONTACT_PROVIDER=formspree
+VITE_FORMSPREE_ENDPOINT=https://formspree.io/f/...
+
+Replace the endpoint with your actual Formspree form URL.
+
+Use the provider's inbox and disable email notifications in its settings. Test the form before launch.
+
+Lovable Preview
+
+The default "cloud" provider preserves the existing validated contact storage in Lovable Cloud. Owner email notifications are not enabled.
+
+External form providers do not require application database credentials.
+
+---
+
+🔐 Environment Variables & Security
+
+- Variables beginning with "VITE_" are public build-time settings.
+- Never store private API keys or other private credentials in "VITE_" variables.
+- Redeploy after changing environment variables.
+- Verify contact form delivery on the deployed website; local previews cannot confirm external hosting or inbox delivery.
+
+---
+
+📌 Before Launch
+
+- [ ] Confirm the website URL configuration.
+- [ ] Verify all portrait image paths.
+- [ ] Configure the contact form provider.
+- [ ] Submit a test contact message.
+- [ ] Confirm successful message delivery.
+- [ ] Check the deployed website after redeployment.
+
+---
+
+Live Portfolio: https://tauhidul.vercel.appapp
