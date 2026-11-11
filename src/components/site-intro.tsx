@@ -5,7 +5,7 @@ import { QUOTATION_COUNT } from "@/lib/site-loading";
 
 const QUOTATIONS = [
   { text: "“Nature never did betray the heart that loved her.”", source: "— William Wordsworth, Tintern Abbey" },
-  { text: "“Indeed, with hardship comes ease.”", source: "— The Qur’an, 94:6, Sahih International translation" },
+  { text: "“Indeed, with hardship comes ease.”", source: "— The Qur’an, 94:6" },
   { text: "“One must imagine Sisyphus happy.”", source: "— Albert Camus, The Myth of Sisyphus" },
 ] as const;
 
