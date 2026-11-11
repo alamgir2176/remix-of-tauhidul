@@ -38,14 +38,15 @@ export function ContactForm() {
     submitting.current = true;
     setStatus("sending");
     try {
-      const provider = getContactProvider(import.meta.env['VITE_CONTACT_PROVIDER']);
+      const provider = getContactProvider(import.meta.env["VITE_CONTACT_PROVIDER"]);
       if (provider === "cloud") {
         const { submitContact } = await import("@/lib/contact.functions");
         await submitContact({ data: parsed.data });
       } else {
-        const config = provider === "web3forms"
-          ? import.meta.env['VITE_WEB3FORMS_KEY']
-          : import.meta.env['VITE_FORMSPREE_ENDPOINT'];
+        const config =
+          provider === "web3forms"
+            ? import.meta.env["VITE_WEB3FORMS_KEY"]
+            : import.meta.env["VITE_FORMSPREE_ENDPOINT"];
         await submitHostedContact(provider, parsed.data, config);
       }
       setStatus("sent");
@@ -71,16 +72,38 @@ export function ContactForm() {
   }
 
   return (
-    <form ref={formRef} name="contact" onSubmit={onSubmit} noValidate className="space-y-9" aria-busy={status === "sending"}>
+    <form
+      ref={formRef}
+      name="contact"
+      onSubmit={onSubmit}
+      noValidate
+      className="space-y-9"
+      aria-busy={status === "sending"}
+    >
       <input type="hidden" name="form-name" value="contact" />
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
       <div className="grid gap-8 sm:grid-cols-2">
         <Field label="Name" name="name" error={errors["name"]} autoComplete="name" />
-        <Field label="Email" name="email" type="email" error={errors["email"]} autoComplete="email" />
+        <Field
+          label="Email"
+          name="email"
+          type="email"
+          error={errors["email"]}
+          autoComplete="email"
+        />
       </div>
       <Field label="Subject (optional)" name="subject" error={errors["subject"]} />
       <div>
-        <label htmlFor="message" className="form-label">Message</label>
+        <label htmlFor="message" className="form-label">
+          Message
+        </label>
         <textarea
           id="message"
           name="message"
@@ -91,10 +114,20 @@ export function ContactForm() {
           aria-describedby={errors["message"] ? "message-error" : undefined}
           className="mt-2 w-full resize-none border-b border-input bg-transparent py-2 outline-none transition-colors focus:border-foreground"
         />
-        {errors["message"] && <p id="message-error" role="alert" className="mt-1 text-sm text-destructive">{errors["message"]}</p>}
+        {errors["message"] && (
+          <p id="message-error" role="alert" className="mt-1 text-sm text-destructive">
+            {errors["message"]}
+          </p>
+        )}
       </div>
-      {status === "error" && <p role="alert" className="text-sm text-destructive">{serverError}</p>}
-      <p role="status" aria-live="polite" className="sr-only">{status === "sending" ? "Sending your message…" : ""}</p>
+      {status === "error" && (
+        <p role="alert" className="text-sm text-destructive">
+          {serverError}
+        </p>
+      )}
+      <p role="status" aria-live="polite" className="sr-only">
+        {status === "sending" ? "Sending your message…" : ""}
+      </p>
       <Button
         type="submit"
         disabled={status === "sending"}
@@ -121,7 +154,9 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="form-label">{label}</label>
+      <label htmlFor={name} className="form-label">
+        {label}
+      </label>
       <input
         id={name}
         name={name}
@@ -133,7 +168,11 @@ function Field({
         aria-describedby={error ? `${name}-error` : undefined}
         className="mt-2 w-full border-b border-input bg-transparent py-2 outline-none transition-colors focus:border-foreground"
       />
-      {error && <p id={`${name}-error`} role="alert" className="mt-1 text-sm text-destructive">{error}</p>}
+      {error && (
+        <p id={`${name}-error`} role="alert" className="mt-1 text-sm text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

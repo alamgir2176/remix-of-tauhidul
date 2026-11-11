@@ -1,4 +1,5 @@
 # Project rules
+
 - Keep the personal website as a single editorial narrative with in-page navigation; its sections tell one continuous identity story.
 - Keep the contact form isolated with a shared validation schema and explicit hosted-provider selection; the default Cloud service stays intact while external deployments can avoid database dependencies.
 - Define all visual colors and effects with semantic global CSS tokens; the monochrome design must remain consistently themeable.

@@ -1,4 +1,5 @@
 # Final website polish
+
 - [ ] Deliver the requested v2 visual refresh across the existing single-page narrative, preserving its monochrome identity, verified biography, loading experience, navigation, and contact flow.
 - [x] Checked search demand and who ranks for the name, and strengthened the Google/social cards with ProfilePage structured data.
 - [x] Apply the review's readability, content simplification, form accessibility, loading reliability and public-address fixes; verify affected flows and layouts.
