@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpRight, Menu, X, Plus, Minus } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Plus, Minus } from "lucide-react";
 import navy2 from "@/assets/portrait-navy-2.jpg.asset.json";
 import navy from "@/assets/portrait-navy.jpg.asset.json";
 import studioWide from "@/assets/portrait-studio-wide.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
-import { LibraryOverview } from "@/components/library-overview";
+import { ActivitiesSection, NoticesSection, WritingSection } from "@/components/home-sections";
+import { SiteFooter, SiteHeader, LINKEDIN } from "@/components/site-chrome";
 import { VisitorFaq } from "@/components/visitor-faq";
 import { portraitUrl } from "@/lib/portrait-url";
 import { profileJsonLd, publicHomepage } from "@/lib/site-metadata";
@@ -32,9 +33,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
-const NAV = [["The person", "#about"], ["Perspective", "#perspective"], ["Beyond the page", "#beyond"], ["Writing & work", "#library"]] as const;
-const SECTIONS = ["about", "perspective", "beyond", "library", "contact"];
+const SECTIONS = ["about", "perspective", "beyond", "library", "notices", "activities", "contact"];
 const PERSPECTIVES = [
   { title: "Think deeply.", subtitle: "PHILOSOPHY & ANALYSIS", text: "Philosophy trained me to read slowly, question what seems obvious, and say complicated things plainly.", detail: "Critical thinking · Analysis · Problem-solving · Clear writing" },
   { title: "Connect honestly.", subtitle: "PEOPLE & COMMUNICATION", text: "Most misunderstandings begin with not listening. I try to hear people out fully, speak with care, and carry my share when working with others.", detail: "Active listening · Communication · Teamwork · Leadership" },
@@ -42,7 +41,6 @@ const PERSPECTIVES = [
 ];
 
 function Index() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [expanded, setExpanded] = useState<number | null>(0);
   const [backgroundOpen, setBackgroundOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -84,30 +82,11 @@ function Index() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => { observer.disconnect(); sectionObserver.disconnect(); window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
   }, []);
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
-    // Capture phase: page-level handlers can stop key events from bubbling back to the document.
-    document.addEventListener("keydown", onKey, true);
-    document.documentElement.classList.add("menu-open");
-    return () => { document.removeEventListener("keydown", onKey, true); document.documentElement.classList.remove("menu-open"); };
-  }, [menuOpen]);
 
   return (
     <div id="top">
       <Link to="/" hash="main" className="skip-link" onClick={() => document.getElementById("main")?.focus()}>Skip to content</Link>
-      <header className={`site-header${scrolled ? " is-scrolled" : ""}${hidden && !menuOpen ? " is-hidden" : ""}`}>
-        <span ref={progress} className="header-progress" aria-hidden="true" />
-        <Link to="/" hash="top" className="wordmark" aria-label="Tauhidul Islam, home">tauhidul<span className="text-muted-foreground">.</span></Link>
-        <nav aria-label="Primary" className="hidden items-center gap-9 md:flex">
-          {NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href} className={`nav-link${active === href.slice(1) ? " is-active" : ""}`} aria-current={active === href.slice(1) ? "location" : undefined}>{label}</Link>)}
-        </nav>
-        <div className="flex shrink-0 items-center gap-4">
-          <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
-          <Button variant="ghost" size="icon" className="md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
-        </div>
-        {menuOpen && <nav id="mobile-menu" aria-label="Mobile" className="mobile-menu">{[...NAV, ["Let’s talk", "#contact"] as const].map(([label, href], i) => <Link to="/" hash={href.slice(1)} key={href} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>)}<p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p></nav>}
-      </header>
+      <SiteHeader active={active} scrolled={scrolled} hidden={hidden} progressRef={progress} />
       <main id="main" tabIndex={-1}>
         <section className="identity-hero" aria-label="Introduction">
           <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(navy2)} alt="Black-and-white portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
@@ -139,20 +118,15 @@ function Index() {
           <div id="background-details" hidden={!backgroundOpen} className="background-details"><div><h3>Education</h3>{[["M.A. in Philosophy", "Jahangirnagar University, Dhaka"],["B.A. in Philosophy", "Jahangirnagar University, Dhaka"],["HSC, Humanities", "Govt. Syed Hatem Ali College, Barishal"],["SSC, Humanities", "Amua Bandar Amir Molla Secondary School, Jhalokati"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div><div><h3>Continued learning</h3>{[["Fundamentals of Digital Marketing", "Google Digital Garage · 2021"],["Elements of AI", "University of Helsinki & Reaktor · 2021"],["Learn Blockchain Features in a Simple Way", "upGrad · 2021"],["Covid-19 Awareness and Prevention", "Muktopaath"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div></div>
         </section>
 
-        <LibraryOverview />
+        <WritingSection />
+        <NoticesSection />
+        <ActivitiesSection />
 
         <section className="interlude" aria-label="A continuing story"><div className="interlude-bg" aria-hidden="true"><img ref={interludeBg} src={portraitUrl(studioWide)} alt="" loading="lazy" className="photo-mono" /></div><div className="interlude-inner scroll-reveal"><span className="micro-label">A continuing story</span><p>Stay curious.<br />Stay <span className="font-editorial italic">human.</span></p><span>Ideas evolve. So do we.</span></div></section>
 
-        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">05</span><div className="section-label"><span>05 — The next conversation</span><span>Good things start with hello</span></div><div className="contact-layout"><div className="scroll-reveal"><h2 className="section-heading">Something<br />on your <span className="font-editorial italic">mind?</span></h2><p className="section-intro">An idea, an opportunity, a collaboration.<br />Or simply a different perspective.<br />I'd love to hear from you.</p><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button><Button asChild variant="link" className="text-link"><Link to="/cv-request">Request my CV <ArrowUpRight /></Link></Button><p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p></div><div className="contact-form-wrap scroll-reveal"><ContactForm /></div></div><VisitorFaq /></section>
+        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">07</span><div className="section-label"><span>07 — The next conversation</span><span>Good things start with hello</span></div><div className="contact-layout"><div className="scroll-reveal"><h2 className="section-heading">Something<br />on your <span className="font-editorial italic">mind?</span></h2><p className="section-intro">An idea, an opportunity, a collaboration.<br />Or simply a different perspective.<br />I'd love to hear from you.</p><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button><Button asChild variant="link" className="text-link"><Link to="/cv-request">Request my CV <ArrowUpRight /></Link></Button><p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p></div><div className="contact-form-wrap scroll-reveal"><ContactForm /></div></div><VisitorFaq /></section>
       </main>
-      <footer className="site-footer">
-        <div className="footer-main">
-          <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul.</Link><p>Dhaka, Bangladesh.</p></div>
-          <nav className="footer-nav" aria-label="Footer"><span className="micro-label">Explore</span>{NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}<Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link></nav>
-          <div className="footer-connect"><span className="micro-label">Keep in touch</span><Button asChild variant="link" className="footer-link"><Link to="/" hash="contact">Start a conversation <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><Link to="/cv-request">Request my CV <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button></div>
-        </div>
-        <div className="footer-bottom"><p>© {new Date().getFullYear()} Md Tauhidul Islam</p><span>A life in progress.</span><Button asChild variant="ghost" className="rounded-none px-0"><Link to="/" hash="top">Back to top <ArrowUp aria-hidden="true" /></Link></Button></div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

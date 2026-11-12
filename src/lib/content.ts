@@ -7,6 +7,7 @@
 import {
   EXTERNAL_SECTIONS,
   buildPosts,
+  dateValue,
   groupPhotos,
   normalizeDocuments,
   normalizeExternal,
@@ -65,58 +66,57 @@ export function getPhotoGroups(): PhotoGroup[] {
   return groupPhotos(getPhotos());
 }
 
-export interface DirectoryEntry {
+export interface FeedItem {
   key: string;
+  /** Type tag shown on the card: Blog, Project, Book, ... */
+  type: string;
   title: string;
-  blurb: string;
-  count: number;
-  to: "/writings" | "/library/$section" | "/notices" | "/activities";
-  params?: { section: string };
-  hash?: string;
+  description: string;
+  image: string;
+  date: string;
+  /** Blog posts open an article page on this website; everything else is an external link. */
+  slug?: string;
+  url?: string;
 }
 
-/** One entry per website section, used by the homepage and the /library index. */
-export function getDirectory(): DirectoryEntry[] {
-  return [
-    {
-      key: "writings",
-      title: "Blog & personal writings",
-      blurb: "Original essays and reflections, published here.",
-      count: posts.length,
-      to: "/writings",
-    },
-    ...EXTERNAL_SECTIONS.map(
-      (section): DirectoryEntry => ({
-        key: section.slug,
-        title: section.title,
-        blurb: section.blurb,
-        count: getExternalItems(section).length,
-        to: "/library/$section",
-        params: { section: section.slug },
-      }),
-    ),
-    {
-      key: "notices",
-      title: "Notices",
-      blurb: "Official notices, available as PDF downloads.",
-      count: getNotices().length,
-      to: "/notices",
-      hash: "notices",
-    },
-    {
-      key: "press-releases",
-      title: "Press releases",
-      blurb: "Press releases, available as PDF downloads.",
-      count: getPressReleases().length,
-      to: "/notices",
-      hash: "press-releases",
-    },
-    {
-      key: "activities",
-      title: "Activities",
-      blurb: "Photographs from events and activities.",
-      count: getPhotos().length,
-      to: "/activities",
-    },
-  ];
+export function getSectionFeed(section: ExternalSection): FeedItem[] {
+  return getExternalItems(section).map((item, i) => ({
+    key: `${section.slug}-${i}-${item.url}`,
+    type: section.singular,
+    title: item.title,
+    description: item.description,
+    image: item.image,
+    date: item.date,
+    url: item.url,
+  }));
+}
+
+/** Blog posts and every external-link section in one list, newest first. */
+export function getFeed(): FeedItem[] {
+  const feed: FeedItem[] = posts.map((post) => ({
+    key: `post-${post.slug}`,
+    type: "Blog",
+    title: post.title,
+    description: post.excerpt,
+    image: post.cover,
+    date: post.date,
+    slug: post.slug,
+  }));
+  for (const section of EXTERNAL_SECTIONS) {
+    getExternalItems(section).forEach((item, i) => {
+      feed.push({
+        key: `${section.slug}-${i}-${item.url}`,
+        type: section.singular,
+        title: item.title,
+        description: item.description,
+        image: item.image,
+        date: item.date,
+        url: item.url,
+      });
+    });
+  }
+  return feed
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => dateValue(b.item.date) - dateValue(a.item.date) || a.index - b.index)
+    .map(({ item }) => item);
 }

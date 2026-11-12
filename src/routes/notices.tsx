@@ -19,7 +19,7 @@ function NoticesPage() {
   const releases = getPressReleases();
   return (
     <PageShell>
-      <PageIntro label="Notices & press releases" title="Official" accent="announcements.">
+      <PageIntro number="05" label="Notices & press releases" title="Official" accent="announcements.">
         Each entry can be downloaded as a PDF.
       </PageIntro>
       <section className="page-section" id="notices" aria-labelledby="notices-title">

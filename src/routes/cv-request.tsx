@@ -16,7 +16,7 @@ export const Route = createFileRoute("/cv-request")({
 function CvRequestPage() {
   return (
     <PageShell>
-      <PageIntro label="CV / résumé" title="Request my" accent="CV.">
+      <PageIntro number="07" label="CV / résumé" title="Request my" accent="CV.">
         My CV is not published online. Tell me a little about yourself and why you would like it. I review every request personally and reply by email if I am able to share it.
       </PageIntro>
       <section className="page-section cv-request-wrap" aria-label="CV request form"><CvRequestForm /></section>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Link2 } from "lucide-react";
 import { MarkdownView } from "@/components/markdown-view";
-import { SiteFooter } from "@/components/page-shell";
+import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { getPost } from "@/lib/content";
 import { absoluteUrl, bengaliFontLink, pageMeta } from "@/lib/seo";
 
@@ -56,14 +56,11 @@ function ArticlePage() {
   if (!post) return null;
   return (
     <div id="top" className="reader">
-      <header className="reader-bar">
-        <Link to="/writings" className="reader-back"><ArrowLeft aria-hidden="true" /> All writings</Link>
-        <Link to="/" className="wordmark" aria-label="Tauhidul Islam, home">tauhidul<span className="text-muted-foreground">.</span></Link>
-        <Link to="/" className="reader-home">Main website</Link>
-      </header>
+      <SiteHeader active="library" />
       <main id="main" tabIndex={-1}>
         <article className="reader-article">
           <header className="reader-head">
+            <Link to="/writings" className="reader-back"><ArrowLeft aria-hidden="true" /> All writings</Link>
             <p className="micro-label">{[post.dateLabel, `${post.readingMinutes} min read`].filter(Boolean).join(" · ")}</p>
             <h1>{post.title}</h1>
             {post.excerpt && <p className="reader-lede">{post.excerpt}</p>}

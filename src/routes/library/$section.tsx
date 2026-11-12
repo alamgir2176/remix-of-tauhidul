@@ -1,8 +1,9 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
-import { ExternalCard } from "@/components/content-cards";
-import { getExternalItems } from "@/lib/content";
-import { EXTERNAL_SECTIONS, findExternalSection } from "@/lib/content-utils";
+import { FeedCard } from "@/components/content-cards";
+import { TypeChips } from "@/components/type-chips";
+import { getSectionFeed } from "@/lib/content";
+import { findExternalSection } from "@/lib/content-utils";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/library/$section")({
@@ -26,21 +27,17 @@ function SectionPage() {
   const { slug } = Route.useLoaderData();
   const section = findExternalSection(slug);
   if (!section) return null;
-  const items = getExternalItems(section);
+  const items = getSectionFeed(section);
   return (
     <PageShell>
-      <PageIntro label={section.title} title={section.title}>{section.blurb}</PageIntro>
+      <PageIntro number="04" label={section.title} title={section.title}>{section.blurb}</PageIntro>
       <section className="page-section" aria-label={section.title}>
+        <TypeChips active={section.slug} />
         {items.length > 0 ? (
-          <div className="card-grid">{items.map((item, i) => <ExternalCard key={`${item.url}-${i}`} item={item} kind={section.singular} />)}</div>
+          <div className="card-grid">{items.map((item) => <FeedCard key={item.key} item={item} />)}</div>
         ) : (
           <EmptyState title={`No ${section.title.toLowerCase()} yet.`}>Entries will appear here as soon as they are added.</EmptyState>
         )}
-        <nav className="section-switch" aria-label="Other sections">
-          {EXTERNAL_SECTIONS.filter((s) => s.slug !== section.slug).map((s) => (
-            <Link key={s.slug} to="/library/$section" params={{ section: s.slug }}>{s.title}</Link>
-          ))}
-        </nav>
       </section>
     </PageShell>
   );
