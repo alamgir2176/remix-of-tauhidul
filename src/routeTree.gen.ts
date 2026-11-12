@@ -10,6 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivitiesRouteImport } from './routes/activities'
+import { Route as CvRequestRouteImport } from './routes/cv-request'
+import { Route as NoticesRouteImport } from './routes/notices'
+import { Route as LibraryIndexRouteImport } from './routes/library/index'
+import { Route as LibrarySectionRouteImport } from './routes/library/$section'
+import { Route as WritingsIndexRouteImport } from './routes/writings/index'
+import { Route as WritingsSlugRouteImport } from './routes/writings/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -17,26 +24,96 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+const ActivitiesRoute = ActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const CvRequestRoute = CvRequestRouteImport.update({
+  id: '/cv-request',
+  path: '/cv-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const NoticesRoute = NoticesRouteImport.update({
+  id: '/notices',
+  path: '/notices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const LibraryIndexRoute = LibraryIndexRouteImport.update({
+  id: '/library/',
+  path: '/library/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const LibrarySectionRoute = LibrarySectionRouteImport.update({
+  id: '/library/$section',
+  path: '/library/$section',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const WritingsIndexRoute = WritingsIndexRouteImport.update({
+  id: '/writings/',
+  path: '/writings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const WritingsSlugRoute = WritingsSlugRouteImport.update({
+  id: '/writings/$slug',
+  path: '/writings/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
+  '/cv-request': typeof CvRequestRoute
+  '/notices': typeof NoticesRoute
+  '/library/': typeof LibraryIndexRoute
+  '/library/$section': typeof LibrarySectionRoute
+  '/writings/': typeof WritingsIndexRoute
+  '/writings/$slug': typeof WritingsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
+  '/cv-request': typeof CvRequestRoute
+  '/notices': typeof NoticesRoute
+  '/library': typeof LibraryIndexRoute
+  '/library/$section': typeof LibrarySectionRoute
+  '/writings': typeof WritingsIndexRoute
+  '/writings/$slug': typeof WritingsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activities': typeof ActivitiesRoute
+  '/cv-request': typeof CvRequestRoute
+  '/notices': typeof NoticesRoute
+  '/library/': typeof LibraryIndexRoute
+  '/library/$section': typeof LibrarySectionRoute
+  '/writings/': typeof WritingsIndexRoute
+  '/writings/$slug': typeof WritingsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/activities' | '/cv-request' | '/notices' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/activities' | '/cv-request' | '/notices' | '/library' | '/library/$section' | '/writings' | '/writings/$slug'
+  id: '__root__' | '/' | '/activities' | '/cv-request' | '/notices' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivitiesRoute: typeof ActivitiesRoute
+  CvRequestRoute: typeof CvRequestRoute
+  NoticesRoute: typeof NoticesRoute
+  LibraryIndexRoute: typeof LibraryIndexRoute
+  LibrarySectionRoute: typeof LibrarySectionRoute
+  WritingsIndexRoute: typeof WritingsIndexRoute
+  WritingsSlugRoute: typeof WritingsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +125,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activities': {
+      id: '/activities'
+      path: '/activities'
+      fullPath: '/activities'
+      preLoaderRoute: typeof ActivitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cv-request': {
+      id: '/cv-request'
+      path: '/cv-request'
+      fullPath: '/cv-request'
+      preLoaderRoute: typeof CvRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notices': {
+      id: '/notices'
+      path: '/notices'
+      fullPath: '/notices'
+      preLoaderRoute: typeof NoticesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library/': {
+      id: '/library/'
+      path: '/library/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof LibraryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library/$section': {
+      id: '/library/$section'
+      path: '/library/$section'
+      fullPath: '/library/$section'
+      preLoaderRoute: typeof LibrarySectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/writings/': {
+      id: '/writings/'
+      path: '/writings/'
+      fullPath: '/writings/'
+      preLoaderRoute: typeof WritingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/writings/$slug': {
+      id: '/writings/$slug'
+      path: '/writings/$slug'
+      fullPath: '/writings/$slug'
+      preLoaderRoute: typeof WritingsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivitiesRoute: ActivitiesRoute,
+  CvRequestRoute: CvRequestRoute,
+  NoticesRoute: NoticesRoute,
+  LibraryIndexRoute: LibraryIndexRoute,
+  LibrarySectionRoute: LibrarySectionRoute,
+  WritingsIndexRoute: WritingsIndexRoute,
+  WritingsSlugRoute: WritingsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

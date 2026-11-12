@@ -161,4 +161,18 @@ External form providers do not require application database credentials.
 
 ---
 
+📝 Managing Content (Blog, Library, Notices, Activities)
+
+All content lives in the "content/" folder and the "public/" folder. Add or edit files, commit, and Vercel redeploys. No source-code changes are needed.
+
+- Blog articles: "content/blog/*.md" (images in "public/images/blog/")
+- External-link sections: "content/external/*.json"
+- Notices and press releases: "content/notices.json", "content/press-releases.json" (PDFs in "public/documents/")
+- Activities gallery: "content/activities.json" (photos in "public/images/activities/")
+- Check everything before committing: "bun run check:content"
+
+Full instructions and examples: "content/README.md".
+
+---
+
 Live Portfolio: https://tauhidul.vercel.appapp

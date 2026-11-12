@@ -1,0 +1,10 @@
+[
+  {
+    "image": "theatre-festival-01.jpg",
+    "caption": "Caption shown under the photograph",
+    "activity": "Theatre festival",
+    "date": "2026-11-13",
+    "location": "Optional place name",
+    "alt": "Optional description for screen readers"
+  }
+]

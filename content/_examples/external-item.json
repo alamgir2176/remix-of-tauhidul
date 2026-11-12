@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Title of the item",
+    "category": "Journal article",
+    "description": "One or two sentences about it.",
+    "url": "https://example.com/the-original-page",
+    "image": "thumbnail.jpg",
+    "source": "Name of the website or publication",
+    "date": "2026-11-13"
+  }
+]
