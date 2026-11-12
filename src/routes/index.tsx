@@ -6,6 +6,7 @@ import navy from "@/assets/portrait-navy.jpg.asset.json";
 import studioWide from "@/assets/portrait-studio-wide.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
+import { LibraryOverview } from "@/components/library-overview";
 import { VisitorFaq } from "@/components/visitor-faq";
 import { portraitUrl } from "@/lib/portrait-url";
 import { profileJsonLd, publicHomepage } from "@/lib/site-metadata";
@@ -32,8 +33,8 @@ export const Route = createFileRoute("/")({
 });
 
 const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
-const NAV = [["The person", "#about"], ["Perspective", "#perspective"], ["Beyond the page", "#beyond"]] as const;
-const SECTIONS = ["about", "perspective", "beyond", "contact"];
+const NAV = [["The person", "#about"], ["Perspective", "#perspective"], ["Beyond the page", "#beyond"], ["Writing & work", "#library"]] as const;
+const SECTIONS = ["about", "perspective", "beyond", "library", "contact"];
 const PERSPECTIVES = [
   { title: "Think deeply.", subtitle: "PHILOSOPHY & ANALYSIS", text: "Philosophy trained me to read slowly, question what seems obvious, and say complicated things plainly.", detail: "Critical thinking · Analysis · Problem-solving · Clear writing" },
   { title: "Connect honestly.", subtitle: "PEOPLE & COMMUNICATION", text: "Most misunderstandings begin with not listening. I try to hear people out fully, speak with care, and carry my share when working with others.", detail: "Active listening · Communication · Teamwork · Leadership" },
@@ -138,15 +139,17 @@ function Index() {
           <div id="background-details" hidden={!backgroundOpen} className="background-details"><div><h3>Education</h3>{[["M.A. in Philosophy", "Jahangirnagar University, Dhaka"],["B.A. in Philosophy", "Jahangirnagar University, Dhaka"],["HSC, Humanities", "Govt. Syed Hatem Ali College, Barishal"],["SSC, Humanities", "Amua Bandar Amir Molla Secondary School, Jhalokati"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div><div><h3>Continued learning</h3>{[["Fundamentals of Digital Marketing", "Google Digital Garage · 2021"],["Elements of AI", "University of Helsinki & Reaktor · 2021"],["Learn Blockchain Features in a Simple Way", "upGrad · 2021"],["Covid-19 Awareness and Prevention", "Muktopaath"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div></div>
         </section>
 
+        <LibraryOverview />
+
         <section className="interlude" aria-label="A continuing story"><div className="interlude-bg" aria-hidden="true"><img ref={interludeBg} src={portraitUrl(studioWide)} alt="" loading="lazy" className="photo-mono" /></div><div className="interlude-inner scroll-reveal"><span className="micro-label">A continuing story</span><p>Stay curious.<br />Stay <span className="font-editorial italic">human.</span></p><span>Ideas evolve. So do we.</span></div></section>
 
-        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">04</span><div className="section-label"><span>04 — The next conversation</span><span>Good things start with hello</span></div><div className="contact-layout"><div className="scroll-reveal"><h2 className="section-heading">Something<br />on your <span className="font-editorial italic">mind?</span></h2><p className="section-intro">An idea, an opportunity, a collaboration.<br />Or simply a different perspective.<br />I'd love to hear from you.</p><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button><p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p></div><div className="contact-form-wrap scroll-reveal"><ContactForm /></div></div><VisitorFaq /></section>
+        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">05</span><div className="section-label"><span>05 — The next conversation</span><span>Good things start with hello</span></div><div className="contact-layout"><div className="scroll-reveal"><h2 className="section-heading">Something<br />on your <span className="font-editorial italic">mind?</span></h2><p className="section-intro">An idea, an opportunity, a collaboration.<br />Or simply a different perspective.<br />I'd love to hear from you.</p><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button><Button asChild variant="link" className="text-link"><Link to="/cv-request">Request my CV <ArrowUpRight /></Link></Button><p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p></div><div className="contact-form-wrap scroll-reveal"><ContactForm /></div></div><VisitorFaq /></section>
       </main>
       <footer className="site-footer">
         <div className="footer-main">
           <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul.</Link><p>Dhaka, Bangladesh.</p></div>
           <nav className="footer-nav" aria-label="Footer"><span className="micro-label">Explore</span>{NAV.map(([label, href]) => <Link to="/" hash={href.slice(1)} key={href}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}<Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link></nav>
-          <div className="footer-connect"><span className="micro-label">Keep in touch</span><Button asChild variant="link" className="footer-link"><Link to="/" hash="contact">Start a conversation <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button></div>
+          <div className="footer-connect"><span className="micro-label">Keep in touch</span><Button asChild variant="link" className="footer-link"><Link to="/" hash="contact">Start a conversation <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><Link to="/cv-request">Request my CV <ArrowUpRight aria-hidden="true" /></Link></Button><Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button></div>
         </div>
         <div className="footer-bottom"><p>© {new Date().getFullYear()} Md Tauhidul Islam</p><span>A life in progress.</span><Button asChild variant="ghost" className="rounded-none px-0"><Link to="/" hash="top">Back to top <ArrowUp aria-hidden="true" /></Link></Button></div>
       </footer>
