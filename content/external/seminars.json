@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "title": "[Demo] Dialogue and Disagreement",
+    "category": "Seminar",
+    "description": "A sample seminar entry for a university event.",
+    "url": "https://example.com/seminar",
+    "image": "demo-seminar.jpg",
+    "source": "Example University",
+    "date": "2026-04-18"
+  }
+]
