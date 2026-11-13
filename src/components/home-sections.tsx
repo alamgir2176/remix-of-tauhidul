@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Camera, FileText, PenLine } from "lucide-react";
 import { DocumentList, FeedCard, PhotoFigure } from "@/components/content-cards";
 import { EmptyState } from "@/components/page-shell";
 import { getFeed, getNotices, getPhotos, getPressReleases } from "@/lib/content";
@@ -22,7 +22,7 @@ export function WritingSection() {
       {feed.length > 0 ? (
         <div className="card-grid">{feed.map((item) => <FeedCard key={item.key} item={item} />)}</div>
       ) : (
-        <EmptyState title="Nothing published yet.">Writings, projects, books and talks will appear here.</EmptyState>
+        <EmptyState icon={<PenLine />} title="Nothing published yet.">Writings, projects, books and talks will appear here.</EmptyState>
       )}
     </section>
   );
@@ -43,11 +43,11 @@ export function NoticesSection() {
       <div className="notices-columns">
         <div>
           <h3 className="page-section-title">Notices</h3>
-          {notices.length > 0 ? <DocumentList items={notices} /> : <EmptyState title="No notices yet.">New notices will be listed here.</EmptyState>}
+          {notices.length > 0 ? <DocumentList items={notices} /> : <EmptyState kind="list" icon={<FileText />} title="No notices yet.">New notices will be listed here.</EmptyState>}
         </div>
         <div>
           <h3 className="page-section-title">Press releases</h3>
-          {releases.length > 0 ? <DocumentList items={releases} /> : <EmptyState title="No press releases yet.">New press releases will be listed here.</EmptyState>}
+          {releases.length > 0 ? <DocumentList items={releases} /> : <EmptyState kind="list" icon={<FileText />} title="No press releases yet.">New press releases will be listed here.</EmptyState>}
         </div>
       </div>
     </section>
@@ -68,7 +68,7 @@ export function ActivitiesSection() {
       {photos.length > 0 ? (
         <div className="photo-grid">{photos.map((photo, i) => <PhotoFigure key={`${photo.image}-${i}`} photo={photo} />)}</div>
       ) : (
-        <EmptyState title="No photographs yet.">Photographs from activities and events will appear here.</EmptyState>
+        <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">Photographs from activities and events will appear here.</EmptyState>
       )}
     </section>
   );

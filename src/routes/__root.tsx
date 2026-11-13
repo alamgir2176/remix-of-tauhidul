@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteIntro } from "../components/site-intro";
 import { INTRO_SKIP_SCRIPT } from "../lib/site-loading";
+import { THEME_BOOT_SCRIPT } from "../lib/theme";
 
 function NotFoundComponent() {
   return (
@@ -109,6 +110,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} suppressHydrationWarning />
         <script dangerouslySetInnerHTML={{ __html: INTRO_SKIP_SCRIPT }} suppressHydrationWarning />
       </head>
       <body>
