@@ -58,6 +58,21 @@ export function getPressReleases(): DocumentItem[] {
   return normalizeDocuments(jsonAt("press-releases.json"), "/documents/press-releases/");
 }
 
+export interface Announcement extends DocumentItem {
+  kind: "Notice" | "Press release";
+}
+
+/** One editorial stream for official updates; the source files remain separate for content management. */
+export function getAnnouncements(): Announcement[] {
+  return [
+    ...getNotices().map((item) => ({ ...item, kind: "Notice" as const })),
+    ...getPressReleases().map((item) => ({ ...item, kind: "Press release" as const })),
+  ]
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => dateValue(b.item.date) - dateValue(a.item.date) || a.index - b.index)
+    .map(({ item }) => item);
+}
+
 export function getPhotos(): Photo[] {
   return normalizePhotos(jsonAt("activities.json"));
 }

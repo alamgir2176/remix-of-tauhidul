@@ -31,13 +31,23 @@ function SectionPage() {
   const items = getSectionFeed(section);
   return (
     <PageShell>
-      <PageIntro number="04" label={section.title} title={section.title}>{section.blurb}</PageIntro>
+      <PageIntro number="04" label={section.title} title={section.title}>
+        {section.blurb}
+      </PageIntro>
       <section className="page-section" aria-label={section.title}>
         <TypeChips active={section.slug} />
         {items.length > 0 ? (
-          <div className="card-grid">{items.map((item) => <FeedCard key={item.key} item={item} />)}</div>
+          <div className="editorial-feed editorial-feed-page">
+            {items.map((item, i) => (
+              <div key={item.key} className={i === 0 ? "editorial-feature" : ""}>
+                <FeedCard item={item} />
+              </div>
+            ))}
+          </div>
         ) : (
-          <EmptyState icon={<PenLine />} title={`No ${section.title.toLowerCase()} yet.`}>Entries will appear here as soon as they are added.</EmptyState>
+          <EmptyState icon={<PenLine />} title={`No ${section.title.toLowerCase()} yet.`}>
+            Entries will appear here as soon as they are added.
+          </EmptyState>
         )}
       </section>
     </PageShell>

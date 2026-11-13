@@ -20,15 +20,28 @@ function WritingsPage() {
   const posts = getFeed().filter((item) => item.slug);
   return (
     <PageShell>
-      <PageIntro number="04" label="Blog & personal writings" title="Thoughts, in" accent="my own words.">
+      <PageIntro
+        number="04"
+        label="Blog & personal writings"
+        title="Thoughts, in"
+        accent="my own words."
+      >
         Essays and reflections published here, on my own website.
       </PageIntro>
       <section className="page-section" aria-label="Articles">
         <TypeChips active="blog" />
         {posts.length > 0 ? (
-          <div className="card-grid">{posts.map((item) => <FeedCard key={item.key} item={item} />)}</div>
+          <div className="editorial-feed editorial-feed-page">
+            {posts.map((item, i) => (
+              <div key={item.key} className={i === 0 ? "editorial-feature" : ""}>
+                <FeedCard item={item} />
+              </div>
+            ))}
+          </div>
         ) : (
-          <EmptyState icon={<PenLine />} title="No writings yet.">New essays and reflections will appear here once they are published.</EmptyState>
+          <EmptyState icon={<PenLine />} title="No writings yet.">
+            New essays and reflections will appear here once they are published.
+          </EmptyState>
         )}
       </section>
     </PageShell>
