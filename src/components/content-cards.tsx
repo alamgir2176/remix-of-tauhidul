@@ -6,7 +6,7 @@ import type { DocumentItem, Photo } from "@/lib/content-utils";
 
 /** Colour of each type's tag in the Colorful theme (an OKLCH hue). Other themes ignore it. */
 const TYPE_HUE: Record<string, number> = {
-  Blog: 285, Project: 165, Book: 35, Research: 235, Article: 350, Editorial: 75, Opinion: 320, "Talk show": 15, Seminar: 195,
+  Blog: 38, Project: 165, Book: 82, Research: 255, Article: 200, Editorial: 8, Opinion: 320, "Talk show": 55, Seminar: 285,
 };
 
 /** Card for any item of the "writing & work" group. The only label is its type tag. */

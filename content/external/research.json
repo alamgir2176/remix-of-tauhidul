@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "title": "[Demo] Rethinking Community Care",
+    "category": "Journal paper",
+    "description": "A sample research entry linking to a paper hosted on another website.",
+    "url": "https://example.com/paper",
+    "image": "demo-research.jpg",
+    "source": "Example Journal",
+    "date": "2026-09-12"
+  }
+]

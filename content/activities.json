@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "image": "demo-winter-01.jpg",
+    "caption": "[Demo] Volunteers sorting donated winter clothes.",
+    "activity": "Winter Clothing Drive",
+    "date": "2026-11-08",
+    "location": "Jahangirnagar University"
+  },
+  {
+    "image": "demo-winter-02.jpg",
+    "caption": "[Demo] Distribution day at the community centre.",
+    "activity": "Winter Clothing Drive",
+    "date": "2026-11-08"
+  },
+  {
+    "image": "demo-winter-03.jpg",
+    "caption": "[Demo] The team after a long day.",
+    "activity": "Winter Clothing Drive",
+    "date": "2026-11-08"
+  },
+  {
+    "image": "demo-theatre-01.jpg",
+    "caption": "[Demo] Rehearsal before the festival opening.",
+    "activity": "Theatre Festival",
+    "date": "2026-09-20",
+    "location": "Dhaka"
+  },
+  {
+    "image": "demo-theatre-02.jpg",
+    "caption": "[Demo] Backstage moments.",
+    "activity": "Theatre Festival",
+    "date": "2026-09-20"
+  },
+  {
+    "image": "demo-theatre-03.jpg",
+    "caption": "[Demo] Closing night.",
+    "activity": "Theatre Festival",
+    "date": "2026-09-21"
+  }
+]

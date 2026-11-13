@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "title": "[Demo] Community Program Launched",
+    "date": "2026-10-28",
+    "description": "A sample press release.",
+    "pdf": "demo-launch.pdf"
+  },
+  {
+    "title": "[Demo] Recognition Announcement",
+    "date": "2026-09-15",
+    "pdf": "demo-award.pdf"
+  }
+]

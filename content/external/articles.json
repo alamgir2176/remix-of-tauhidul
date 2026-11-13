@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "title": "[Demo] What Philosophy Teaches About Listening",
+    "description": "A sample article published on an external website. This card has no thumbnail.",
+    "url": "https://example.com/article",
+    "source": "Example Magazine",
+    "date": "2026-10-05"
+  }
+]

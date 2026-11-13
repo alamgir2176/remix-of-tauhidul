@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "title": "[Demo] Voices from the Coast",
+    "category": "Community project",
+    "description": "A sample project card: oral histories gathered from coastal villages and shared online.",
+    "url": "https://example.com/voices",
+    "image": "demo-project.jpg",
+    "source": "Example Foundation",
+    "date": "2026-10-20"
+  }
+]

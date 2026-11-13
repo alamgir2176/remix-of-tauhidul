@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "title": "[Demo] Notice on Winter Clothing Drive",
+    "date": "2026-11-10",
+    "description": "A sample notice with a downloadable PDF.",
+    "pdf": "demo-winter-drive.pdf"
+  },
+  {
+    "title": "[Demo] Seminar Registration Now Open",
+    "date": "2026-11-02",
+    "pdf": "demo-seminar-registration.pdf"
+  }
+]

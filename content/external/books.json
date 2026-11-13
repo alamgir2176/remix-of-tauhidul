@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "title": "[Demo] Notes on Everyday Ethics",
+    "category": "Book",
+    "description": "A sample book card with a short description of what the book is about.",
+    "url": "https://example.com/book",
+    "image": "demo-book.jpg",
+    "source": "Example Press",
+    "date": "2026-08-01"
+  }
+]
