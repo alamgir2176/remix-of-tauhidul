@@ -3,12 +3,12 @@ import { Moon, Palette, Sun } from "lucide-react";
 import { THEMES, applyTheme, readTheme, type ThemeId } from "@/lib/theme";
 
 const META: Record<ThemeId, { label: string; Icon: typeof Sun }> = {
-  minimal: { label: "Minimal", Icon: Sun },
+  minimal: { label: "Natural", Icon: Sun },
   dark: { label: "Dark", Icon: Moon },
   colorful: { label: "Colorful", Icon: Palette },
 };
 
-/** Three-way switch: Minimal (black & white), Dark, Colorful. The choice is remembered in the browser. */
+/** Three-way switch: Natural, Dark, Colorful. The choice is remembered in the browser. */
 export function ThemeSwitcher({ labeled = false }: { labeled?: boolean }) {
   // Unknown until mounted, so server and browser render the same markup.
   const [theme, setTheme] = useState<ThemeId | null>(null);
