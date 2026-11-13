@@ -13,12 +13,19 @@ export function isTheme(value: unknown): value is ThemeId {
 export const THEME_BOOT_SCRIPT = `(function(){try{var t=window.localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="dark"||t==="colorful"||t==="minimal"){window.document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();`;
 
 export function readTheme(): ThemeId {
-  const current = typeof document !== "undefined" ? document.documentElement.getAttribute("data-theme") : null;
+  const current =
+    typeof document !== "undefined" ? document.documentElement.getAttribute("data-theme") : null;
   return isTheme(current) ? current : "minimal";
 }
 
 export function applyTheme(theme: ThemeId): void {
   document.documentElement.setAttribute("data-theme", theme);
-  try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* Storage may be unavailable. */ }
+  document.documentElement.classList.add("theme-is-changing");
+  window.setTimeout(() => document.documentElement.classList.remove("theme-is-changing"), 420);
+  try {
+    window.localStorage.setItem(THEME_KEY, theme);
+  } catch {
+    /* Storage may be unavailable. */
+  }
   window.dispatchEvent(new Event("theme-change"));
 }
