@@ -48,7 +48,8 @@ export function WritingSection() {
         </div>
       ) : (
         <EmptyState icon={<PenLine />} title="Nothing published yet.">
-          Essays, projects, books and talks will be collected here as they are ready.
+          This live section is ready for essays, projects, books and talks. Add an entry in the
+          repository and it will appear here automatically.
         </EmptyState>
       )}
     </section>
@@ -79,7 +80,8 @@ export function NoticesSection() {
         <DocumentList items={announcements} />
       ) : (
         <EmptyState kind="list" icon={<FileText />} title="Nothing new yet.">
-          Notices, news and announcements will be posted here.
+          This live section is ready for notices, news and announcements. Repository updates will
+          appear here automatically.
         </EmptyState>
       )}
     </section>
@@ -116,7 +118,8 @@ export function ActivitiesSection() {
         </div>
       ) : (
         <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">
-          Photographs from events and activities will be added here.
+          This live section is ready for activity photographs. Add them to the repository and they
+          will appear here automatically.
         </EmptyState>
       )}
     </section>

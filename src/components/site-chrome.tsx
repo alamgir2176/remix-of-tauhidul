@@ -6,14 +6,12 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
 
-/** One menu for the whole website. Every item is a section of the homepage. */
+/** The compact primary menu shown in the reference direction. The longer story remains available on the homepage. */
 export const NAV = [
-  ["The person", "about"],
-  ["Perspective", "perspective"],
-  ["Beyond the page", "beyond"],
-  ["Writing & work", "library"],
-  ["Updates", "notices"],
-  ["Activities", "activities"],
+  ["Home", "top"],
+  ["Articles", "library"],
+  ["About", "about"],
+  ["Contact", "contact"],
 ] as const;
 
 interface HeaderProps {
