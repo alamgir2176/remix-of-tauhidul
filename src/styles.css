@@ -962,3 +962,101 @@ html.theme-is-changing *::after {
   .hero-bottom { margin-top: 22px; }
   .hero-index { left: 7%; bottom: 20px; }
 }
+
+/* ======================================================================
+   Full reference visual system
+   Every major section receives a deliberate surface, graphic cue and motion
+   treatment so the page reads as one designed system rather than a recolored
+   hero followed by the old page.
+   ====================================================================== */
+body { background: var(--background); }
+.site-header { margin: 0 2.5%; border-radius: 0 0 8px 8px; }
+.identity-hero { margin: 16px 2.5% 0; min-height: 600px; height: min(720px, calc(100svh - 96px)); border: 1px solid var(--border); border-radius: 9px; isolation: isolate; }
+.identity-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--paper) 15%, transparent); z-index: 3; }
+.hero-image { border-radius: 0 8px 8px 0; }
+.hero-copy { left: 6%; }
+.hero-copy h1 { max-width: 8ch; }
+.hero-topline { z-index: 4; }
+.hero-index { z-index: 4; }
+.hero-image::before { animation: reference-float 12s ease-in-out infinite alternate; }
+.hero-image::after { animation: reference-orbit 16s linear infinite; }
+@keyframes reference-float { from { transform: translate3d(-2%, 1%, 0) rotate(-3deg); } to { transform: translate3d(5%, -3%, 0) rotate(5deg); } }
+@keyframes reference-orbit { to { transform: rotate(360deg); } }
+
+.about-section { overflow: hidden; border-bottom: 1px solid var(--border); }
+.about-section::after { content: "01"; position: absolute; right: 7%; bottom: -12%; font-family: var(--font-editorial); font-size: clamp(180px, 20vw, 310px); color: color-mix(in oklab, var(--accent) 12%, transparent); line-height: .8; pointer-events: none; }
+.about-layout { position: relative; z-index: 1; }
+.about-layout > div { background: color-mix(in oklab, var(--card) 88%, var(--accent)); border: 1px solid color-mix(in oklab, var(--border) 82%, var(--accent)); padding: clamp(28px, 5vw, 70px); border-radius: 9px; box-shadow: 10px 10px 0 color-mix(in oklab, var(--accent) 13%, transparent); }
+.about-layout .statement { max-width: 11ch; }
+
+.perspective-section { position: relative; overflow: hidden; border-block: 1px solid var(--inverse-border); }
+.perspective-section::before { content: ""; position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(color-mix(in oklab, var(--paper) 12%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--paper) 12%, transparent) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(90deg, black, transparent 70%); pointer-events: none; }
+.perspective-layout { position: relative; z-index: 1; }
+.perspective-trigger { border-radius: 7px; padding-inline: 16px; }
+.perspective-item:has(.perspective-trigger[aria-expanded="true"]) { background: color-mix(in oklab, var(--paper) 5%, transparent); }
+
+.beyond-section { overflow: hidden; background: color-mix(in oklab, var(--background) 92%, var(--accent)); }
+.beyond-section::before { content: ""; position: absolute; width: 40vw; max-width: 560px; aspect-ratio: 1; right: -16vw; top: 24%; border: 1px solid color-mix(in oklab, var(--accent) 24%, transparent); border-radius: 50%; box-shadow: 0 0 0 34px color-mix(in oklab, var(--accent) 5%, transparent), 0 0 0 68px color-mix(in oklab, var(--accent) 4%, transparent); pointer-events: none; }
+.beyond-portrait img { border-radius: 8px; box-shadow: 8px 8px 0 color-mix(in oklab, var(--accent) 15%, transparent); }
+.experience-stories article { padding: 30px; border: 1px solid var(--border); border-radius: 7px; background: color-mix(in oklab, var(--card) 78%, transparent); }
+.experience-stories { gap: 14px; }
+
+.library-section { border-block: 1px solid var(--border); }
+.notices-section { border-bottom: 1px solid var(--border); }
+.activities-section { position: relative; overflow: hidden; }
+.activities-section::before { content: ""; position: absolute; width: 44vw; aspect-ratio: 1; right: -12vw; top: 15%; border: 1px solid color-mix(in oklab, var(--accent) 28%, transparent); border-radius: 50%; box-shadow: 0 0 0 34px color-mix(in oklab, var(--accent) 5%, transparent), 0 0 0 68px color-mix(in oklab, var(--accent) 4%, transparent); }
+.content-card, .doc-row, .gallery-item { box-shadow: 6px 6px 0 color-mix(in oklab, var(--accent) 12%, transparent); transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease; }
+.content-card:hover, .doc-row:hover, .gallery-item:hover { transform: translateY(-5px); box-shadow: 9px 9px 0 color-mix(in oklab, var(--accent) 20%, transparent); }
+.empty { position: relative; z-index: 1; border: 1px solid color-mix(in oklab, var(--border) 80%, var(--accent)); border-radius: 8px; background: color-mix(in oklab, var(--card) 88%, transparent); padding: 22px; }
+
+.interlude { margin-inline: 2.5%; border-radius: 9px; }
+.contact-section { background: var(--card); }
+.contact-form-wrap { border: 1px solid var(--border); border-radius: 8px; padding: 28px; background: color-mix(in oklab, var(--background) 86%, var(--accent)); box-shadow: 8px 8px 0 color-mix(in oklab, var(--accent) 12%, transparent); }
+.site-footer { margin-top: 0; }
+
+:root[data-theme="dark"] .about-layout > div, :root[data-theme="dark"] .experience-stories article, :root[data-theme="dark"] .empty, :root[data-theme="dark"] .contact-form-wrap { background: color-mix(in oklab, #20332f 86%, #111c1b); }
+:root[data-theme="dark"] .about-section, :root[data-theme="dark"] .contact-section { background: #172624; }
+:root[data-theme="dark"] .beyond-section, :root[data-theme="dark"] .library-section, :root[data-theme="dark"] .notices-section, :root[data-theme="dark"] .activities-section { background: #14211f; }
+:root[data-theme="dark"] .content-card, :root[data-theme="dark"] .doc-row, :root[data-theme="dark"] .gallery-item { box-shadow: 6px 6px 0 color-mix(in oklab, #91b6a2 18%, transparent); }
+
+:root[data-theme="colorful"] .about-layout > div, :root[data-theme="colorful"] .experience-stories article, :root[data-theme="colorful"] .empty, :root[data-theme="colorful"] .contact-form-wrap { background: color-mix(in oklab, #fbf9ff 84%, #d7cbea); }
+:root[data-theme="colorful"] .about-section { background: #fbf9ff; }
+:root[data-theme="colorful"] .beyond-section { background: #eee9f8; }
+:root[data-theme="colorful"] .library-section { background: #e9f0ed; }
+:root[data-theme="colorful"] .notices-section { background: #eee9f8; }
+:root[data-theme="colorful"] .activities-section { background: #e7dff5; }
+:root[data-theme="colorful"] .perspective-section { background: linear-gradient(135deg, #201a38, #332751); }
+:root[data-theme="colorful"] .content-card, :root[data-theme="colorful"] .doc-row, :root[data-theme="colorful"] .gallery-item { box-shadow: 6px 6px 0 color-mix(in oklab, #7951a6 22%, transparent); }
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .site-header { margin-inline: 3%; }
+  .identity-hero { margin-inline: 3%; min-height: 600px; }
+  .hero-image { left: 46%; }
+  .hero-copy { left: 7%; right: 47%; bottom: 58px; }
+  .hero-copy h1 { font-size: clamp(60px, 8vw, 86px); }
+  .hero-copy h1 span { font-size: clamp(74px, 10vw, 106px); }
+  .section-space { padding-inline: 6%; }
+  .about-layout > div { grid-template-columns: 1fr; }
+  .statement { max-width: 14ch; }
+  .perspective-layout, .beyond-layout, .contact-layout { gap: 7%; }
+}
+@media (max-width: 767px) {
+  .site-header { margin-inline: 0; border-radius: 0; }
+  .identity-hero { margin: 10px 3% 0; min-height: 720px; border-radius: 8px; }
+  .hero-image { border-radius: 7px 7px 0 0; }
+  .hero-copy { left: 7%; right: 7%; }
+  .hero-cta { margin-top: 16px; }
+  .about-layout > div { padding: 25px 20px; box-shadow: 5px 5px 0 color-mix(in oklab, var(--accent) 13%, transparent); }
+  .about-layout > div > .statement { font-size: 38px; }
+  .about-layout > div > .about-lead { font-size: 16px; }
+  .perspective-section::before { background-size: 44px 44px; }
+  .experience-stories article { padding: 22px 18px; }
+  .interlude { margin-inline: 3%; border-radius: 8px; }
+  .contact-form-wrap { padding: 20px 16px; }
+  .empty { padding: 16px; }
+  .content-card, .doc-row, .gallery-item { box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent) 13%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-image::before, .hero-image::after { animation: none; }
+  .content-card, .doc-row, .gallery-item { transition: none; }
+}
