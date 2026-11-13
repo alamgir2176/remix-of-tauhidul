@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { FileText } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { DocumentList } from "@/components/content-cards";
-import { getNotices, getPressReleases } from "@/lib/content";
+import { getAnnouncements } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/notices")({
@@ -16,20 +16,35 @@ export const Route = createFileRoute("/notices")({
 });
 
 function NoticesPage() {
-  const notices = getNotices();
-  const releases = getPressReleases();
+  const announcements = getAnnouncements();
   return (
     <PageShell>
-      <PageIntro number="05" label="Notices & press releases" title="Official" accent="announcements.">
+      <PageIntro
+        number="05"
+        label="Notices & press releases"
+        title="Official"
+        accent="announcements."
+      >
         Each entry can be downloaded as a PDF.
       </PageIntro>
-      <section className="page-section" id="notices" aria-labelledby="notices-title">
-        <h2 id="notices-title" className="page-section-title">Notices</h2>
-        {notices.length > 0 ? <DocumentList items={notices} /> : <EmptyState kind="list" icon={<FileText />} title="No notices yet.">New notices will be listed here.</EmptyState>}
-      </section>
-      <section className="page-section" id="press-releases" aria-labelledby="press-title">
-        <h2 id="press-title" className="page-section-title">Press releases</h2>
-        {releases.length > 0 ? <DocumentList items={releases} /> : <EmptyState kind="list" icon={<FileText />} title="No press releases yet.">New press releases will be listed here.</EmptyState>}
+      <section
+        className="page-section announcements-page"
+        id="notices"
+        aria-labelledby="notices-title"
+      >
+        <div className="announcement-intro">
+          <h2 id="notices-title" className="page-section-title">
+            Latest announcements
+          </h2>
+          <p>Notices and press releases, together in one clear chronological record.</p>
+        </div>
+        {announcements.length > 0 ? (
+          <DocumentList items={announcements} />
+        ) : (
+          <EmptyState kind="list" icon={<FileText />} title="No announcements yet.">
+            New notices and press releases will be listed here.
+          </EmptyState>
+        )}
       </section>
     </PageShell>
   );
