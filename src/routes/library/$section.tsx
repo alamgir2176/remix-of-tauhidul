@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { PenLine } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { FeedCard } from "@/components/content-cards";
 import { TypeChips } from "@/components/type-chips";
@@ -36,7 +37,7 @@ function SectionPage() {
         {items.length > 0 ? (
           <div className="card-grid">{items.map((item) => <FeedCard key={item.key} item={item} />)}</div>
         ) : (
-          <EmptyState title={`No ${section.title.toLowerCase()} yet.`}>Entries will appear here as soon as they are added.</EmptyState>
+          <EmptyState icon={<PenLine />} title={`No ${section.title.toLowerCase()} yet.`}>Entries will appear here as soon as they are added.</EmptyState>
         )}
       </section>
     </PageShell>

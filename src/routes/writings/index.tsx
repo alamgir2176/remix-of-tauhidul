@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PenLine } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { FeedCard } from "@/components/content-cards";
 import { TypeChips } from "@/components/type-chips";
@@ -27,7 +28,7 @@ function WritingsPage() {
         {posts.length > 0 ? (
           <div className="card-grid">{posts.map((item) => <FeedCard key={item.key} item={item} />)}</div>
         ) : (
-          <EmptyState title="No writings yet.">New essays and reflections will appear here once they are published.</EmptyState>
+          <EmptyState icon={<PenLine />} title="No writings yet.">New essays and reflections will appear here once they are published.</EmptyState>
         )}
       </section>
     </PageShell>

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
@@ -36,12 +36,42 @@ export function PageIntro({ number, label, title, accent, children }: { number: 
   );
 }
 
-export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
+type EmptyKind = "cards" | "list" | "photos";
+
+const GHOST_HUES = [285, 20, 190];
+
+/** A calm "nothing here yet" panel with a faint preview of how entries will look once published. */
+export function EmptyState({ title, icon, kind = "cards", children }: { title: string; icon: ReactNode; kind?: EmptyKind; children?: ReactNode }) {
   return (
-    <div className="empty-state" role="status">
-      <span className="empty-state-mark" aria-hidden="true">—</span>
-      <p className="empty-state-title">{title}</p>
-      {children && <p className="empty-state-text">{children}</p>}
+    <div className="empty" role="status">
+      <div className="empty-head">
+        <span className="empty-icon" aria-hidden="true">{icon}</span>
+        <div>
+          <p className="empty-title">{title}</p>
+          {children && <p className="empty-text">{children}</p>}
+        </div>
+        <span className="empty-pill">Coming soon</span>
+      </div>
+      <div className={`ghost ghost-${kind}`} aria-hidden="true">
+        {kind === "cards" && GHOST_HUES.map((hue) => (
+          <div key={hue} className="ghost-card" style={{ "--hue": hue } as CSSProperties}>
+            <span className="ghost-thumb" />
+            <span className="ghost-line" style={{ width: "72%" }} />
+            <span className="ghost-line" />
+            <span className="ghost-line" style={{ width: "48%" }} />
+          </div>
+        ))}
+        {kind === "list" && [0, 1].map((i) => (
+          <div key={i} className="ghost-row">
+            <span className="ghost-square" />
+            <span className="ghost-lines"><span className="ghost-line" style={{ width: i ? "58%" : "76%" }} /><span className="ghost-line" style={{ width: "34%" }} /></span>
+            <span className="ghost-pill" />
+          </div>
+        ))}
+        {kind === "photos" && [4 / 3, 4 / 3, 4 / 3].map((ratio, i) => (
+          <span key={i} className="ghost-photo" style={{ aspectRatio: String(ratio), "--hue": GHOST_HUES[i] } as CSSProperties} />
+        ))}
+      </div>
     </div>
   );
 }

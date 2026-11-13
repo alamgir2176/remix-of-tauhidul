@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Camera } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { PhotoFigure } from "@/components/content-cards";
 import { getPhotoGroups } from "@/lib/content";
@@ -22,7 +23,7 @@ function ActivitiesPage() {
         Photographs from activities, events, programmes and community work.
       </PageIntro>
       <section className="page-section" aria-label="Photo gallery">
-        {groups.length === 0 && <EmptyState title="No photographs yet.">Photographs from activities will appear here.</EmptyState>}
+        {groups.length === 0 && <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">Photographs from activities will appear here.</EmptyState>}
         {groups.map((group, g) => (
           <div key={`${group.activity}-${g}`} className="gallery-group">
             {(group.activity || group.dateLabel) && (

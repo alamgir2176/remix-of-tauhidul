@@ -1,7 +1,13 @@
+import type { CSSProperties } from "react";
 import { Link } from "@tanstack/react-router";
 import { Download, FileText } from "lucide-react";
 import type { FeedItem } from "@/lib/content";
 import type { DocumentItem, Photo } from "@/lib/content-utils";
+
+/** Colour of each type's tag in the Colorful theme (an OKLCH hue). Other themes ignore it. */
+const TYPE_HUE: Record<string, number> = {
+  Blog: 285, Project: 165, Book: 35, Research: 235, Article: 350, Editorial: 75, Opinion: 320, "Talk show": 15, Seminar: 195,
+};
 
 /** Card for any item of the "writing & work" group. The only label is its type tag. */
 export function FeedCard({ item }: { item: FeedItem }) {
@@ -21,10 +27,11 @@ export function FeedCard({ item }: { item: FeedItem }) {
       </div>
     </>
   );
+  const style = { "--hue": TYPE_HUE[item.type] ?? 285 } as CSSProperties;
   return item.slug ? (
-    <Link to="/writings/$slug" params={{ slug: item.slug }} className="content-card">{inner}</Link>
+    <Link to="/writings/$slug" params={{ slug: item.slug }} className="content-card" style={style}>{inner}</Link>
   ) : (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" className="content-card">{inner}</a>
+    <a href={item.url} target="_blank" rel="noopener noreferrer" className="content-card" style={style}>{inner}</a>
   );
 }
 

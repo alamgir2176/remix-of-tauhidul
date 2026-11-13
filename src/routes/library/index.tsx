@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PenLine } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { FeedCard } from "@/components/content-cards";
 import { TypeChips } from "@/components/type-chips";
@@ -27,7 +28,7 @@ function LibraryPage() {
         {feed.length > 0 ? (
           <div className="card-grid">{feed.map((item) => <FeedCard key={item.key} item={item} />)}</div>
         ) : (
-          <EmptyState title="Nothing published yet.">Writings, projects, books and talks will appear here.</EmptyState>
+          <EmptyState icon={<PenLine />} title="Nothing published yet.">Writings, projects, books and talks will appear here.</EmptyState>
         )}
       </section>
     </PageShell>

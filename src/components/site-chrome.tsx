@@ -2,6 +2,7 @@ import { useEffect, useState, type RefObject } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUp, ArrowUpRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
 
@@ -45,6 +46,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
         ))}
       </nav>
       <div className="flex shrink-0 items-center gap-4">
+        <div className="header-theme"><ThemeSwitcher /></div>
         <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
         <Button variant="ghost" size="icon" className="xl:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
       </div>
@@ -53,6 +55,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
           {[...NAV, ["Let’s talk", "contact"] as const].map(([label, id], i) => (
             <Link to="/" hash={id} key={id} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>
           ))}
+          <div className="mobile-theme"><p className="micro-label">Theme</p><ThemeSwitcher labeled /></div>
           <p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p>
         </nav>
       )}
