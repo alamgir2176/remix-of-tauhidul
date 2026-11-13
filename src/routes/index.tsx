@@ -89,13 +89,13 @@ function Index() {
       <SiteHeader active={active} scrolled={scrolled} hidden={hidden} progressRef={progress} />
       <main id="main" tabIndex={-1}>
         <section className="identity-hero" aria-label="Introduction">
-          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(navy2)} alt="Black-and-white portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
+          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(navy2)} alt="Portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
           <div className="hero-shade" aria-hidden="true" />
           <div className="hero-topline"><span>A personal perspective</span><span>Dhaka, Bangladesh</span></div>
           <div className="hero-copy">
             <p className="hero-intro enter">BA &amp; MA in Philosophy · Jahangirnagar University</p>
             <h1 className="enter">Md Tauhidul<br /><span className="font-editorial italic">Islam.</span></h1>
-            <div className="hero-bottom enter"><p>Philosophy, theatre, and everyday life.<br />A story rooted in Bangladesh.</p><Link to="/" hash="about" className="round-link" aria-label="Discover my story"><ArrowDown /></Link></div>
+          <div className="hero-bottom enter"><div><p>Philosophy graduate · Jahangirnagar University<br />A story rooted in Bangladesh.</p><Link to="/" hash="about" className="hero-cta">View my journey <ArrowUpRight aria-hidden="true" /></Link></div><Link to="/" hash="about" className="round-link" aria-label="Discover my story"><ArrowDown /></Link></div>
           </div>
           <span className="hero-index">01 / A life in progress</span>
         </section>

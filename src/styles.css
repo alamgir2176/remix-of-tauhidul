@@ -876,3 +876,89 @@ html.theme-is-changing *::after {
   .announcement-intro { display: block; }
   .announcement-intro p { margin-top: -10px; }
 }
+
+/* ======================================================================
+   Reference-inspired visual direction
+   The existing story and components stay intact; this layer changes the
+   presentation toward the supplied three-theme editorial mockup.
+   ====================================================================== */
+.site-header { height: 64px; padding-inline: 2.5%; }
+.site-header::before { inset-inline: 2.5%; }
+.site-header > nav { justify-self: center; }
+.wordmark { font-size: 20px; letter-spacing: -.04em; }
+.nav-link { font-size: 11px; color: var(--foreground); }
+.header-theme { display: block; }
+.header-contact { display: none; }
+.theme-switch { border: 0; gap: 2px; }
+.theme-option { width: 28px; height: 28px; border: 0; }
+.theme-option[aria-pressed="true"] { background: transparent; color: var(--accent); }
+.theme-option svg { width: 14px; height: 14px; }
+.identity-hero { min-height: 570px; height: min(690px, calc(100svh - 64px)); background: var(--background); color: var(--foreground); }
+.hero-image { inset: 0 0 0 50%; overflow: hidden; background: color-mix(in oklab, var(--accent) 10%, var(--background)); }
+.hero-image::before { content: ""; position: absolute; width: 72%; aspect-ratio: 1; left: -20%; top: 7%; border-radius: 48% 52% 42% 58%; background: color-mix(in oklab, var(--accent) 18%, transparent); z-index: 0; }
+.hero-image::after { content: ""; position: absolute; width: 38%; aspect-ratio: 1; right: 4%; bottom: -12%; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--accent) 36%, transparent); z-index: 0; }
+.hero-image img { position: relative; z-index: 1; object-position: center 28%; }
+.hero-shade { background: linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 96%, transparent) 28%, color-mix(in oklab, var(--background) 24%, transparent) 57%, transparent 84%); }
+.hero-shade::after { background: linear-gradient(0deg, color-mix(in oklab, var(--foreground) 8%, transparent), transparent 42%); }
+.hero-topline { top: 28px; left: 2.5%; right: 2.5%; color: var(--muted-foreground); }
+.hero-topline > span:last-child { color: var(--foreground); background: color-mix(in oklab, var(--accent) 18%, var(--background)); }
+.hero-copy { inset: auto 50% 64px 6%; z-index: 2; }
+.hero-intro { color: var(--muted-foreground); margin-bottom: 22px; }
+.hero-copy h1 { color: var(--foreground); font-size: clamp(58px, 7.2vw, 104px); letter-spacing: -.05em; }
+.hero-copy h1 span { color: var(--accent); font-size: clamp(76px, 9vw, 126px); }
+.hero-bottom { align-items: end; margin-top: 28px; }
+.hero-bottom p { color: var(--muted-foreground); }
+.hero-cta { display: inline-flex; align-items: center; gap: 12px; margin-top: 20px; padding: 11px 15px; background: var(--accent); color: var(--accent-foreground); font-size: 11px; text-decoration: none; transition: transform .25s ease, background .25s ease; }
+.hero-cta svg { width: 14px; height: 14px; transition: transform .25s ease; }
+.hero-cta:hover { transform: translateY(-2px); background: color-mix(in oklab, var(--accent) 84%, var(--foreground)); }
+.hero-cta:hover svg { transform: translate(2px, -2px); }
+.round-link { border-color: color-mix(in oklab, var(--foreground) 38%, transparent); color: var(--foreground); }
+.round-link:hover { background: color-mix(in oklab, var(--accent) 16%, transparent); }
+.hero-index { left: 2.5%; color: var(--muted-foreground); }
+.about-section { background: var(--card); }
+.about-section .section-label, .library-section .section-label, .notices-section .section-label { border-bottom-color: color-mix(in oklab, var(--border) 82%, var(--accent)); }
+.about-section .statement .font-editorial, .library-section .font-editorial, .notices-section .font-editorial { color: var(--accent); }
+.library-section, .notices-section { background: color-mix(in oklab, var(--background) 82%, var(--accent)); }
+.activities-section { background: color-mix(in oklab, var(--background) 86%, var(--accent)); }
+.content-card, .doc-row, .gallery-item { border-radius: 6px; }
+
+:root[data-theme="dark"] .identity-hero { background: #111c1b; color: #f1eee5; }
+:root[data-theme="dark"] .hero-image { background: #20332f; }
+:root[data-theme="dark"] .hero-shade { background: linear-gradient(90deg, #111c1b 0%, color-mix(in oklab, #111c1b 94%, transparent) 30%, color-mix(in oklab, #111c1b 25%, transparent) 60%, transparent 88%); }
+:root[data-theme="dark"] .hero-shade::after { background: linear-gradient(0deg, color-mix(in oklab, #111c1b 38%, transparent), transparent 48%); }
+:root[data-theme="dark"] .hero-topline > span:last-child { background: #91b6a2; color: #111c1b; }
+:root[data-theme="dark"] .hero-copy h1 { color: #f1eee5; }
+:root[data-theme="dark"] .hero-copy h1 span { color: #91b6a2; }
+:root[data-theme="dark"] .hero-cta { background: #91b6a2; color: #111c1b; }
+:root[data-theme="dark"] .hero-image::before { background: color-mix(in oklab, #91b6a2 20%, transparent); }
+:root[data-theme="dark"] .hero-image::after { border-color: color-mix(in oklab, #91b6a2 36%, transparent); }
+
+:root[data-theme="colorful"] .identity-hero { background: #f1edfa; color: #201a38; }
+:root[data-theme="colorful"] .hero-image { background: #e7dff5; }
+:root[data-theme="colorful"] .hero-shade { background: linear-gradient(90deg, #f1edfa 0%, color-mix(in oklab, #f1edfa 95%, transparent) 30%, color-mix(in oklab, #f1edfa 18%, transparent) 60%, transparent 88%); }
+:root[data-theme="colorful"] .hero-shade::after { background: linear-gradient(0deg, color-mix(in oklab, #201a38 12%, transparent), transparent 46%); }
+:root[data-theme="colorful"] .hero-topline > span:last-child { background: #d7cbea; color: #201a38; }
+:root[data-theme="colorful"] .hero-copy h1 { color: #201a38; }
+:root[data-theme="colorful"] .hero-copy h1 span { color: #7951a6; }
+:root[data-theme="colorful"] .hero-cta { background: #7951a6; color: #fbf9ff; }
+:root[data-theme="colorful"] .hero-image::before { background: color-mix(in oklab, #7951a6 16%, transparent); }
+:root[data-theme="colorful"] .hero-image::after { border-color: color-mix(in oklab, #7951a6 34%, transparent); }
+
+@media (max-width: 1279px) {
+  .site-header > nav { display: none; }
+  .header-contact { display: inline-flex; }
+}
+@media (max-width: 767px) {
+  .site-header { height: 60px; padding-inline: 5%; }
+  .identity-hero { min-height: 730px; height: auto; }
+  .hero-image { inset: 0 0 31% 0; }
+  .hero-image img { object-position: center 24%; }
+  .hero-shade { background: linear-gradient(0deg, var(--background) 26%, color-mix(in oklab, var(--background) 48%, transparent) 60%, transparent 88%); }
+  .hero-copy { inset: auto 7% 52px; }
+  .hero-copy h1 { font-size: clamp(52px, 15vw, 78px); }
+  .hero-copy h1 span { font-size: clamp(68px, 19vw, 98px); }
+  .hero-topline { top: 20px; left: 7%; right: 7%; }
+  .hero-topline > span:last-child { display: none; }
+  .hero-bottom { margin-top: 22px; }
+  .hero-index { left: 7%; bottom: 20px; }
+}
