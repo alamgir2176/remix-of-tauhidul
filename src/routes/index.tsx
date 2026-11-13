@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react";
-import navy2 from "@/assets/portrait-navy-2.jpg.asset.json";
 import navy from "@/assets/portrait-navy.jpg.asset.json";
 import studioWide from "@/assets/portrait-studio-wide.jpg.asset.json";
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,9 @@ export const Route = createFileRoute("/")({
   scripts: [{ type: "application/ld+json", children: JSON.stringify(profileJsonLd()) }] }),
   component: Index,
 });
+
+/** Transparent cut-out of the hero portrait (public/portraits), so it sits directly on the themed hero artwork. */
+const HERO_CUTOUT = { url: "", original_filename: "portrait-navy-2-cutout.webp" };
 
 const SECTIONS = ["about", "perspective", "beyond", "library", "notices", "activities", "contact"];
 const PERSPECTIVES = [
@@ -89,7 +91,16 @@ function Index() {
       <SiteHeader active={active} scrolled={scrolled} hidden={hidden} progressRef={progress} />
       <main id="main" tabIndex={-1}>
         <section className="identity-hero" aria-label="Introduction">
-          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(navy2)} alt="Portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
+          <div className="hero-art" aria-hidden="true">
+            <svg viewBox="0 0 800 800" preserveAspectRatio="xMaxYMid slice" focusable="false">
+              <path className="art-blob" d="M330 80C470-10 700 30 790 190L800 800H240C200 640 130 520 170 360 200 230 230 150 330 80Z" />
+              <path className="art-wave" d="M0 800C120 560 300 520 470 560 620 595 720 520 800 400V800Z" />
+              <path className="art-corner" d="M600 0C660 110 740 190 800 230V0Z" />
+              <path className="art-arc" pathLength="1" d="M120 720C70 430 190 170 430 80" />
+              <path className="art-arc art-arc-2" pathLength="1" d="M190 740C150 480 250 250 470 150" />
+            </svg>
+          </div>
+          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(HERO_CUTOUT)} alt="Portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
           <div className="hero-shade" aria-hidden="true" />
           <div className="hero-topline"><span>A personal perspective</span><span>Dhaka, Bangladesh</span></div>
           <div className="hero-copy">
