@@ -56,7 +56,6 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
           {[...NAV, ["Let’s talk", "contact"] as const].map(([label, id], i) => (
             <Link to="/" hash={id} key={id} className={active === id ? "is-active" : undefined} aria-current={active === id ? "location" : undefined} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>
           ))}
-          <div className="mobile-theme"><p className="micro-label">Theme</p><ThemeSwitcher labeled /></div>
           <p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p>
         </nav>
       )}
@@ -78,7 +77,7 @@ export function SiteFooter() {
         <div className="footer-connect">
           <span className="micro-label">Keep in touch</span>
           <Button asChild variant="link" className="footer-link"><Link to="/" hash="contact">Start a conversation <ArrowUpRight aria-hidden="true" /></Link></Button>
-          <Button asChild variant="link" className="footer-link"><Link to="/cv-request">Request my CV <ArrowUpRight aria-hidden="true" /></Link></Button>
+          <Button asChild variant="link" className="footer-link"><Link to="/" hash="request-cv">Request my CV <ArrowUpRight aria-hidden="true" /></Link></Button>
           <Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button>
         </div>
       </div>

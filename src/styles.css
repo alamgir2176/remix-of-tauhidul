@@ -1160,3 +1160,11 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .mobile-menu a.is-active, .mobile-menu a.is-active span { color: var(--brand-ink); }
 .mobile-menu a.is-active { border-bottom-color: var(--brand); }
 .mobile-theme { margin-top: 26px; }
+
+/* Header height, shared with the contact area's scroll offset */
+:root { --header-h: 68px; }
+@media (min-width: 768px) { :root { --header-h: 76px; } }
+
+/* Contact area: the CV request opens in place of the contact form */
+.contact-layout { scroll-margin-top: calc(var(--header-h) + 28px); }
+.contact-layout [hidden] { display: none !important; }

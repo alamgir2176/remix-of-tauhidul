@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react";
 import navy from "@/assets/portrait-navy.jpg.asset.json";
 import studioWide from "@/assets/portrait-studio-wide.jpg.asset.json";
 import { Button } from "@/components/ui/button";
-import { ContactForm } from "@/components/contact-form";
+import { ContactPanel } from "@/components/contact-panel";
 import { ActivitiesSection, NoticesSection, WritingSection } from "@/components/home-sections";
 import { SiteFooter, SiteHeader, LINKEDIN } from "@/components/site-chrome";
 import { VisitorFaq } from "@/components/visitor-faq";
@@ -145,7 +145,7 @@ function Index() {
 
         <section className="interlude" aria-label="A continuing story"><div className="interlude-bg" aria-hidden="true"><img ref={interludeBg} src={portraitUrl(studioWide)} alt="" loading="lazy" className="photo-mono" /></div><div className="interlude-inner scroll-reveal"><span className="micro-label">A continuing story</span><p>Still reading.<br />Still <span className="font-editorial italic">asking.</span></p><span>Questions are always welcome.</span></div></section>
 
-        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">07</span><div className="section-label"><span>07 — Get in touch</span><span>Work, ideas, or just hello</span></div><div className="contact-layout"><div className="scroll-reveal"><h2 className="section-heading">Say<br /><span className="font-editorial italic">hello.</span></h2><p className="section-intro">A question, a project, a collaboration,<br />or a different way of seeing something.<br />Write to me.</p><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button><Button asChild variant="link" className="text-link"><Link to="/cv-request">Request my CV <ArrowUpRight /></Link></Button><p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p></div><div className="contact-form-wrap scroll-reveal"><ContactForm /></div></div><VisitorFaq /></section>
+        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">07</span><div className="section-label"><span>07 — Get in touch</span><span>Work, ideas, or just hello</span></div><ContactPanel /><VisitorFaq /></section>
       </main>
       <SiteFooter />
     </div>
