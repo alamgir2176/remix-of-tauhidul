@@ -68,7 +68,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-main">
-        <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul.</Link><p>Dhaka, Bangladesh.</p></div>
+        <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul<span>.</span></Link><p>Philosophy, theatre and everyday life.</p><p className="footer-place">Dhaka, Bangladesh</p></div>
         <nav className="footer-nav" aria-label="Footer">
           <span className="micro-label">Explore</span>
           {NAV.map(([label, id]) => <Link to="/" hash={id} key={id}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}
@@ -81,7 +81,7 @@ export function SiteFooter() {
           <Button asChild variant="link" className="footer-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight aria-hidden="true" /></a></Button>
         </div>
       </div>
-      <div className="footer-bottom"><p>© {new Date().getFullYear()} Md Tauhidul Islam</p><span>A life in progress.</span><Button asChild variant="ghost" className="rounded-none px-0"><Link to="/" hash="top">Back to top <ArrowUp aria-hidden="true" /></Link></Button></div>
+      <div className="footer-bottom"><p>© {new Date().getFullYear()} Md Tauhidul Islam</p><span>A life in progress.</span><Button asChild variant="ghost" className="footer-top"><Link to="/" hash="top">Back to top <ArrowUp aria-hidden="true" /></Link></Button></div>
     </footer>
   );
 }
