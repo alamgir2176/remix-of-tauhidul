@@ -1092,3 +1092,71 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 
 .footer-connect > .footer-link:last-child { border-bottom: 0; }
 .interlude-bg { isolation: isolate; z-index: 0; }
+
+/* ───────── Dark bands, one system for all three themes ─────────
+   The photos have cool, near-black studio backdrops, so every band is a deep, low-chroma base with a single soft accent glow.
+   The glow sits behind the portrait and shows through where the photo fades, so photo and band meet through colour, not a seam. */
+:root { --band-from: #2D2924; --band-to: #151412; }
+:root[data-theme="colorful"] { --band-from: #34285A; --band-to: #140F26; }
+
+/* Desktop and tablet keep the earlier closing-band look (original brown / plum band colours) */
+@media (min-width: 768px) {
+  .interlude { --band-from: #5C4524; --band-to: #2B2216; }
+  :root[data-theme="dark"] .interlude { --band-from: #1E3A34; --band-to: #0D1817; }
+  :root[data-theme="colorful"] .interlude { --band-from: #5B3F8C; --band-to: #2A1F4E; }
+}
+
+@media (max-width: 767px) {
+  /* Phone: portrait first, heading rests on its faded lower edge (same pattern as the hero) */
+  .interlude { flex-direction: column; padding: 0; min-height: 0; }
+  .interlude-bg { height: clamp(300px, 96vw, 470px); }
+  .interlude-bg::before { z-index: auto; mix-blend-mode: normal; }
+  .interlude-bg img { filter: none; object-position: 64% 14%; -webkit-mask-image: linear-gradient(180deg, #000 0, #000 46%, rgb(0 0 0 / .86) 58%, rgb(0 0 0 / .58) 70%, rgb(0 0 0 / .3) 82%, rgb(0 0 0 / .1) 92%, transparent 100%); mask-image: linear-gradient(180deg, #000 0, #000 46%, rgb(0 0 0 / .86) 58%, rgb(0 0 0 / .58) 70%, rgb(0 0 0 / .3) 82%, rgb(0 0 0 / .1) 92%, transparent 100%); }
+  .interlude-bg::before { background: radial-gradient(70% 70% at 62% 34%, color-mix(in oklab, var(--band-accent) 26%, transparent), color-mix(in oklab, var(--band-accent) 8%, transparent) 55%, transparent 80%); }
+  .interlude-bg::after { background: linear-gradient(180deg, color-mix(in oklab, var(--band-to) 20%, transparent), transparent 18%); }
+  .interlude-inner { position: relative; z-index: 2; margin-top: -64px; padding: 0 6% 60px; }
+}
+
+/* ───────── Perspective: the framed picture, kept wide ───────── */
+@media (min-width: 820px) {
+  .perspective-banner-grid { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: clamp(28px, 5%, 72px); }
+  .perspective-figure { aspect-ratio: auto; height: clamp(300px, 26vw, 420px); }
+  .perspective-figure img { object-position: 72% 62%; }
+}
+
+/* ───────── Header: aligned to the page grid, visible theme control, tidy on every screen ───────── */
+.site-header { --header-pad: 6%; --header-h: 68px; height: var(--header-h); padding-inline: var(--header-pad); gap: 12px; }
+.site-header::before { inset-inline: var(--header-pad); }
+@media (min-width: 768px) { .site-header { --header-pad: 7%; --header-h: 76px; gap: 28px; } }
+@media (min-width: 1500px) { .site-header { --header-pad: max(7%, calc((100% - 1400px) / 2)); } }
+.site-header > div { gap: 12px; }
+@media (min-width: 768px) { .site-header > div { gap: 18px; } }
+.site-header nav[aria-label="Primary"] { gap: 30px; }
+.nav-link { font-size: 13px; padding: 8px 0; }
+.site-header .wordmark { font-size: 25px; letter-spacing: -.01em; }
+@media (min-width: 768px) { .site-header .wordmark { font-size: 27px; } }
+
+/* Theme switch: a clear segmented control, the active mode filled with the brand colour */
+.theme-switch { padding: 3px; gap: 2px; border: 1px solid var(--input); background: var(--card); box-shadow: var(--shadow-soft); }
+.theme-option { width: 34px; height: 34px; border-radius: 999px; color: var(--muted-foreground); }
+.theme-option:hover { color: var(--foreground); background: color-mix(in oklab, var(--foreground) 8%, transparent); }
+.theme-option[aria-pressed="true"], .theme-option[aria-pressed="true"]:hover { background: var(--brand); color: var(--brand-contrast); }
+.site-header .theme-option svg { color: currentColor; width: 16px; height: 16px; }
+.theme-switch.is-labeled { padding: 4px; gap: 4px; box-shadow: none; }
+.theme-switch.is-labeled .theme-option { height: 44px; }
+/* Phones: one round button that shows the current mode and cycles on tap */
+.header-theme-compact { display: none; }
+.theme-cycle { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; border: 1px solid var(--input); background: var(--card); color: var(--foreground); box-shadow: var(--shadow-soft); cursor: pointer; transition: background .25s, border-color .25s; }
+.theme-cycle:hover { border-color: var(--brand); }
+.theme-cycle:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.theme-cycle svg { width: 17px; height: 17px; }
+@media (max-width: 639px) { .header-theme-compact { display: block; } }
+@media (max-width: 359px) { .site-header .header-contact svg { display: none; } .theme-cycle { width: 36px; height: 36px; } .site-header .wordmark { font-size: 22px; } }
+
+/* Menu panel hangs exactly under the bar */
+.mobile-menu { height: calc(100dvh - var(--header-h, 68px)); padding-inline: var(--header-pad, 6%); }
+@media (min-width: 768px) and (max-width: 1279px) { .mobile-menu { max-height: calc(100dvh - var(--header-h, 76px)); } }
+.mobile-menu a { min-height: 58px; }
+.mobile-menu a.is-active, .mobile-menu a.is-active span { color: var(--brand-ink); }
+.mobile-menu a.is-active { border-bottom-color: var(--brand); }
+.mobile-theme { margin-top: 26px; }
