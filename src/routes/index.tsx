@@ -119,10 +119,12 @@ function Index() {
 
         <section id="perspective" className="perspective-section">
           <div className="perspective-banner section-space">
-            <img className="perspective-banner-img" src="/images/site/perspective-banner.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = "none"; }} />
             <span className="section-mark" aria-hidden="true">02</span>
             <div className="section-label"><span>02 — Perspective</span><span>A way of approaching the world</span></div>
-            <div className="perspective-banner-copy scroll-reveal"><h2 className="section-heading">How I see<br /><span className="font-editorial italic">things.</span></h2><p className="section-intro">Not a list of skills. Three habits that<br className="hidden sm:block" /> shape how I think and work.</p></div>
+            <div className="perspective-banner-grid">
+              <div className="perspective-banner-copy scroll-reveal"><h2 className="section-heading">How I see<br /><span className="font-editorial italic">things.</span></h2><p className="section-intro">Not a list of skills. Three habits that<br className="hidden sm:block" /> shape how I think and work.</p></div>
+              <figure className="perspective-figure scroll-reveal"><img src="/images/site/perspective-banner.jpg" alt="Two paperback classics, Kafka’s The Trial and Orwell’s 1984, with a small plant on a white table" width={1376} height={768} loading="lazy" decoding="async" onError={(e) => { const f = e.currentTarget.closest("figure"); if (f) (f as HTMLElement).style.display = "none"; }} /></figure>
+            </div>
           </div>
           <div className="perspective-body section-space">
             <div className="perspective-list scroll-reveal">{PERSPECTIVES.map((item, i) => <article key={item.title} className="perspective-item"><Button variant="ghost" className="perspective-trigger" aria-expanded={expanded === i} aria-controls={`perspective-${i}`} onClick={() => setExpanded(expanded === i ? null : i)}><span className="item-number">0{i + 1}</span><span>{item.title}</span>{expanded === i ? <Minus /> : <Plus />}</Button><div id={`perspective-${i}`} hidden={expanded !== i} className="perspective-detail"><p className="micro-label">{item.subtitle}</p><p>{item.text}</p><p className="detail-tools">{item.detail}</p></div></article>)}</div>
