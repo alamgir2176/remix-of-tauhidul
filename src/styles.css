@@ -1161,23 +1161,10 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .mobile-menu a.is-active { border-bottom-color: var(--brand); }
 .mobile-theme { margin-top: 26px; }
 
-/* ───────── The first screen is the hero ─────────
-   The hero fills whatever is left of the screen under the header, on every device, so nothing of the next section peeks in.
-   It never gets shorter than its content, and svh keeps it steady while a phone's address bar moves. */
+/* Header height, shared with the contact area's scroll offset */
 :root { --header-h: 68px; }
 @media (min-width: 768px) { :root { --header-h: 76px; } }
-.identity-hero { min-height: calc(100vh - var(--header-h)); min-height: calc(100svh - var(--header-h)); }
-@media (min-width: 900px) {
-  .identity-hero { min-height: 0; height: clamp(560px, calc(100vh - var(--header-h)), 1200px); height: clamp(560px, calc(100svh - var(--header-h)), 1200px); }
-}
-@media (max-width: 899px) {
-  .identity-hero { height: auto; max-height: none; }
-  .hero-image { margin-bottom: -34px; }
-  .hero-copy { margin-top: auto; }
-}
 
 /* Contact area: the CV request opens in place of the contact form */
 .contact-layout { scroll-margin-top: calc(var(--header-h) + 28px); }
 .contact-layout [hidden] { display: none !important; }
-@media (min-width: 561px) and (max-width: 899px) { .hero-image { width: min(78%, 620px, 50vh); width: min(78%, 620px, 50svh); } }
-@media (min-width: 561px) and (max-width: 899px) { .hero-copy h1 { font-size: clamp(50px, 10.5vw, 88px); } .hero-copy h1 span { font-size: clamp(66px, 14vw, 116px); } }
