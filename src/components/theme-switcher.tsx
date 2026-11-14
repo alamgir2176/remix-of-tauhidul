@@ -32,3 +32,22 @@ export function ThemeSwitcher({ labeled = false }: { labeled?: boolean }) {
     </div>
   );
 }
+
+/** One round button for small screens: shows the current theme and moves to the next one on each tap. */
+export function ThemeCycle() {
+  const [theme, setTheme] = useState<ThemeId | null>(null);
+  useEffect(() => {
+    const sync = () => setTheme(readTheme());
+    sync();
+    window.addEventListener("theme-change", sync);
+    return () => window.removeEventListener("theme-change", sync);
+  }, []);
+  const current: ThemeId = theme ?? "minimal";
+  const { label, Icon } = META[current];
+  const next = () => applyTheme(THEMES[(THEMES.indexOf(current) + 1) % THEMES.length] ?? "minimal");
+  return (
+    <button type="button" className="theme-cycle" aria-label={`Theme: ${label}. Switch to the next theme`} title={`${label} theme. Tap to change`} onClick={next}>
+      <Icon aria-hidden="true" />
+    </button>
+  );
+}
