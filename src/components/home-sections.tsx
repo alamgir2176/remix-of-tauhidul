@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Camera, FileText, PenLine } from "lucide-react";
-import { DocumentList, FeedCard, PhotoFigure } from "@/components/content-cards";
+import { DocumentList, FeedCard } from "@/components/content-cards";
+import { PhotoGallery } from "@/components/photo-gallery";
 import { EmptyState } from "@/components/page-shell";
 import { getAnnouncements, getFeed, getPhotos } from "@/lib/content";
 
@@ -107,13 +108,7 @@ export function ActivitiesSection() {
         <SeeAll to="/activities">Full gallery</SeeAll>
       </div>
       {photos.length > 0 ? (
-        <div className="photo-grid photo-grid-home">
-          {photos.map((photo, i) => (
-            <div key={`${photo.image}-${i}`} className={i === 0 ? "photo-feature" : ""}>
-              <PhotoFigure photo={photo} />
-            </div>
-          ))}
-        </div>
+        <PhotoGallery photos={photos} className="photo-grid-home" />
       ) : (
         <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">
           Photographs from events and activities will be added here.

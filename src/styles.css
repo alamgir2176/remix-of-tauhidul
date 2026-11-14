@@ -1168,3 +1168,31 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 /* Contact area: the CV request opens in place of the contact form */
 .contact-layout { scroll-margin-top: calc(var(--header-h) + 28px); }
 .contact-layout [hidden] { display: none !important; }
+
+/* ───────── Gallery: photographs keep their own proportions ─────────
+   Wide, tall and square pictures sit side by side in columns, nothing is cropped. */
+.gallery-mosaic, .photo-grid-home { display: block; columns: 3; column-gap: 20px; }
+.gallery-mosaic > div, .photo-grid-home > div { grid-column: auto; grid-row: auto; break-inside: avoid; margin: 0 0 20px; }
+.gallery-mosaic .gallery-feature img, .photo-grid-home .photo-feature img, .gallery-mosaic .gallery-item img, .photo-grid-home .gallery-item img { aspect-ratio: auto; object-fit: initial; }
+.gallery-mosaic .gallery-item a, .photo-grid-home .gallery-item a { border-radius: 10px; box-shadow: var(--shadow-soft); cursor: zoom-in; }
+.gallery-mosaic .gallery-item figcaption, .photo-grid-home .gallery-item figcaption { margin-top: 10px; padding-inline: 2px; }
+@media (max-width: 999px) { .gallery-mosaic, .photo-grid-home { columns: 2; column-gap: 16px; } .gallery-mosaic > div, .photo-grid-home > div { margin-bottom: 16px; } }
+@media (max-width: 559px) { .gallery-mosaic, .photo-grid-home { columns: 1; } }
+
+/* Full-screen photo viewer */
+.viewer { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 56px 16px 72px; animation: fade .25s ease both; }
+.viewer-backdrop { position: absolute; inset: 0; background: color-mix(in oklab, #000 88%, transparent); backdrop-filter: blur(6px); }
+.viewer-figure { position: relative; margin: 0; max-width: min(1200px, 100%); max-height: 100%; display: grid; gap: 12px; justify-items: center; }
+.viewer-figure img { display: block; max-width: 100%; max-height: calc(100dvh - 190px); width: auto; height: auto; object-fit: contain; border-radius: 8px; }
+.viewer-figure figcaption { color: #eee; font-size: 14px; line-height: 1.6; text-align: center; max-width: 70ch; }
+.viewer-figure figcaption span { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #bbb; }
+.viewer-btn { position: absolute; display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 999px; border: 1px solid rgb(255 255 255 / .28); background: rgb(0 0 0 / .45); color: #fff; cursor: pointer; transition: background .25s, border-color .25s; }
+.viewer-btn:hover { background: rgb(255 255 255 / .16); border-color: rgb(255 255 255 / .6); }
+.viewer-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.viewer-btn svg { width: 20px; height: 20px; }
+.viewer-close { top: 14px; right: 14px; }
+.viewer-prev { left: 14px; top: 50%; transform: translateY(-50%); }
+.viewer-next { right: 14px; top: 50%; transform: translateY(-50%); }
+.viewer-count { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: 12px; letter-spacing: .12em; color: #ccc; }
+@media (max-width: 639px) { .viewer-prev, .viewer-next { top: auto; bottom: 14px; transform: none; } .viewer-prev { left: 16px; } .viewer-next { right: 16px; } .viewer { padding: 60px 12px 84px; } }
+.viewer-open { overflow: hidden; }

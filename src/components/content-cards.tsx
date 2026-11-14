@@ -88,7 +88,7 @@ export function DocumentList({ items }: { items: (DocumentItem | Announcement)[]
   );
 }
 
-export function PhotoFigure({ photo }: { photo: Photo }) {
+export function PhotoFigure({ photo, onOpen }: { photo: Photo; onOpen?: (trigger: HTMLElement) => void }) {
   return (
     <figure className="gallery-item">
       <a
@@ -96,6 +96,12 @@ export function PhotoFigure({ photo }: { photo: Photo }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Open full-size photo: ${photo.caption || photo.alt}`}
+        onClick={(e) => {
+          // With a viewer available, open it in place; modified clicks still use the plain link.
+          if (!onOpen || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          onOpen(e.currentTarget);
+        }}
       >
         <img src={photo.image} alt={photo.alt} loading="lazy" decoding="async" />
       </a>
