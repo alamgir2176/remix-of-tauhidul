@@ -1203,34 +1203,25 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .gallery-more svg { position: absolute; top: 18px; right: 18px; width: 22px; height: 22px; transition: transform .3s; }
 .gallery-more:hover svg { transform: translate(3px, -3px); }
 
-/* Full-screen photo viewer: the picture fills the screen, details sit over its lower edge */
-.viewer { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; color: #fff; animation: viewer-fade .28s ease both; }
-.viewer-backdrop { position: absolute; inset: 0; background: #07090a; }
-.viewer-top { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: max(14px, env(safe-area-inset-top)) clamp(14px, 3vw, 28px) 6px; }
-.viewer-count { font-size: 13px; letter-spacing: .14em; font-variant-numeric: tabular-nums; }
-.viewer-count span { color: rgb(255 255 255 / .5); }
-.viewer-stage { position: relative; z-index: 1; min-height: 0; --pad: clamp(10px, 6vw, 96px); }
-.viewer-img { position: absolute; inset: 4px var(--pad); display: block; width: calc(100% - 2 * var(--pad)); height: calc(100% - 8px); object-fit: contain; animation: viewer-in .38s cubic-bezier(.2,.7,.2,1) both; }
-.viewer-info { position: relative; z-index: 2; max-width: 760px; width: 100%; margin: 0 auto; padding: 14px clamp(16px, 3vw, 28px) max(16px, env(safe-area-inset-bottom)); text-align: center; }
-.viewer-meta { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgb(255 255 255 / .6); }
-.viewer-caption { margin-top: 6px; font-size: 14px; line-height: 1.6; color: rgb(255 255 255 / .92); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.viewer-strip { position: relative; z-index: 2; display: none; gap: 8px; justify-content: safe center; overflow-x: auto; padding: 4px clamp(14px, 3vw, 28px) max(18px, env(safe-area-inset-bottom)); scrollbar-width: none; }
-.viewer-strip::-webkit-scrollbar { display: none; }
-.viewer-strip button { flex: none; width: 64px; height: 44px; padding: 0; border: 0; border-radius: 4px; overflow: hidden; opacity: .45; cursor: pointer; outline-offset: 2px; transition: opacity .25s, transform .25s; }
-.viewer-strip button:hover { opacity: .8; }
-.viewer-strip button[aria-current="true"] { opacity: 1; transform: translateY(-2px); box-shadow: 0 0 0 2px #fff; }
-.viewer-strip button:focus-visible { outline: 2px solid #fff; }
-.viewer-strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.viewer-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 0; background: rgb(255 255 255 / .1); color: #fff; cursor: pointer; backdrop-filter: blur(8px); transition: background .25s; }
-.viewer-btn:hover { background: rgb(255 255 255 / .22); }
-.viewer-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.viewer-btn svg { width: 20px; height: 20px; }
-.viewer-prev, .viewer-next { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; }
-.viewer-prev { left: clamp(6px, 1.5vw, 24px); } .viewer-next { right: clamp(6px, 1.5vw, 24px); }
-@media (min-width: 768px) { .viewer-strip { display: flex; } .viewer-prev, .viewer-next { width: 48px; height: 48px; } .viewer-info { padding-top: 10px; } }
-@media (max-width: 639px) { .viewer-stage { --pad: 0px; } }
+/* Photo page: the photo grows out of the gallery; details sit beside or below it; the album follows on scroll */
+.viewer { position: fixed; inset: 0; z-index: 80; overflow-y: auto; overscroll-behavior: contain; background: var(--background); color: var(--foreground); animation: viewer-fade .3s ease both; }
+.viewer-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: max(10px, env(safe-area-inset-top)) var(--viewer-gutter, 20px) 10px; background: color-mix(in oklab, var(--background) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent); }
+.viewer-bar p { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.viewer-back, .viewer-end { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.viewer-back svg, .viewer-end svg { width: 16px; height: 16px; transition: transform .25s; }
+.viewer-back:hover svg, .viewer-end:hover svg { transform: translateX(-4px); }
+.viewer-back:focus-visible, .viewer-end:focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 4px; }
+.viewer-story { --viewer-gutter: clamp(16px, 4vw, 48px); max-width: 1320px; margin: 0 auto; padding: clamp(16px, 3vw, 36px) var(--viewer-gutter) clamp(48px, 8vw, 96px); display: grid; gap: clamp(40px, 7vw, 88px); }
+.viewer-bar { --viewer-gutter: clamp(16px, 4vw, 48px); }
+.viewer-item { margin: 0; display: grid; gap: 14px; align-items: end; }
+.viewer-item img { display: block; justify-self: start; width: auto; max-width: 100%; height: auto; max-height: 80svh; background: var(--card); will-change: transform; }
+.viewer-item figcaption { display: grid; gap: 8px; max-width: 62ch; }
+.viewer-meta { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); }
+.viewer-caption { text-transform: none; letter-spacing: 0; font-family: var(--font-editorial); font-size: clamp(22px, 2.6vw, 30px); line-height: 1.25; text-wrap: pretty; }
+.viewer-index { font-size: 11px; letter-spacing: .14em; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+.viewer-end { justify-self: start; border-top: 1px solid var(--border); padding-top: 18px; width: 100%; }
+@media (min-width: 1024px) { .viewer-item { display: flex; gap: 44px; align-items: flex-end; } .viewer-item img { flex: 0 1 auto; min-width: 0; max-width: calc(100% - 330px); max-height: calc(100svh - 120px); } .viewer-item figcaption { flex: 0 0 286px; padding-bottom: 4px; } }
 @keyframes viewer-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes viewer-in { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 28px)) scale(.985); } to { opacity: 1; transform: none; } }
 .viewer-open { overflow: hidden; }
 
 /* ───────── Writing & work: front-page layout (lead story, short items beside it, the rest in a grid) ───────── */
