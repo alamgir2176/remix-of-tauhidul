@@ -92,6 +92,7 @@ export interface FeedItem {
   /** Blog posts open an article page on this website; everything else is an external link. */
   slug?: string;
   url?: string;
+  featured: boolean;
 }
 
 export function getSectionFeed(section: ExternalSection): FeedItem[] {
@@ -103,6 +104,7 @@ export function getSectionFeed(section: ExternalSection): FeedItem[] {
     image: item.image,
     date: item.date,
     url: item.url,
+    featured: item.featured,
   }));
 }
 
@@ -116,6 +118,7 @@ export function getFeed(): FeedItem[] {
     image: post.cover,
     date: post.date,
     slug: post.slug,
+    featured: post.featured,
   }));
   for (const section of EXTERNAL_SECTIONS) {
     getExternalItems(section).forEach((item, i) => {
@@ -127,6 +130,7 @@ export function getFeed(): FeedItem[] {
         image: item.image,
         date: item.date,
         url: item.url,
+        featured: item.featured,
       });
     });
   }

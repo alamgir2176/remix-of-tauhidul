@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PenLine } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
-import { FeedCard } from "@/components/content-cards";
+import { PortalPage } from "@/components/portal";
 import { TypeChips } from "@/components/type-chips";
 import { getFeed } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
@@ -28,13 +28,7 @@ function LibraryPage() {
       <section className="page-section" aria-label="All writing and work">
         <TypeChips active="all" />
         {feed.length > 0 ? (
-          <div className="editorial-feed editorial-feed-page">
-            {feed.map((item, i) => (
-              <div key={item.key} className={i === 0 ? "editorial-feature" : ""}>
-                <FeedCard item={item} />
-              </div>
-            ))}
-          </div>
+          <PortalPage items={feed} />
         ) : (
           <EmptyState icon={<PenLine />} title="Nothing published yet.">
             Writings, projects, books and talks will appear here.

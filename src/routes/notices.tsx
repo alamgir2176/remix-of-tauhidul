@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FileText } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
-import { DocumentList } from "@/components/content-cards";
+import { NoticeBoard } from "@/components/notice-board";
 import { getAnnouncements } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
@@ -39,7 +39,7 @@ function NoticesPage() {
           <p>Everything in one place, newest first.</p>
         </div>
         {announcements.length > 0 ? (
-          <DocumentList items={announcements} />
+          <NoticeBoard items={announcements} filters />
         ) : (
           <EmptyState kind="list" icon={<FileText />} title="Nothing new yet.">
             Notices, news and announcements will be posted here.
