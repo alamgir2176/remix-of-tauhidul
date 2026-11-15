@@ -86,7 +86,7 @@
 }
 @layer base {
   * { border-color: var(--border); letter-spacing: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h, 68px) + 20px); }
   body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--foreground); color: var(--background); }
   a, button, input, textarea { -webkit-tap-highlight-color: transparent; }
@@ -1334,4 +1334,26 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
   .reader-cover img { max-height: 62vw; }
   .reader-foot { margin-top: 48px; }
   .reader-foot-links { gap: 4px 22px; }
+}
+
+/* 404 page, in the same chrome as every other page */
+.notfound { max-width: 680px; margin: 0 auto; padding: clamp(64px, 12vw, 140px) var(--gutter, 20px) clamp(72px, 12vw, 140px); }
+.notfound h1 { font-family: var(--font-editorial); font-weight: 400; font-size: clamp(40px, 7vw, 64px); line-height: 1.1; margin: 16px 0 20px; text-wrap: balance; }
+.notfound p:not(.micro-label) { font-size: 18px; line-height: 1.7; color: var(--muted-foreground); max-width: 52ch; }
+.notfound ul { list-style: none; margin: 32px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.notfound a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid var(--foreground); border-radius: 6px; font-size: 13px; text-transform: uppercase; transition: background .25s, color .25s; }
+.notfound a:hover, .notfound a:focus-visible { background: var(--foreground); color: var(--background); }
+
+/* Printing an article or a page: only the words */
+@media print {
+  .site-header, .site-footer, .mobile-menu, .read-next, .reader-share, .reader-back, .reader-foot, .skip-link, .site-intro, .header-progress { display: none !important; }
+  html, body, .reader { background: #fff !important; color: #000 !important; }
+  .reader-article { padding: 0; }
+  .reader-head, .article-body, .reader-cover { max-width: none; }
+  .article-body { font-size: 12pt; line-height: 1.6; }
+  .article-body a { color: inherit; text-decoration: underline; }
+  .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+  .reader-cover img, .md-figure img { max-height: 90mm; }
+  .md-figure, .article-body blockquote, .article-body h2, .article-body h3 { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
 }
