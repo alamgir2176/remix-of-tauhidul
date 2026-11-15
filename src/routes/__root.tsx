@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteIntro } from "../components/site-intro";
+import { ImageGuard } from "../components/image-guard";
 import { SiteFooter, SiteHeader } from "../components/site-chrome";
 import { INTRO_SKIP_SCRIPT } from "../lib/site-loading";
 import { THEME_BOOT_SCRIPT } from "../lib/theme";
@@ -129,6 +130,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <SiteIntro />
+      <ImageGuard />
     </QueryClientProvider>
   );
 }
