@@ -1357,3 +1357,9 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
   .md-figure, .article-body blockquote, .article-body h2, .article-body h3 { break-inside: avoid; }
   h2, h3 { break-after: avoid; }
 }
+
+/* Pictures outside articles: no dragging, no long-press "save image" menu, no text-style selection */
+img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
+.article-body img, .reader-cover img, .read-next img { -webkit-user-drag: auto; user-select: auto; -webkit-touch-callout: default; }
+img.img-broken { visibility: hidden; }
+.gallery-item:has(img.img-broken) { display: none; }
