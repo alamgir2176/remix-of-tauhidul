@@ -128,3 +128,7 @@ Every page (writing and work, updates, gallery) lists everything. The homepage o
 ## Sample articles
 
 `content/blog/define-your-terms-first.md` and `tools-that-think-back.md` are sample articles written by Claude (an AI assistant) and labelled with the optional `note:` line. To remove them, delete the two `.md` files and their covers in `public/images/blog/`. The `note:` field works for any article.
+
+## Sitemap for search engines
+
+`public/sitemap.xml` and the `Sitemap:` line in `public/robots.txt` are rebuilt automatically before every build from your articles and link sections (drafts and hidden entries are left out). You do nothing. To refresh them by hand: `node scripts/generate-sitemap.mjs`. After the first deploy, add `https://tauhidul.vercel.app/sitemap.xml` in Google Search Console.
