@@ -132,3 +132,7 @@ Every page (writing and work, updates, gallery) lists everything. The homepage o
 ## Sitemap for search engines
 
 `public/sitemap.xml` and the `Sitemap:` line in `public/robots.txt` are rebuilt automatically before every build from your articles and link sections (drafts and hidden entries are left out). You do nothing. To refresh them by hand: `node scripts/generate-sitemap.mjs`. After the first deploy, add `https://tauhidul.vercel.app/sitemap.xml` in Google Search Console.
+
+## Sample gallery pictures
+
+`content/activities.json` currently holds nine sample pictures (abstract artwork made by Claude, labelled as samples) so you can see how the gallery looks. To remove them, replace the file's contents with `[]` and delete `public/images/activities/sample-*.jpg`.
