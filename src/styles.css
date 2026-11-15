@@ -1316,24 +1316,22 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .reader-note span { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); font-weight: 600; }
 
 /* Reader: one measure and one gutter shared by every part of an article */
-.reader { --measure: 680px; --gutter: clamp(20px, 5vw, 40px); --wide: 960px; }
+.reader { --measure: 700px; --gutter: clamp(20px, 5vw, 40px); --wide: var(--measure); }
 .reader-article { padding: clamp(28px, 6vw, 64px) var(--gutter) clamp(56px, 9vw, 96px); }
 .reader-head, .article-body, .reader-foot { max-width: var(--measure); margin-inline: auto; }
 .reader-head h1 { font-size: clamp(34px, 5.2vw, 54px); line-height: 1.12; margin-top: 16px; letter-spacing: -.01em; }
 .reader-lede { font-size: clamp(17px, 1.9vw, 20px); line-height: 1.65; margin-top: 20px; }
 .reader-tags { margin-top: 20px; }
 .reader-cover { max-width: var(--wide); margin: clamp(28px, 5vw, 48px) auto 0; }
-.reader-cover img { max-height: min(56vw, 520px); }
+.reader-cover img { aspect-ratio: 16 / 10; max-height: none; }
 .article-body { margin-top: clamp(32px, 5vw, 48px); font-size: clamp(17px, 1.5vw + 11px, 19px); line-height: 1.8; }
 .article-body h2 { font-size: clamp(23px, 3vw, 28px); margin-top: 2.1em; }
 .article-body h3 { font-size: clamp(20px, 2.4vw, 23px); }
 .article-body blockquote { font-size: clamp(20px, 2.6vw, 25px); padding-left: clamp(16px, 3vw, 24px); }
 .article-body .md-figure, .article-body .md-embed, .article-body .md-pdf { margin-block: 2em; }
 .article-body .md-figure img { max-height: 70vh; object-fit: contain; }
-@media (min-width: 1000px) { .article-body .md-figure, .article-body .md-embed { width: min(var(--wide), 100vw - 2 * var(--gutter)); margin-inline: calc((var(--measure) - min(var(--wide), 100vw - 2 * var(--gutter))) / 2); } }
 @media (max-width: 599px) {
-  .reader-cover { margin-inline: calc(var(--gutter) * -1); max-width: none; }
-  .reader-cover img { border-radius: 0; max-height: 62vw; }
+  .reader-cover img { max-height: 62vw; }
   .reader-foot { margin-top: 48px; }
   .reader-foot-links { gap: 4px 22px; }
 }
