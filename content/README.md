@@ -124,3 +124,7 @@ Every page (writing and work, updates, gallery) lists everything. The homepage o
 - Blog post: add `featured: true` to the front matter.
 - Projects, books, research, articles and the other link sections, and notices and press releases: add `"featured": true` to the entry in its JSON file.
 - If nothing is marked, the homepage shows the newest few. The first featured item becomes the large lead story in "Writing & work".
+
+## Sample articles
+
+`content/blog/define-your-terms-first.md` and `tools-that-think-back.md` are sample articles written by Claude (an AI assistant) and labelled with the optional `note:` line. To remove them, delete the two `.md` files and their covers in `public/images/blog/`. The `note:` field works for any article.

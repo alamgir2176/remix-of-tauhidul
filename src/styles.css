@@ -1311,3 +1311,6 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .read-next strong { font-family: var(--font-serif, Georgia, serif); font-size: 17px; line-height: 1.35; font-weight: 600; }
 .read-next a:hover strong, .read-next a:focus-visible strong { color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
 @media (min-width: 768px) { .read-next ul { grid-template-columns: repeat(3, 1fr); gap: 20px; } .read-next a { grid-template-columns: 1fr; align-items: start; gap: 10px; } .read-next img { width: 100%; height: auto; aspect-ratio: 16/10; } .read-next:has(li:only-child) ul, .read-next ul:has(li:nth-child(2):last-child) { grid-template-columns: repeat(2, 1fr); } }
+/* Disclosure under an article's title (for example, written with AI) */
+.reader-note { display: grid; gap: 4px; margin: 22px 0 0; max-width: 62ch; padding: 14px 18px; border-left: 3px solid var(--brand); background: color-mix(in oklab, var(--brand) 8%, transparent); border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7; color: var(--muted-foreground); }
+.reader-note span { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); font-weight: 600; }

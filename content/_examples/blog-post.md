@@ -3,6 +3,7 @@ title: "My first essay"
 date: 2026-11-13
 excerpt: "One or two sentences shown on the article card and in link previews."
 cover: my-first-essay-cover.jpg
+note: "Optional. A short disclosure shown under the title, e.g. that the piece was written with AI. Delete this line if not needed."
 coverAlt: "Describe the cover image for screen readers"
 tags: [philosophy, reflections]
 draft: false
