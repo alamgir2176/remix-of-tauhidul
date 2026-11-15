@@ -102,7 +102,7 @@ Each section has one file in `content/external/`: `projects.json`, `books.json`,
 
 Photos with the same `activity` are grouped together; groups are ordered newest first.
 
-The full gallery page shows every photo. The homepage shows only a few: the photos marked `"featured": true` (up to five), or the first five in the file if none are marked. Leave `featured` out for photos that belong only in the gallery.
+The full gallery page shows every photo. The homepage shows only a few: the photos marked `"featured": true` (up to four), or the first four in the file if none are marked. Leave `featured` out for photos that belong only in the gallery.
 
 ## 5. Keeping the deployment light
 
@@ -116,3 +116,11 @@ The full gallery page shows every photo. The homepage shows only a few: the phot
 The CV is never published. Visitors use the form at `/cv-request`; the request arrives (subject "CV request — name") through the same kind of hosted form as the contact form, and you reply manually. Optional settings (all `VITE_` environment variables, only needed to send CV requests to a different inbox than the contact form):
 `VITE_CV_REQUEST_PROVIDER`, `VITE_CV_REQUEST_KEY` (Web3Forms), `VITE_CV_REQUEST_ENDPOINT` (Formspree).
 By default the CV form uses the same provider settings as the contact form.
+
+## 7. Choosing what the homepage shows
+
+Every page (writing and work, updates, gallery) lists everything. The homepage only shows a few pieces of each, so you choose them:
+
+- Blog post: add `featured: true` to the front matter.
+- Projects, books, research, articles and the other link sections, and notices and press releases: add `"featured": true` to the entry in its JSON file.
+- If nothing is marked, the homepage shows the newest few. The first featured item becomes the large lead story in "Writing & work".

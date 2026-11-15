@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Camera, FileText, PenLine } from "lucide-react";
-import { DocumentList, FeedCard } from "@/components/content-cards";
+import { NoticeBoard } from "@/components/notice-board";
+import { PortalFeed, PortalMore } from "@/components/portal";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { EmptyState } from "@/components/page-shell";
 import { getAnnouncements, getFeed, getPhotos } from "@/lib/content";
@@ -21,7 +22,11 @@ function SeeAll({
 
 /** 04: blog posts, projects, books, research, articles, editorials, opinion, talk shows and seminars. */
 export function WritingSection() {
-  const feed = getFeed().slice(0, 6);
+  const all = getFeed();
+  // A few chosen pieces: those marked "featured" first, otherwise the newest.
+  const featured = all.filter((item) => item.featured);
+  const feed = (featured.length > 0 ? featured : all).slice(0, 4);
+  const moreCount = all.length - feed.length;
   return (
     <section id="library" className="library-section section-space">
       <span className="section-mark" aria-hidden="true">
@@ -40,13 +45,7 @@ export function WritingSection() {
         <SeeAll to="/library">See everything</SeeAll>
       </div>
       {feed.length > 0 ? (
-        <div className="editorial-feed editorial-feed-home">
-          {feed.map((item, i) => (
-            <div key={item.key} className={i === 0 ? "editorial-feature" : ""}>
-              <FeedCard item={item} />
-            </div>
-          ))}
-        </div>
+        <PortalFeed items={feed} more={moreCount > 0 ? <PortalMore to="/library">{`+${moreCount} more in Writing & work`}</PortalMore> : undefined} />
       ) : (
         <EmptyState icon={<PenLine />} title="Nothing published yet.">
           Essays, projects, books and talks will be collected here as they are ready.
@@ -58,7 +57,10 @@ export function WritingSection() {
 
 /** 05: notices and press releases together. */
 export function NoticesSection() {
-  const announcements = getAnnouncements().slice(0, 6);
+  const all = getAnnouncements();
+  const featured = all.filter((item) => item.featured);
+  const announcements = (featured.length > 0 ? featured : all).slice(0, 4);
+  const moreCount = all.length - announcements.length;
   return (
     <section id="notices" className="notices-section section-space">
       <span className="section-mark" aria-hidden="true">
@@ -77,7 +79,7 @@ export function NoticesSection() {
         <SeeAll to="/notices">All updates</SeeAll>
       </div>
       {announcements.length > 0 ? (
-        <DocumentList items={announcements} />
+        <NoticeBoard items={announcements} more={moreCount} />
       ) : (
         <EmptyState kind="list" icon={<FileText />} title="Nothing new yet.">
           Notices, news and announcements will be posted here.

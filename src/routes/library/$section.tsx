@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PenLine } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
-import { FeedCard } from "@/components/content-cards";
+import { PortalPage } from "@/components/portal";
 import { TypeChips } from "@/components/type-chips";
 import { getSectionFeed } from "@/lib/content";
 import { findExternalSection } from "@/lib/content-utils";
@@ -37,13 +37,7 @@ function SectionPage() {
       <section className="page-section" aria-label={section.title}>
         <TypeChips active={section.slug} />
         {items.length > 0 ? (
-          <div className="editorial-feed editorial-feed-page">
-            {items.map((item, i) => (
-              <div key={item.key} className={i === 0 ? "editorial-feature" : ""}>
-                <FeedCard item={item} />
-              </div>
-            ))}
-          </div>
+          <PortalPage items={items} />
         ) : (
           <EmptyState icon={<PenLine />} title={`No ${section.title.toLowerCase()} yet.`}>
             Entries will appear here as soon as they are added.

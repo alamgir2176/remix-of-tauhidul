@@ -5,7 +5,7 @@ import type { Announcement, FeedItem } from "@/lib/content";
 import type { DocumentItem, Photo } from "@/lib/content-utils";
 
 /** Colour of each type's tag in the Colorful theme (an OKLCH hue). Other themes ignore it. */
-const TYPE_HUE: Record<string, number> = {
+export const TYPE_HUE: Record<string, number> = {
   Blog: 38,
   Project: 165,
   Book: 82,

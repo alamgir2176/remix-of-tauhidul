@@ -100,6 +100,8 @@ export interface Post {
   coverAlt: string;
   tags: string[];
   readingMinutes: number;
+  /** Marked `featured: true` in the front matter; the homepage shows these first. */
+  featured: boolean;
   blocks: Block[];
 }
 
@@ -155,6 +157,7 @@ export function buildPost(path: string, raw: string): Post | null {
     coverAlt: str(data["coverAlt"]) || str(data["cover_alt"]) || title,
     tags,
     readingMinutes: Math.max(1, Math.round(countWords(text) / 200)),
+    featured: isTrue(data["featured"]),
     blocks,
   };
 }
@@ -205,6 +208,7 @@ export interface ExternalItem {
   image: string;
   date: string;
   dateLabel: string;
+  featured: boolean;
 }
 
 export function hostOf(url: string): string {
@@ -233,6 +237,7 @@ export function normalizeExternal(data: unknown): ExternalItem[] {
       image: image ? resolveAsset("image", image.startsWith("/") || /^https?:/i.test(image) ? image : `/images/external/${image}`) : "",
       date: str(row["date"]),
       dateLabel: formatDate(row["date"]),
+      featured: isTrue(row["featured"]),
     });
   }
   return items
@@ -248,6 +253,7 @@ export interface DocumentItem {
   description: string;
   pdf: string;
   fileName: string;
+  featured: boolean;
 }
 
 /** `folder` is where bare PDF file names are looked up, e.g. `/documents/notices/`. */
@@ -270,6 +276,7 @@ export function normalizeDocuments(data: unknown, folder: string): DocumentItem[
       description: str(row["description"]),
       pdf,
       fileName: pdf ? decodeURIComponent(pdf.split("/").pop() ?? "") : "",
+      featured: isTrue(row["featured"]),
     });
   }
   return items

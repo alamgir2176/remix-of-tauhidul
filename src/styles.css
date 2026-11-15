@@ -1220,3 +1220,82 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
 .viewer-count { position: absolute; bottom: 22px; left: 0; right: 0; text-align: center; font-size: 12px; letter-spacing: .12em; color: #ccc; }
 @media (max-width: 639px) { .viewer-prev, .viewer-next { top: auto; bottom: 14px; transform: none; } .viewer-prev { left: 16px; } .viewer-next { right: 16px; } .viewer { padding: 60px 12px 84px; } }
 .viewer-open { overflow: hidden; }
+
+/* ───────── Writing & work: front-page layout (lead story, short items beside it, the rest in a grid) ───────── */
+.portal { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(28px, 4.5vw, 64px); align-items: start; }
+.portal-solo { grid-template-columns: minmax(0, 860px); }
+.portal-lead, .portal-row { display: block; color: inherit; text-decoration: none; }
+.portal-lead-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 6px; background: var(--muted); display: grid; place-items: center; }
+.portal-lead-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.2,.7,.2,1); }
+.portal-lead-media .card-thumb-fallback { font-size: clamp(80px, 12vw, 140px); color: var(--brand-ink); opacity: .55; }
+.portal-lead:hover .portal-lead-media img { transform: scale(1.035); }
+.portal-lead-body { padding-top: 22px; }
+.portal-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-foreground); }
+.portal-type { color: var(--brand-ink); font-weight: 600; }
+.portal-host { text-transform: none; letter-spacing: .02em; }
+.portal-lead-title { margin: 12px 0 0; font-family: var(--font-display); font-weight: 500; font-size: clamp(26px, 3.1vw, 40px); line-height: 1.16; letter-spacing: -.01em; text-wrap: balance; transition: color .25s; }
+.portal-lead:hover .portal-lead-title { color: var(--brand-ink); }
+.portal-lead-text { margin: 14px 0 0; max-width: 62ch; font-size: 15px; line-height: 1.75; color: var(--muted-foreground); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.portal-read { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+.portal-read svg { width: 14px; height: 14px; transition: transform .3s; }
+.portal-lead:hover .portal-read svg { transform: translate(2px, -2px); }
+.portal-side { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+.portal-side > li { border-bottom: 1px solid var(--border); }
+.portal-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 20px 0; }
+.portal-row img { width: 104px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; background: var(--muted); }
+.portal-row-title { margin: 8px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 1.35; transition: color .25s; }
+.portal-row:hover .portal-row-title { color: var(--brand-ink); }
+.portal-more { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 20px 0; color: var(--brand-ink); text-decoration: none; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.portal-more svg { width: 16px; height: 16px; transition: transform .3s; }
+.portal-more:hover svg { transform: translate(3px, -3px); }
+.portal-earlier { margin: 64px 0 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+.portal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; }
+@media (max-width: 1000px) { .portal { grid-template-columns: 1fr; gap: 32px; } .portal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 599px) {
+  .portal-grid { grid-template-columns: 1fr; }
+  .portal-lead-media { aspect-ratio: 4 / 3; border-radius: 4px; }
+  .portal-lead-title { font-size: 26px; }
+  .portal-row { padding: 16px 0; gap: 14px; }
+  .portal-row img { width: 84px; }
+  .portal-row-title { font-size: 16px; }
+}
+
+/* ───────── Updates: an official register (date, subject, document) ───────── */
+.notice-filters { display: flex; flex-wrap: wrap; gap: 14px 28px; margin-bottom: 26px; }
+.notice-filter-set { display: flex; flex-wrap: wrap; gap: 8px; }
+.notice-chip { height: 36px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted-foreground); font-size: 12px; letter-spacing: .04em; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.notice-chip:hover { border-color: var(--foreground); color: var(--foreground); }
+.notice-chip[aria-pressed="true"] { background: var(--foreground); border-color: var(--foreground); color: var(--background); }
+.notice-chip:focus-visible, .notice-pdf:focus-visible, .notice-more:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.notice-head { display: grid; grid-template-columns: 116px minmax(0, 1fr) 112px; gap: 28px; padding: 0 0 12px; border-bottom: 2px solid var(--foreground); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); }
+.notice-head span:last-child { text-align: right; }
+.notice-list { list-style: none; margin: 0; padding: 0; }
+.notice-row { display: grid; grid-template-columns: 116px minmax(0, 1fr) 112px; gap: 28px; align-items: start; padding: 26px 0; border-bottom: 1px solid var(--border); transition: background .25s; }
+.notice-row:hover { background: color-mix(in oklab, var(--foreground) 3%, transparent); }
+.notice-date { display: flex; flex-direction: column; gap: 2px; }
+.notice-day { font-family: var(--font-display); font-size: 38px; font-weight: 300; line-height: 1; letter-spacing: -.02em; }
+.notice-month { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-foreground); }
+.notice-kind { display: inline-block; margin: 0 0 8px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 3px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-foreground); }
+.notice-kind.is-press { border-color: var(--brand); color: var(--brand-ink); }
+.notice-title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 19px; line-height: 1.4; }
+.notice-text { margin: 8px 0 0; max-width: 68ch; font-size: 14px; line-height: 1.7; color: var(--muted-foreground); }
+.notice-action { text-align: right; }
+.notice-pdf { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid var(--foreground); border-radius: 3px; font-size: 12px; letter-spacing: .08em; text-decoration: none; color: var(--foreground); transition: background .25s, color .25s; }
+.notice-pdf:hover { background: var(--foreground); color: var(--background); }
+.notice-pdf svg { width: 15px; height: 15px; }
+.notice-nofile { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-foreground); }
+.notice-empty { padding: 28px 0; color: var(--muted-foreground); font-size: 14px; }
+.notice-more { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); color: var(--brand-ink); text-decoration: none; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.notice-more svg { width: 16px; height: 16px; transition: transform .3s; }
+.notice-more:hover svg { transform: translate(3px, -3px); }
+@media (max-width: 767px) {
+  .notice-head { display: none; }
+  .notice-list { border-top: 2px solid var(--foreground); }
+  .notice-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "date action" "main main"; gap: 14px 16px; padding: 20px 0; align-items: center; }
+  .notice-date { grid-area: date; flex-direction: row; align-items: baseline; gap: 8px; }
+  .notice-day { font-size: 28px; }
+  .notice-main { grid-area: main; }
+  .notice-action { grid-area: action; }
+  .notice-pdf { height: 38px; padding: 0 14px; }
+  .notice-title { font-size: 17px; }
+}
