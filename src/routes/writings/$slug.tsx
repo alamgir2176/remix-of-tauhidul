@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Link2 } from "lucide-react";
 import { MarkdownView } from "@/components/markdown-view";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { getPost } from "@/lib/content";
+import { getPost, getPosts } from "@/lib/content";
 import { absoluteUrl, bengaliFontLink, pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/writings/$slug")({
@@ -54,6 +54,14 @@ function ArticlePage() {
   const { slug } = Route.useLoaderData();
   const post = getPost(slug);
   if (!post) return null;
+  // Up to three other articles, those sharing a tag first, then the newest.
+  const shared = (p: { tags: string[] }) => p.tags.filter((t) => post.tags.includes(t)).length;
+  const next = getPosts()
+    .filter((p) => p.slug !== post.slug)
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => shared(b.p) - shared(a.p) || a.i - b.i)
+    .slice(0, 3)
+    .map(({ p }) => p);
   return (
     <div id="top" className="reader">
       <SiteHeader active="library" />
@@ -80,6 +88,24 @@ function ArticlePage() {
             </div>
           </footer>
         </article>
+        {next.length > 0 && (
+          <aside className="read-next" aria-labelledby="read-next-title">
+            <h2 id="read-next-title" className="micro-label">Keep reading</h2>
+            <ul>
+              {next.map((p) => (
+                <li key={p.slug}>
+                  <Link to="/writings/$slug" params={{ slug: p.slug }}>
+                    {p.cover && <img src={p.cover} alt="" loading="lazy" decoding="async" />}
+                    <span className="read-next-text">
+                      <span className="read-next-meta">{[p.dateLabel, `${p.readingMinutes} min read`].filter(Boolean).join(" · ")}</span>
+                      <strong>{p.title}</strong>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
       </main>
       <SiteFooter />
     </div>

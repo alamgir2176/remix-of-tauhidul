@@ -1299,3 +1299,15 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
   .notice-pdf { height: 38px; padding: 0 14px; }
   .notice-title { font-size: 17px; }
 }
+
+/* "Keep reading" after an article: quiet, below the footer of the piece */
+.read-next { max-width: 760px; margin: 8px auto 0; padding: 32px 20px 56px; border-top: 1px solid var(--border); }
+.read-next ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 4px; }
+.read-next a { display: grid; grid-template-columns: 88px 1fr; gap: 16px; align-items: center; padding: 12px 0; text-decoration: none; color: inherit; }
+.read-next a:not(:has(img)) { grid-template-columns: 1fr; }
+.read-next img { width: 88px; height: 62px; object-fit: cover; border-radius: 4px; }
+.read-next-text { display: grid; gap: 4px; min-width: 0; }
+.read-next-meta { font-size: 12px; color: var(--muted-foreground); }
+.read-next strong { font-family: var(--font-serif, Georgia, serif); font-size: 17px; line-height: 1.35; font-weight: 600; }
+.read-next a:hover strong, .read-next a:focus-visible strong { color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 768px) { .read-next ul { grid-template-columns: repeat(3, 1fr); gap: 20px; } .read-next a { grid-template-columns: 1fr; align-items: start; gap: 10px; } .read-next img { width: 100%; height: auto; aspect-ratio: 16/10; } .read-next:has(li:only-child) ul, .read-next ul:has(li:nth-child(2):last-child) { grid-template-columns: repeat(2, 1fr); } }
