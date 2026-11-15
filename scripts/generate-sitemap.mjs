@@ -20,6 +20,7 @@ const origin = (() => {
 })();
 
 const SECTIONS = ["projects", "books", "research", "articles", "editorials", "opinion-pieces", "talk-shows", "seminars"];
+const cleanSlug = (v) => v.toLowerCase().replace(/[^\p{L}\p{M}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "");
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const urls = [];
 const add = (path, lastmod) => urls.push({ loc: origin + path, lastmod });
@@ -52,7 +53,8 @@ if (existsSync(blogDir)) {
     const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text)?.[1] ?? "";
     const field = (k) => new RegExp(`^${k}:\\s*(.+)$`, "m").exec(front)?.[1]?.trim().replace(/^["']|["']$/g, "");
     if (field("draft") === "true" || !field("title")) continue;
-    add(`/writings/${name.slice(0, -3)}`, isoDay(field("date")) ?? isoDay(statSync(join(blogDir, name)).mtime.toISOString()));
+    const slug = cleanSlug(field("slug") ?? "") || cleanSlug(name.slice(0, -3));
+    add(`/writings/${encodeURI(slug)}`, isoDay(field("date")) ?? isoDay(statSync(join(blogDir, name)).mtime.toISOString()));
   }
 }
 
