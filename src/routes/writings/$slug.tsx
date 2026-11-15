@@ -64,6 +64,7 @@ function ArticlePage() {
             <p className="micro-label">{[post.dateLabel, `${post.readingMinutes} min read`].filter(Boolean).join(" · ")}</p>
             <h1>{post.title}</h1>
             {post.excerpt && <p className="reader-lede">{post.excerpt}</p>}
+            {post.note && <p className="reader-note"><span>About this article</span>{post.note}</p>}
             {post.tags.length > 0 && <ul className="reader-tags">{post.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>}
           </header>
           {post.cover && (

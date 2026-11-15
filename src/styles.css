@@ -1299,3 +1299,7 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
   .notice-pdf { height: 38px; padding: 0 14px; }
   .notice-title { font-size: 17px; }
 }
+
+/* Disclosure under an article's title (for example, written with AI) */
+.reader-note { display: grid; gap: 4px; margin: 22px 0 0; max-width: 62ch; padding: 14px 18px; border-left: 3px solid var(--brand); background: color-mix(in oklab, var(--brand) 8%, transparent); border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7; color: var(--muted-foreground); }
+.reader-note span { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); font-weight: 600; }

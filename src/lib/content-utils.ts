@@ -102,6 +102,8 @@ export interface Post {
   readingMinutes: number;
   /** Marked `featured: true` in the front matter; the homepage shows these first. */
   featured: boolean;
+  /** Optional disclosure shown under the title (for example that an article was written with AI). */
+  note: string;
   blocks: Block[];
 }
 
@@ -158,6 +160,7 @@ export function buildPost(path: string, raw: string): Post | null {
     tags,
     readingMinutes: Math.max(1, Math.round(countWords(text) / 200)),
     featured: isTrue(data["featured"]),
+    note: str(data["note"]),
     blocks,
   };
 }
