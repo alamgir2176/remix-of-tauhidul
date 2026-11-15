@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Camera } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
-import { PhotoFigure } from "@/components/content-cards";
+import { PhotoGallery } from "@/components/photo-gallery";
 import { getPhotoGroups } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
@@ -37,13 +37,7 @@ function ActivitiesPage() {
                 {group.dateLabel && <p className="micro-label">{group.dateLabel}</p>}
               </div>
             )}
-            <div className="gallery gallery-mosaic">
-              {group.photos.map((photo, i) => (
-                <div key={`${photo.image}-${i}`} className={i === 0 ? "gallery-feature" : ""}>
-                  <PhotoFigure photo={photo} />
-                </div>
-              ))}
-            </div>
+            <PhotoGallery photos={group.photos} />
           </div>
         ))}
       </section>

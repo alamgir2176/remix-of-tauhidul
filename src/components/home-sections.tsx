@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Camera, FileText, PenLine } from "lucide-react";
-import { DocumentList, FeedCard, PhotoFigure } from "@/components/content-cards";
+import { DocumentList, FeedCard } from "@/components/content-cards";
+import { PhotoGallery } from "@/components/photo-gallery";
 import { EmptyState } from "@/components/page-shell";
 import { getAnnouncements, getFeed, getPhotos } from "@/lib/content";
 
@@ -87,8 +88,14 @@ export function NoticesSection() {
 }
 
 /** 06: activity and event photographs. */
+const HOME_PHOTOS = 4;
+
 export function ActivitiesSection() {
-  const photos = getPhotos().slice(0, 6);
+  const all = getPhotos();
+  // The homepage shows a hand-picked few: photos marked "featured" first, otherwise the first few in the file.
+  const featured = all.filter((photo) => photo.featured);
+  const photos = (featured.length > 0 ? featured : all).slice(0, HOME_PHOTOS);
+  const more = all.length - photos.length;
   return (
     <section id="activities" className="activities-section section-space">
       <span className="section-mark" aria-hidden="true">
@@ -107,13 +114,17 @@ export function ActivitiesSection() {
         <SeeAll to="/activities">Full gallery</SeeAll>
       </div>
       {photos.length > 0 ? (
-        <div className="photo-grid photo-grid-home">
-          {photos.map((photo, i) => (
-            <div key={`${photo.image}-${i}`} className={i === 0 ? "photo-feature" : ""}>
-              <PhotoFigure photo={photo} />
-            </div>
-          ))}
-        </div>
+        <PhotoGallery
+          photos={photos}
+          className="gallery-wall gallery-wall-home"
+          tail={
+            <Link to="/activities" className="gallery-more">
+              <span className="gallery-more-count">{more > 0 ? `+${more}` : all.length}</span>
+              <span className="gallery-more-text">{more > 0 ? "more in the full gallery" : "in the full gallery"}</span>
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          }
+        />
       ) : (
         <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">
           Photographs from events and activities will be added here.
