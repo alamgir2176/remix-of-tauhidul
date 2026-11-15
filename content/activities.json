@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "image": "sample-01.jpg",
+    "caption": "Warm light. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Daylight",
+    "date": "2026-11-15",
+    "featured": true,
+    "alt": "A pale orange sky with a white sun over dark hills (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-04.jpg",
+    "caption": "Slow waves. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Daylight",
+    "date": "2026-11-15",
+    "featured": false,
+    "alt": "Soft layered waves in cream and coral (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-06.jpg",
+    "caption": "Leaves. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Daylight",
+    "date": "2026-11-14",
+    "featured": false,
+    "alt": "Pale green leaves drifting across a light background (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-09.jpg",
+    "caption": "Rings. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Daylight",
+    "date": "2026-11-14",
+    "featured": false,
+    "alt": "Three white rings on a cream and blue gradient (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-02.jpg",
+    "caption": "Hills at dusk. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Evening",
+    "date": "2026-11-13",
+    "featured": true,
+    "alt": "Layered green hills in the evening (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-05.jpg",
+    "caption": "Moon. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Evening",
+    "date": "2026-11-13",
+    "featured": true,
+    "alt": "A crescent moon over a dark blue sky with stars (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-08.jpg",
+    "caption": "Night water. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Evening",
+    "date": "2026-11-12",
+    "featured": false,
+    "alt": "Wide dark blue waves at night (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-03.jpg",
+    "caption": "Circles. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Evening",
+    "date": "2026-11-12",
+    "featured": true,
+    "alt": "Concentric rings on a deep purple background (sample artwork by Claude)"
+  },
+  {
+    "image": "sample-07.jpg",
+    "caption": "Sunset. Sample picture made by Claude, an AI assistant, to preview this gallery. Not a real event or photograph.",
+    "activity": "Sample gallery: Evening",
+    "date": "2026-11-12",
+    "featured": false,
+    "alt": "A white sun over dark rose-coloured hills (sample artwork by Claude)"
+  }
+]
