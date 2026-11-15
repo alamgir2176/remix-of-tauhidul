@@ -286,6 +286,8 @@ export interface Photo {
   date: string;
   dateLabel: string;
   location: string;
+  /** Marked "featured": true in activities.json; the homepage shows these first. */
+  featured: boolean;
 }
 
 export interface PhotoGroup {
@@ -313,6 +315,7 @@ export function normalizePhotos(data: unknown): Photo[] {
       date: str(row["date"]),
       dateLabel: formatDate(row["date"]),
       location: str(row["location"]),
+      featured: isTrue(row["featured"]),
     });
   }
   return photos;

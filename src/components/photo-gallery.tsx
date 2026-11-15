@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { PhotoFigure } from "@/components/content-cards";
 import type { Photo } from "@/lib/content-utils";
@@ -7,7 +7,7 @@ import type { Photo } from "@/lib/content-utils";
  * Photographs at their own proportions (wide, tall, square side by side), with a full-screen viewer.
  * It only changes how the photos are shown; the photo list itself comes from the content files as before.
  */
-export function PhotoGallery({ photos, className = "gallery-mosaic" }: { photos: Photo[]; className?: string }) {
+export function PhotoGallery({ photos, className = "gallery-wall", tail }: { photos: Photo[]; className?: string; tail?: ReactNode | undefined }) {
   const [open, setOpen] = useState<number | null>(null);
   const trigger = useRef<HTMLElement | null>(null);
   const close = useCallback(() => {
@@ -22,6 +22,7 @@ export function PhotoGallery({ photos, className = "gallery-mosaic" }: { photos:
             <PhotoFigure photo={photo} onOpen={(el) => { trigger.current = el; setOpen(i); }} />
           </div>
         ))}
+        {tail && <div>{tail}</div>}
       </div>
       {open !== null && <Viewer photos={photos} index={open} onIndex={setOpen} onClose={close} />}
     </>

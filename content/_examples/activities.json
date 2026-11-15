@@ -5,6 +5,7 @@
     "activity": "Theatre festival",
     "date": "2026-11-13",
     "location": "Optional place name",
+    "featured": false,
     "alt": "Optional description for screen readers"
   }
 ]

@@ -96,11 +96,13 @@ Each section has one file in `content/external/`: `projects.json`, `books.json`,
 
 ```json
 [
-  { "image": "file.jpg", "caption": "Caption", "activity": "Activity name", "date": "2026-11-13", "location": "Optional" }
+  { "image": "file.jpg", "caption": "Caption", "activity": "Activity name", "date": "2026-11-13", "location": "Optional", "featured": true }
 ]
 ```
 
 Photos with the same `activity` are grouped together; groups are ordered newest first.
+
+The full gallery page shows every photo. The homepage shows only a few: the photos marked `"featured": true` (up to five), or the first five in the file if none are marked. Leave `featured` out for photos that belong only in the gallery.
 
 ## 5. Keeping the deployment light
 
