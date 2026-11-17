@@ -30,10 +30,10 @@ export function WritingSection() {
   return (
     <section id="library" className="library-section section-space">
       <span className="section-mark" aria-hidden="true">
-        04
+        02
       </span>
       <div className="section-label">
-        <span>04 — Writing &amp; work</span>
+        <span>02 — Writing &amp; work</span>
         <span>Words, projects and talks</span>
       </div>
       <div className="section-head scroll-reveal">

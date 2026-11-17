@@ -65,7 +65,7 @@ export function SiteIntro() {
         </div>
       </div>
       <div className="intro-bottom">
-        <Button variant="ghost" className="intro-skip-btn" onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>Enter site <ArrowUpRight aria-hidden="true" /></Button>
+        <Button variant="ghost" className={`intro-skip-btn${ready ? " is-ready" : ""}`} onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>Enter site <ArrowUpRight aria-hidden="true" /></Button>
         <span className="intro-hint" aria-hidden="true">or press Esc</span>
       </div>
     </div>

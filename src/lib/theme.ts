@@ -8,9 +8,10 @@ export function isTheme(value: unknown): value is ThemeId {
 
 /**
  * Runs in <head> before first paint so the saved theme never flashes.
- * Uses explicit window-owned APIs because this string is injected as-is.
+ * Uses explicit window-owned APIs because this string is injected as-is. A first-time visitor whose
+ * device prefers a dark appearance gets the Dark theme; nothing is saved until they choose a theme.
  */
-export const THEME_BOOT_SCRIPT = `(function(){try{var t=window.localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="dark"||t==="colorful"||t==="minimal"){window.document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();`;
+export const THEME_BOOT_SCRIPT = `(function(){try{var t=window.localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="dark"||t==="colorful"||t==="minimal"){window.document.documentElement.setAttribute("data-theme",t);}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){window.document.documentElement.setAttribute("data-theme","dark");}}catch(e){}})();`;
 
 export function readTheme(): ThemeId {
   const current =

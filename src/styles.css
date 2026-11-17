@@ -332,9 +332,10 @@ body { font-feature-settings: "ss01", "kern"; text-rendering: optimizeLegibility
 .intro-progress span { display: block; width: 100%; height: 100%; background: var(--intro-indicator); transform-origin: left; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
 .intro-progress::after { content: ""; position: absolute; top: 50%; left: var(--intro-fill, 0%); width: 5px; height: 5px; border-radius: 50%; background: var(--intro-indicator); transform: translate(-50%, -50%); transition: left .7s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
 .intro-progress[data-full]::after { opacity: 0; }
-.intro-skip-btn { height: 44px; padding: 12px 18px; gap: 10px; border-radius: 0; font-size: 12px; font-weight: 400; color: var(--intro-muted); background: transparent; border-bottom: 1px solid var(--intro-line); transition: color .3s ease, border-color .3s ease; }
+.intro-skip-btn { height: 44px; padding: 0 22px; gap: 10px; border-radius: 999px; font-size: 12px; font-weight: 400; letter-spacing: .08em; color: var(--intro-muted); background: transparent; border: 1px solid var(--intro-line); transition: color .3s ease, border-color .3s ease, background .3s ease; }
 .intro-skip-btn svg { width: 14px; height: 14px; }
-.intro-skip-btn:hover, .intro-skip-btn:focus-visible { color: var(--intro-foreground); background: transparent; border-color: var(--intro-foreground); }
+.intro-skip-btn:hover, .intro-skip-btn:focus-visible { color: var(--intro-background); background: var(--intro-foreground); border-color: var(--intro-foreground); }
+.intro-skip-btn.is-ready { color: var(--intro-foreground); border-color: var(--intro-indicator); animation: intro-ready-pulse 2s ease-in-out infinite; }
 .intro-hint { font-size: 11px; letter-spacing: .04em; color: var(--intro-muted); opacity: .8; }
 @keyframes intro-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes intro-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -1366,3 +1367,17 @@ img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
 .article-body img, .reader-cover img, .read-next img { -webkit-user-drag: auto; user-select: auto; -webkit-touch-callout: default; }
 img.img-broken { visibility: hidden; }
 .gallery-item:has(img.img-broken) { display: none; }
+
+/* Opening sequence: slow ambient light, a quiet oversized quotation mark, three-step progress and a pill button */
+.site-intro > * { position: relative; z-index: 1; }
+.site-intro::before { content: ""; position: absolute; z-index: 0; inset: -20%; background: radial-gradient(40% 36% at 30% 70%, color-mix(in oklab, var(--intro-indicator) 22%, transparent), transparent 70%), radial-gradient(34% 30% at 72% 30%, color-mix(in oklab, var(--intro-foreground) 9%, transparent), transparent 70%); animation: intro-drift 22s ease-in-out infinite alternate; pointer-events: none; }
+.site-intro::after { content: ""; position: absolute; inset: 0; z-index: 0; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgb(0 0 0 / .35) 100%); pointer-events: none; }
+.intro-quotes { position: relative; }
+.intro-quotes::before { content: "\201C"; position: absolute; left: 50%; top: -.28em; transform: translateX(-50%); font-family: Georgia, serif; font-size: clamp(160px, 28vw, 300px); line-height: 1; color: var(--intro-foreground); opacity: .06; pointer-events: none; }
+.intro-source { text-transform: uppercase; letter-spacing: .14em; font-size: 11px; }
+.intro-progress::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, transparent calc(33.333% - 2px), var(--intro-background) calc(33.333% - 2px) calc(33.333% + 2px), transparent calc(33.333% + 2px) calc(66.666% - 2px), var(--intro-background) calc(66.666% - 2px) calc(66.666% + 2px), transparent calc(66.666% + 2px)); pointer-events: none; }
+@keyframes intro-drift { from { transform: translate3d(-3%, 2%, 0) scale(1); } to { transform: translate3d(3%, -3%, 0) scale(1.08); } }
+@keyframes intro-ready-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--intro-indicator) 40%, transparent); } 50% { box-shadow: 0 0 0 8px transparent; } }
+@media (prefers-reduced-motion: reduce) { .site-intro::before, .intro-skip-btn.is-ready { animation: none; } }
+
+.tag-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; }

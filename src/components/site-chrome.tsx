@@ -9,9 +9,9 @@ export const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331
 /** One menu for the whole website. Every item is a section of the homepage. */
 export const NAV = [
   ["The person", "about"],
+  ["Writing & work", "library"],
   ["Perspective", "perspective"],
   ["Beyond the page", "beyond"],
-  ["Writing & work", "library"],
   ["Updates", "notices"],
   ["Activities", "activities"],
 ] as const;

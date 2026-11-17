@@ -6,6 +6,9 @@ const BENGALI_FONTS =
 /** Bengali glyph fonts. Google serves them by unicode-range, so English-only pages never download them. */
 export const bengaliFontLink = { rel: "stylesheet", href: BENGALI_FONTS } as const;
 
+/** Used for link previews (WhatsApp, Facebook, X) on pages that have no picture of their own. */
+export const DEFAULT_SHARE_IMAGE = "/share-card.jpg";
+
 export function absoluteUrl(path: string): string | undefined {
   const origin = publicHomepage(import.meta.env["VITE_SITE_URL"]);
   return origin ? `${origin}${path.replace(/^\//, "")}` : undefined;
@@ -13,7 +16,8 @@ export function absoluteUrl(path: string): string | undefined {
 
 export function pageMeta(opts: { title: string; description: string; path: string; image?: string; type?: string }) {
   const url = absoluteUrl(opts.path);
-  const image = opts.image ? (opts.image.startsWith("http") ? opts.image : absoluteUrl(opts.image)) : undefined;
+  const shared = opts.image || DEFAULT_SHARE_IMAGE;
+  const image = shared.startsWith("http") ? shared : absoluteUrl(shared);
   return {
     meta: [
       { title: opts.title },
