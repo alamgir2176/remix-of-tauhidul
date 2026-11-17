@@ -8,7 +8,8 @@ export function bootstrapIntro(seenKey: string, recoveryMs: number, quoteMs: num
   const root = document.documentElement;
   try {
     const navigation = window.performance?.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
-    if (sessionStorage.getItem(seenKey) || location.hash || navigation?.type === "back_forward") return;
+    // The opening sequence belongs to the home page; every other address opens straight away.
+    if (location.pathname !== "/" || sessionStorage.getItem(seenKey) || location.hash || navigation?.type === "back_forward") return;
   } catch { /* Storage or navigation timing may be unavailable. */ }
 
   root.classList.add("intro-active");

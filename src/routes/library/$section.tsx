@@ -31,7 +31,7 @@ function SectionPage() {
   const items = getSectionFeed(section);
   return (
     <PageShell>
-      <PageIntro number="04" label={section.title} title={section.title}>
+      <PageIntro number="02" label={section.title} title={section.title}>
         {section.blurb}
       </PageIntro>
       <section className="page-section" aria-label={section.title}>

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Writes public/sitemap.xml and the Sitemap line of public/robots.txt from the content folder.
+ * Writes public/sitemap.xml, public/rss.xml and the Sitemap line of public/robots.txt from the content folder.
  * Runs automatically before every build (see "prebuild" in package.json), so new articles
  * appear in the sitemap by themselves. Drafts and hidden entries are left out.
  *   node scripts/generate-sitemap.mjs
@@ -23,6 +23,7 @@ const SECTIONS = ["projects", "books", "research", "articles", "editorials", "op
 const cleanSlug = (v) => v.toLowerCase().replace(/[^\p{L}\p{M}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "");
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const urls = [];
+const feed = [];
 const add = (path, lastmod) => urls.push({ loc: origin + path, lastmod });
 const isoDay = (v) => (/^\d{4}-\d{2}-\d{2}/.test(String(v ?? "")) ? String(v).slice(0, 10) : undefined);
 
@@ -54,6 +55,8 @@ if (existsSync(blogDir)) {
     const field = (k) => new RegExp(`^${k}:\\s*(.+)$`, "m").exec(front)?.[1]?.trim().replace(/^["']|["']$/g, "");
     if (field("draft") === "true" || !field("title")) continue;
     const slug = cleanSlug(field("slug") ?? "") || cleanSlug(name.slice(0, -3));
+    const day = isoDay(field("date"));
+    if (day) feed.push({ title: field("title"), link: `${origin}/writings/${encodeURI(slug)}`, day, excerpt: field("excerpt") ?? "" });
     add(`/writings/${encodeURI(slug)}`, isoDay(field("date")) ?? isoDay(statSync(join(blogDir, name)).mtime.toISOString()));
   }
 }
@@ -64,6 +67,17 @@ const xml =
   `\n</urlset>\n`;
 writeFileSync(join(root, "public/sitemap.xml"), xml);
 
+const rfc822 = (d) => new Date(`${d}T00:00:00Z`).toUTCString();
+feed.sort((a, b) => b.day.localeCompare(a.day));
+const rss =
+  `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0">\n<channel>\n  <title>Md Tauhidul Islam: Writings</title>\n  <link>${origin}/writings</link>\n  <description>Essays and reflections published on this website.</description>\n` +
+  feed
+    .slice(0, 30)
+    .map((f) => `  <item><title>${esc(f.title)}</title><link>${esc(f.link)}</link><guid>${esc(f.link)}</guid><pubDate>${rfc822(f.day)}</pubDate><description>${esc(f.excerpt)}</description></item>`)
+    .join("\n") +
+  `\n</channel>\n</rss>\n`;
+writeFileSync(join(root, "public/rss.xml"), rss);
+
 const robotsFile = join(root, "public/robots.txt");
 const robots = existsSync(robotsFile) ? readFileSync(robotsFile, "utf8") : "User-agent: *\nAllow: /\n";
 const line = `Sitemap: ${origin}/sitemap.xml`;
@@ -71,4 +85,4 @@ writeFileSync(
   robotsFile,
   /^Sitemap:.*$/m.test(robots) ? robots.replace(/^Sitemap:.*$/m, line) : `${robots.replace(/\s*$/, "\n")}\n${line}\n`,
 );
-console.log(`sitemap: ${urls.length} addresses (${origin})`);
+console.log(`sitemap + rss: ${urls.length} addresses, ${feed.length} feed items (${origin})`);

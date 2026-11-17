@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Md Tauhidul Islam: Writings</title>
+  <link>https://tauhidul.vercel.app/writings</link>
+  <description>Essays and reflections published on this website.</description>
+  <item><title>Define your terms first</title><link>https://tauhidul.vercel.app/writings/define-your-terms-first</link><guid>https://tauhidul.vercel.app/writings/define-your-terms-first</guid><pubDate>Sun, 15 Nov 2026 00:00:00 GMT</pubDate><description>A sample article, written by Claude (an AI assistant) for this website: why most arguments get shorter, and kinder, once we ask what we actually mean.</description></item>
+  <item><title>Tools that think back</title><link>https://tauhidul.vercel.app/writings/tools-that-think-back</link><guid>https://tauhidul.vercel.app/writings/tools-that-think-back</guid><pubDate>Sun, 08 Nov 2026 00:00:00 GMT</pubDate><description>A sample article, written by Claude (an AI assistant) for this website: a few honest questions to ask before we let a clever tool do our thinking.</description></item>
+</channel>
+</rss>

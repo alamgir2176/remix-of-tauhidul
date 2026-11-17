@@ -21,7 +21,7 @@ function LibraryPage() {
   const feed = getFeed();
   return (
     <PageShell>
-      <PageIntro number="04" label="Writing & work" title="Ideas, set down" accent="on the page.">
+      <PageIntro number="02" label="Writing & work" title="Ideas, set down" accent="on the page.">
         Blog posts, projects, books, research, articles, editorials, opinion pieces, talk shows and
         seminars.
       </PageIntro>
