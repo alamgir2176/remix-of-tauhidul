@@ -1386,7 +1386,7 @@ img.img-broken { visibility: hidden; }
 .quote-list { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(28px, 5vw, 56px); counter-reset: q; }
 .quote-list li { counter-increment: q; display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 8px 16px; padding-top: clamp(20px, 3vw, 32px); border-top: 1px solid var(--border); }
 .quote-list li::before { content: counter(q, decimal-leading-zero); font-size: 12px; letter-spacing: .14em; color: var(--muted-foreground); padding-top: .6em; font-variant-numeric: tabular-nums; }
-.quote-list figure { margin: 0; max-width: 40ch; }
+.quote-list figure { margin: 0; max-width: 900px; }
 .quote-list blockquote { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.22; text-wrap: balance; }
 .quote-list figcaption { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-foreground); }
 .quote-list figcaption em { font-style: normal; color: var(--brand-ink); }
