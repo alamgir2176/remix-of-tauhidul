@@ -47,8 +47,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
         ))}
       </nav>
       <div className="flex shrink-0 items-center gap-4">
-        <button type="button" className="header-search" aria-label="Search this website" title="Search this website (Ctrl K)" onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}><Search aria-hidden="true" /><span className="header-search-label">Search</span><kbd aria-hidden="true">/</kbd></button>
-        <div className="header-theme"><ThemeSwitcher /></div>
+        <button type="button" className="header-search" aria-label="Search this website" title="Search this website (Ctrl K)" onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}><Search aria-hidden="true" /></button>
         <div className="header-theme-compact"><ThemeCycle /></div>
         <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
         <Button variant="ghost" size="icon" className="xl:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
@@ -70,7 +69,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-main">
-        <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul<span>.</span></Link><p>Philosophy, theatre and everyday life.</p><p className="footer-place">Dhaka, Bangladesh</p></div>
+        <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul<span>.</span></Link><p>Philosophy, theatre and everyday life.</p><p className="footer-place">Dhaka, Bangladesh</p><div className="footer-theme"><span className="micro-label">Theme</span><ThemeSwitcher labeled /></div></div>
         <nav className="footer-nav" aria-label="Footer">
           <span className="micro-label">The website</span>
           {NAV.map(([label, id]) => <Link to="/" hash={id} key={id}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}
