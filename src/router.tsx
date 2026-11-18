@@ -9,6 +9,8 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
+    // A soft cross-fade between pages in browsers that support it; others navigate as before.
+    defaultViewTransition: true,
     defaultPreloadStaleTime: 0,
   });
 

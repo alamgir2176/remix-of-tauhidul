@@ -47,7 +47,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
         ))}
       </nav>
       <div className="flex shrink-0 items-center gap-4">
-        <button type="button" className="header-search" aria-label="Search this website" title="Search (Ctrl K)" onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}><Search aria-hidden="true" /></button>
+        <button type="button" className="header-search" aria-label="Search this website" title="Search this website (Ctrl K)" onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}><Search aria-hidden="true" /><span className="header-search-label">Search</span><kbd aria-hidden="true">/</kbd></button>
         <div className="header-theme"><ThemeSwitcher /></div>
         <div className="header-theme-compact"><ThemeCycle /></div>
         <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
@@ -58,7 +58,6 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
           {[...NAV, ["Let’s talk", "contact"] as const].map(([label, id], i) => (
             <Link to="/" hash={id} key={id} className={active === id ? "is-active" : undefined} aria-current={active === id ? "location" : undefined} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>
           ))}
-          <button type="button" className="mobile-menu-search" onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event(OPEN_SEARCH_EVENT)); }}><Search aria-hidden="true" /> Search this website</button>
           <p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p>
         </nav>
       )}
@@ -73,12 +72,16 @@ export function SiteFooter() {
       <div className="footer-main">
         <div className="footer-identity"><Link to="/" hash="top" className="footer-name" aria-label="Tauhidul Islam, back to home">tauhidul<span>.</span></Link><p>Philosophy, theatre and everyday life.</p><p className="footer-place">Dhaka, Bangladesh</p></div>
         <nav className="footer-nav" aria-label="Footer">
-          <span className="micro-label">Explore</span>
+          <span className="micro-label">The website</span>
           {NAV.map(([label, id]) => <Link to="/" hash={id} key={id}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}
-          <Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link>
+        </nav>
+        <nav className="footer-nav footer-more" aria-label="More">
+          <span className="micro-label">More to explore</span>
+          <Link to="/writings">All writings<ArrowUpRight aria-hidden="true" /></Link>
           <Link to="/quotations">Quotations<ArrowUpRight aria-hidden="true" /></Link>
           <Link to="/now">Now<ArrowUpRight aria-hidden="true" /></Link>
           <Link to="/media">Media kit<ArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link>
         </nav>
         <div className="footer-connect">
           <span className="micro-label">Keep in touch</span>

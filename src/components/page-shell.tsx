@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { KeepExploring } from "@/components/keep-exploring";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
 /** Which homepage menu item a path belongs to. */
@@ -10,13 +11,26 @@ function activeFor(path: string): string {
   return "";
 }
 
+/** The kind of content a path already shows, so the "keep exploring" strip points elsewhere. */
+function ownKind(path: string): "writing" | "line" | "now" | "photo" | "update" | null {
+  if (path.startsWith("/writings") || path.startsWith("/library")) return "writing";
+  if (path.startsWith("/quotations")) return "line";
+  if (path.startsWith("/now")) return "now";
+  if (path.startsWith("/activities")) return "photo";
+  if (path.startsWith("/notices")) return "update";
+  return null;
+}
+
 /** Same header and footer as the homepage, around the content of an inner page. */
 export function PageShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   return (
     <div id="top">
       <SiteHeader active={activeFor(path)} />
-      <main id="main" tabIndex={-1}>{children}</main>
+      <main id="main" tabIndex={-1}>
+        {children}
+        {path !== "/cv-request" && <KeepExploring page={path} skip={ownKind(path) ? [ownKind(path)!] : []} />}
+      </main>
       <SiteFooter />
     </div>
   );
