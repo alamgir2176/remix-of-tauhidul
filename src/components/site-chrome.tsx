@@ -1,7 +1,8 @@
 import { useEffect, useState, type RefObject } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowUp, ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OPEN_SEARCH_EVENT } from "@/components/search-launcher";
 import { ThemeCycle, ThemeSwitcher } from "@/components/theme-switcher";
 
 export const LINKEDIN = "https://www.linkedin.com/in/md-tauhidul-islam-910612331";
@@ -46,6 +47,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
         ))}
       </nav>
       <div className="flex shrink-0 items-center gap-4">
+        <button type="button" className="header-search" aria-label="Search this website" title="Search (Ctrl K)" onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}><Search aria-hidden="true" /></button>
         <div className="header-theme"><ThemeSwitcher /></div>
         <div className="header-theme-compact"><ThemeCycle /></div>
         <Button asChild variant="ghost" className="header-contact rounded-none px-0"><Link to="/" hash="contact">Let's talk <ArrowUpRight /></Link></Button>
@@ -56,6 +58,7 @@ export function SiteHeader({ active = "", scrolled = true, hidden = false, progr
           {[...NAV, ["Let’s talk", "contact"] as const].map(([label, id], i) => (
             <Link to="/" hash={id} key={id} className={active === id ? "is-active" : undefined} aria-current={active === id ? "location" : undefined} style={{ animationDelay: `${60 + i * 60}ms` }} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{label}<ArrowUpRight /></Link>
           ))}
+          <button type="button" className="mobile-menu-search" onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event(OPEN_SEARCH_EVENT)); }}><Search aria-hidden="true" /> Search this website</button>
           <p className="mobile-menu-note"><span>Dhaka, Bangladesh</span><a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn ↗</a></p>
         </nav>
       )}
