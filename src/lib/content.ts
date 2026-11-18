@@ -11,12 +11,18 @@ import {
   groupPhotos,
   normalizeDocuments,
   normalizeExternal,
+  normalizeMedia,
+  normalizeNow,
+  normalizeQuotations,
   normalizePhotos,
   type DocumentItem,
   type ExternalItem,
   type ExternalSection,
+  type MediaKit,
+  type NowPage,
   type Photo,
   type PhotoGroup,
+  type Quotation,
   type Post,
 } from "./content-utils";
 
@@ -138,4 +144,22 @@ export function getFeed(): FeedItem[] {
     .map((item, index) => ({ item, index }))
     .sort((a, b) => dateValue(b.item.date) - dateValue(a.item.date) || a.index - b.index)
     .map(({ item }) => item);
+}
+
+export function getQuotations(): Quotation[] {
+  return normalizeQuotations(jsonAt("quotations.json"));
+}
+
+export function getNow(): NowPage {
+  return normalizeNow(jsonAt("now.json"));
+}
+
+export function getMedia(): MediaKit {
+  return normalizeMedia(jsonAt("media.json"));
+}
+
+/** The articles of one series, in reading order. */
+export function getSeries(name: string): Post[] {
+  if (!name) return [];
+  return posts.filter((p) => p.series === name).sort((a, b) => a.part - b.part || dateValue(a.date) - dateValue(b.date));
 }

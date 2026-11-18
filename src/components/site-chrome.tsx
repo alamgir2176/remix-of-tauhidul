@@ -73,6 +73,9 @@ export function SiteFooter() {
           <span className="micro-label">Explore</span>
           {NAV.map(([label, id]) => <Link to="/" hash={id} key={id}>{label}<ArrowUpRight aria-hidden="true" /></Link>)}
           <Link to="/" hash="questions">Visitor questions<ArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/quotations">Quotations<ArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/now">Now<ArrowUpRight aria-hidden="true" /></Link>
+          <Link to="/media">Media kit<ArrowUpRight aria-hidden="true" /></Link>
         </nav>
         <div className="footer-connect">
           <span className="micro-label">Keep in touch</span>

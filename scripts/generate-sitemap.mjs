@@ -41,6 +41,9 @@ add("/writings");
 add("/library");
 add("/notices");
 add("/activities");
+add("/quotations");
+add("/now");
+add("/media");
 
 for (const s of SECTIONS) {
   if (jsonRows(join(root, "content/external", `${s}.json`)).length > 0) add(`/library/${s}`);

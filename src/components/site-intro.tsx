@@ -1,13 +1,24 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getQuotations } from "@/lib/content";
 import { QUOTATION_COUNT } from "@/lib/site-loading";
 
-const QUOTATIONS = [
-  { text: "“Nature never did betray the heart that loved her.”", source: "— William Wordsworth, Tintern Abbey" },
-  { text: "“Indeed, with hardship comes ease.”", source: "— The Qur’an, 94:6" },
-  { text: "“One must imagine Sisyphus happy.”", source: "— Albert Camus, The Myth of Sisyphus" },
-] as const;
+const FALLBACK = [
+  { text: "Nature never did betray the heart that loved her.", source: "William Wordsworth, Tintern Abbey" },
+  { text: "Indeed, with hardship comes ease.", source: "The Qur’an, 94:6" },
+  { text: "One must imagine Sisyphus happy.", source: "Albert Camus, The Myth of Sisyphus" },
+];
+
+/** The three quotations of the opening sequence come from content/quotations.json (those marked "intro"). */
+function openingQuotations() {
+  const all = getQuotations();
+  const chosen = [...all.filter((q) => q.intro), ...all.filter((q) => !q.intro)].slice(0, QUOTATION_COUNT);
+  const list = chosen.length === QUOTATION_COUNT ? chosen : FALLBACK;
+  return list.map((q, i) => ({ key: `${i}-${q.source}`, text: `“${q.text.replace(/^[“"]|[”"]$/g, "")}”`, source: q.source ? `— ${q.source}` : "" }));
+}
+
+const QUOTATIONS = openingQuotations();
 
 export function SiteIntro() {
   const [index, setIndex] = useState(0);
@@ -48,7 +59,7 @@ export function SiteIntro() {
       <div className="intro-stage">
         <div className="intro-quotes" aria-live="off">
         {QUOTATIONS.map((quotation, position) => (
-          <figure key={quotation.source} className={`intro-quotation${position === index ? " is-current" : ""}`} aria-hidden={position !== index}>
+          <figure key={quotation.key} className={`intro-quotation${position === index ? " is-current" : ""}`} aria-hidden={position !== index}>
             <blockquote className="intro-line font-editorial">{quotation.text}</blockquote>
             <figcaption className="intro-source">{quotation.source}</figcaption>
           </figure>
