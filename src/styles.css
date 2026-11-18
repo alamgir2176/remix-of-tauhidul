@@ -696,31 +696,32 @@ html.theme-is-changing *::after {
 }
 :root[data-theme="colorful"] {
   color-scheme: light;
-  --background: #F1EDFA;
-  --section: #E7DFF5;
-  --card: #FBF9FF;
-  --foreground: #201A38;
-  --muted-foreground: #5E5575;
-  --brand: #7951A6;
-  --brand-ink: #7951A6;
+  --background: #F7F4FA;
+  --section: #EEE9F4;
+  --card: #FDFCFE;
+  --foreground: #241C33;
+  --muted-foreground: #645B72;
+  --brand: #8A62B8;
+  --brand-ink: #62409A;
   --brand-contrast: #FFFFFF;
-  --border: #D7CBEA;
-  --input: #BDAFDC;
+  --border: #E0D8EA;
+  --input: #C9BEDA;
   --destructive: #A9384F;
   --destructive-foreground: #FBF9FF;
-  --ink: #201A38;
-  --paper: #F1EDFA;
+  --ink: #241C33;
+  --paper: #F7F4FA;
   --inverse-muted: #CFC6E8;
-  --inverse-border: #4C4278;
-  --inverse-accent: #2F2752;
-  --band-from: #5B3F8C;
-  --band-to: #2A1F4E;
-  --band-accent: #D9C6F5;
+  --inverse-border: #4A4066;
+  --inverse-accent: #2E2548;
+  --band-from: #4E3B78;
+  --band-to: #241B3B;
+  --band-accent: #E3D3F3;
   --shadow-soft: 0 1px 2px rgb(32 26 56 / .05), 0 10px 28px -12px rgb(90 60 150 / .22);
   --shadow-lift: 0 2px 4px rgb(32 26 56 / .06), 0 22px 44px -18px rgb(90 60 150 / .34);
-  --hero-wash: radial-gradient(60% 80% at 82% 38%, color-mix(in oklab, var(--brand) 22%, transparent), transparent 70%), radial-gradient(45% 55% at 100% 100%, color-mix(in oklab, #B9A0E8 30%, transparent), transparent 75%);
-  --intro-background: #1A1433;
-  --intro-sheen: #4A3A7A;
+  --accent-warm: #C98B63;
+  --hero-wash: radial-gradient(60% 80% at 82% 38%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 70%), radial-gradient(45% 55% at 100% 100%, color-mix(in oklab, #C9B3E6 22%, transparent), transparent 75%);
+  --intro-background: #1B1530;
+  --intro-sheen: #473A70;
   --intro-foreground: #F1EDFA;
   --intro-muted: #CFC6E8;
   --intro-track: #3A3166;
@@ -1098,13 +1099,13 @@ a:focus-visible, button:focus-visible { outline-color: var(--ring); }
    The photos have cool, near-black studio backdrops, so every band is a deep, low-chroma base with a single soft accent glow.
    The glow sits behind the portrait and shows through where the photo fades, so photo and band meet through colour, not a seam. */
 :root { --band-from: #2D2924; --band-to: #151412; }
-:root[data-theme="colorful"] { --band-from: #34285A; --band-to: #140F26; }
+:root[data-theme="colorful"] { --band-from: #2E2449; --band-to: #120E22; }
 
 /* Desktop and tablet keep the earlier closing-band look (original brown / plum band colours) */
 @media (min-width: 768px) {
   .interlude { --band-from: #5C4524; --band-to: #2B2216; }
   :root[data-theme="dark"] .interlude { --band-from: #1E3A34; --band-to: #0D1817; }
-  :root[data-theme="colorful"] .interlude { --band-from: #5B3F8C; --band-to: #2A1F4E; }
+  :root[data-theme="colorful"] .interlude { --band-from: #4E3B78; --band-to: #241B3B; }
 }
 
 @media (max-width: 767px) {
@@ -1633,3 +1634,21 @@ html { accent-color: var(--brand); caret-color: var(--brand); }
 :root[data-theme="colorful"] .section-mark { -webkit-text-stroke-color: color-mix(in oklab, var(--brand) 14%, transparent); }
 :root[data-theme="colorful"] .explore-kind, :root[data-theme="colorful"] .reader-series { color: var(--brand); }
 :root[data-theme="dark"] .explore a { background: color-mix(in oklab, var(--card) 70%, transparent); }
+
+/* ───────── Header: quiet icon buttons beside one clear action ───────── */
+.header-search, .site-header .theme-cycle { border: 0; background: transparent; box-shadow: none; color: var(--foreground); }
+.header-search:hover, .site-header .theme-cycle:hover { border: 0; background: color-mix(in oklab, var(--foreground) 8%, transparent); }
+.site-header .header-theme-compact { display: block; }
+.site-header .flex.shrink-0 { gap: 4px; }
+.site-header .header-contact { margin-left: 12px; padding: 0 16px; height: 40px; border: 1px solid var(--input); border-radius: 999px; transition: border-color var(--dur-quick), background var(--dur-quick); }
+.site-header .header-contact:hover { border-color: var(--brand); background: color-mix(in oklab, var(--brand) 8%, transparent); }
+@media (max-width: 639px) { .site-header .header-contact { display: none; } }
+.footer-theme { display: grid; gap: 10px; margin-top: 24px; max-width: 300px; }
+.footer-theme .theme-switch { background: transparent; border-color: var(--inverse-border); box-shadow: none; }
+.footer-theme .theme-option { color: var(--inverse-muted); }
+.footer-theme .theme-option[aria-pressed="true"] { color: var(--brand-contrast); }
+
+/* Colorful: one warm note against the violet */
+:root[data-theme="colorful"] .section-label > span:first-child::before { background: var(--accent-warm); }
+:root[data-theme="colorful"] .header-progress, :root[data-theme="colorful"] .reader-progress span { background: linear-gradient(90deg, var(--brand), var(--accent-warm)); }
+:root[data-theme="colorful"] .toc-rail li a[aria-current="location"] { border-left-color: var(--accent-warm); }
