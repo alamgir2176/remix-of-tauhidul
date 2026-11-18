@@ -1600,3 +1600,36 @@ img.is-loading { opacity: .25; background: color-mix(in oklab, var(--foreground)
 @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
 .site-header .header-contact { white-space: nowrap; }
 .listen-voice { max-width: 190px; }
+
+/* ───────── Motion and colour: one language ───────── */
+:root { --ease: cubic-bezier(.2, .7, .2, 1); --dur-quick: .2s; --dur: .35s; --dur-slow: .7s; }
+
+/* Entrance: a short rise and fade, staggered a little within a group */
+.rv { opacity: 0; transform: translateY(16px); }
+.rv.is-in { opacity: 1; transform: none; transition: opacity var(--dur-slow) var(--ease) var(--rv-d, 0ms), transform var(--dur-slow) var(--ease) var(--rv-d, 0ms); }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
+
+/* Touch and click feedback, the same everywhere */
+button:not(:disabled):active, .theme-option:active, .notice-chip:active { transform: scale(.97); }
+.explore a:active, .content-card:active, .doc-row:active { transform: translateY(0) scale(.995); }
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* Hover treatments share one rhythm */
+.content-card, .doc-row, .explore a, .series-nav a, .read-next a { transition-duration: var(--dur); transition-timing-function: var(--ease); }
+.photo-grid .gallery-item a, .gallery-item a { transition: box-shadow var(--dur) var(--ease); }
+.gallery-item a:hover { box-shadow: var(--shadow-lift); }
+.read-next a img { transition: transform var(--dur-slow) var(--ease); }
+.read-next a:hover img { transform: scale(1.04); }
+.nav-link, .footer-nav > a, .footer-link { transition-timing-function: var(--ease); }
+
+/* Colour details that follow the active theme */
+::selection { background: color-mix(in oklab, var(--brand) 28%, transparent); color: inherit; }
+html { accent-color: var(--brand); caret-color: var(--brand); }
+:focus-visible { outline-color: var(--ring); }
+.reader-progress span, .header-progress { background: linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--brand) 55%, var(--foreground))); }
+
+/* Colorful: keep the plum character but let the page breathe (softer washes, calmer shadows) */
+:root[data-theme="colorful"] { --shadow-soft: 0 1px 2px rgb(32 26 56 / .04), 0 8px 22px -14px rgb(90 60 150 / .2); --shadow-lift: 0 2px 4px rgb(32 26 56 / .05), 0 18px 36px -20px rgb(90 60 150 / .3); }
+:root[data-theme="colorful"] .section-mark { -webkit-text-stroke-color: color-mix(in oklab, var(--brand) 14%, transparent); }
+:root[data-theme="colorful"] .explore-kind, :root[data-theme="colorful"] .reader-series { color: var(--brand); }
+:root[data-theme="dark"] .explore a { background: color-mix(in oklab, var(--card) 70%, transparent); }

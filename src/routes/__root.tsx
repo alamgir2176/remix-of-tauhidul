@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteIntro } from "../components/site-intro";
 import { ImageGuard } from "../components/image-guard";
+import { ScrollReveal } from "../components/scroll-reveal";
 import { SearchLauncher } from "../components/search-launcher";
 import { SiteFooter, SiteHeader } from "../components/site-chrome";
 import { INTRO_SKIP_SCRIPT } from "../lib/site-loading";
@@ -144,6 +145,7 @@ function RootComponent() {
       <SiteIntro />
       <ImageGuard />
       <SearchLauncher />
+      <ScrollReveal />
     </QueryClientProvider>
   );
 }
