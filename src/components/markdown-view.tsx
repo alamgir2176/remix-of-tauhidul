@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { FadeImg } from "@/components/fade-img";
 import { safeUrl, type Block, type Inline } from "@/lib/markdown";
 
 function renderInline(nodes: Inline[]): ReactNode[] {
@@ -75,7 +76,7 @@ function renderBlocks(blocks: Block[], shift: number): ReactNode[] {
       case "figure":
         return (
           <figure key={i} className="md-figure">
-            <img src={block.src} alt={block.alt} loading="lazy" decoding="async" />
+            <FadeImg src={block.src} alt={block.alt} loading="lazy" decoding="async" />
             <Caption text={block.caption} />
           </figure>
         );

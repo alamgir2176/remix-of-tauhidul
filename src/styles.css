@@ -1470,3 +1470,45 @@ img.img-broken { visibility: hidden; }
 @media (min-width: 768px) { .sp-hint { display: flex; } }
 html.search-open { overflow: hidden; }
 @media print { .sp, .header-search { display: none !important; } }
+
+/* Reading: contents list, drop cap, ornaments */
+.reader-toc { margin-top: 22px; border: 1px solid var(--border); border-radius: 8px; background: color-mix(in oklab, var(--card) 70%, transparent); }
+.reader-toc summary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 16px; cursor: pointer; list-style: none; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+.reader-toc summary::-webkit-details-marker { display: none; }
+.reader-toc summary span { letter-spacing: 0; text-transform: none; color: var(--muted-foreground); font-size: 13px; }
+.reader-toc summary::after { content: "+"; margin-left: auto; padding-left: 12px; color: var(--brand-ink); }
+.reader-toc[open] summary::after { content: "–"; }
+.reader-toc summary:focus-visible, .reader-toc a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.reader-toc ol { margin: 0; padding: 0 16px 14px; list-style: none; display: grid; gap: 2px; }
+.reader-toc li a { display: block; padding: 7px 0; font-size: 15px; line-height: 1.45; color: var(--foreground); text-decoration: none; }
+.reader-toc li a:hover { color: var(--brand-ink); }
+.reader-toc li.is-sub { padding-left: 18px; }
+.reader-toc li.is-sub a { font-size: 14px; color: var(--muted-foreground); }
+.article-body h2, .article-body h3 { scroll-margin-top: 84px; }
+
+/* Latin-script articles only: a conjunct-heavy Bengali initial does not enlarge cleanly. */
+.reader-article[data-script="latin"] .article-body > p:first-child::first-letter { float: left; font-family: Georgia, "Instrument Serif", serif; font-size: 3.6em; line-height: .82; padding: .06em .12em 0 0; color: var(--brand-ink); }
+.article-body hr { border: 0; height: auto; margin: 2.6em auto; text-align: center; overflow: visible; }
+.article-body hr::before { content: "❦"; display: inline-block; font-size: 20px; line-height: 1; color: var(--brand); letter-spacing: 0; }
+
+/* Images ease in after loading (placeholder only appears while an image is still on its way) */
+.fade-img { transition: opacity .5s ease; }
+img.is-loading { opacity: .25; background: color-mix(in oklab, var(--foreground) 8%, var(--card)); }
+@media (prefers-reduced-motion: reduce) { .fade-img { transition: none; } }
+
+/* Share a line as an image */
+.share-line-btn { position: fixed; z-index: 70; display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--foreground); color: var(--background); font: inherit; font-size: 13px; cursor: pointer; box-shadow: 0 8px 24px rgb(0 0 0 / .25); animation: viewer-fade .16s ease both; }
+.share-line-btn svg { width: 16px; height: 16px; }
+.share-line-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.slc { position: fixed; inset: 0; z-index: 95; display: grid; place-items: center; padding: 16px; animation: viewer-fade .18s ease both; }
+.slc-backdrop { position: absolute; inset: 0; background: rgb(0 0 0 / .6); backdrop-filter: blur(4px); }
+.slc-panel { position: relative; width: min(520px, 100%); max-height: 94svh; overflow: auto; padding: 14px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 24px 70px rgb(0 0 0 / .35); }
+.slc-panel canvas { display: block; width: 100%; height: auto; aspect-ratio: 1; border-radius: 4px; }
+.slc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.slc-actions button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--foreground); font: inherit; font-size: 14px; cursor: pointer; }
+.slc-actions button:first-child { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.slc-actions svg { width: 16px; height: 16px; }
+.slc-close { position: absolute; top: 22px; right: 22px; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 999px; background: rgb(0 0 0 / .45); color: #fff; cursor: pointer; }
+.slc-close svg { width: 18px; height: 18px; }
+@media (prefers-reduced-motion: reduce) { .share-line-btn, .slc { animation: none; } }
+@media print { .reader-toc, .share-line-btn, .slc { display: none !important; } }
