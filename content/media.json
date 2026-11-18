@@ -1,0 +1,13 @@
+{
+  "note": "Sample text written by Claude, an AI assistant, using only what this website already says publicly. Please check and edit it before anyone uses it.",
+  "short": "Md Tauhidul Islam is a philosophy graduate from Dhaka, Bangladesh. He writes and speaks about philosophy, technology and everyday life.",
+  "long": "Md Tauhidul Islam is a philosophy graduate from Dhaka, Bangladesh, who studied at Jahangirnagar University. His studies covered logic, ethics, and the philosophy of mind and language, including the ethics of technology. He is interested in what new tools, artificial intelligence included, change about how people think and live, and he likes to explain hard ideas in plain words. Alongside his studies he has taken part in student events, helpdesks and community work.",
+  "credit": "Please credit the text as “Md Tauhidul Islam” and link to the website where you can.",
+  "facts": [
+    { "label": "Based in", "value": "Dhaka, Bangladesh" },
+    { "label": "Writes about", "value": "Philosophy, technology and everyday life" },
+    { "label": "Languages", "value": "English and Bengali" }
+  ],
+  "photo": "/portraits/portrait-navy.jpg",
+  "photoCredit": "Portrait of Md Tauhidul Islam"
+}

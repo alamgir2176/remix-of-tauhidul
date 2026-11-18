@@ -1,0 +1,11 @@
+{
+  "updated": "2026-11-18",
+  "intro": "A short page that changes as my days do.",
+  "note": "Sample entries written by Claude, an AI assistant, to show how this page looks. They are not personal statements. Replace them with your own in content/now.json.",
+  "entries": [
+    { "label": "Reading", "text": "Sample entry: the book on the table right now, and one line on why." },
+    { "label": "Working on", "text": "Sample entry: the project or piece of writing that has most of the attention this month." },
+    { "label": "Thinking about", "text": "Sample entry: a question that keeps coming back, such as what it means to define our terms before we argue." },
+    { "label": "Looking for", "text": "Sample entry: conversations, collaborators or recommendations, if any." }
+  ]
+}

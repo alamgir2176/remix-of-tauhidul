@@ -104,6 +104,9 @@ export interface Post {
   featured: boolean;
   /** Optional disclosure shown under the title (for example that an article was written with AI). */
   note: string;
+  /** Optional series name and the article's place in it. */
+  series: string;
+  part: number;
   blocks: Block[];
 }
 
@@ -161,6 +164,8 @@ export function buildPost(path: string, raw: string): Post | null {
     readingMinutes: Math.max(1, Math.round(countWords(text) / 200)),
     featured: isTrue(data["featured"]),
     note: str(data["note"]),
+    series: str(data["series"]),
+    part: Number.isFinite(Number(data["part"])) ? Number(data["part"]) : 0,
     blocks,
   };
 }
@@ -351,4 +356,77 @@ export function groupPhotos(photos: Photo[]): PhotoGroup[] {
       return dateValue(b.group.date) - dateValue(a.group.date) || a.index - b.index;
     })
     .map(({ group }) => group);
+}
+
+
+export interface Quotation {
+  text: string;
+  source: string;
+  /** The writer's own one-line thought about it (optional). */
+  note: string;
+  /** Plays in the opening sequence (the first three marked are used). */
+  intro: boolean;
+}
+
+export function normalizeQuotations(raw: unknown): Quotation[] {
+  if (!Array.isArray(raw)) return [];
+  const out: Quotation[] = [];
+  for (const row of raw) {
+    if (!row || typeof row !== "object") continue;
+    const r = row as Record<string, unknown>;
+    const text = str(r["text"]);
+    if (!text) continue;
+    out.push({ text, source: str(r["source"]), note: str(r["note"]), intro: r["intro"] === true });
+  }
+  return out;
+}
+
+export interface NowEntry {
+  label: string;
+  text: string;
+}
+
+export interface NowPage {
+  updated: string;
+  intro: string;
+  note: string;
+  entries: NowEntry[];
+}
+
+export function normalizeNow(raw: unknown): NowPage {
+  const r = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  const entries: NowEntry[] = [];
+  if (Array.isArray(r["entries"])) {
+    for (const e of r["entries"]) {
+      if (!e || typeof e !== "object") continue;
+      const label = str((e as Record<string, unknown>)["label"]);
+      const text = str((e as Record<string, unknown>)["text"]);
+      if (label && text) entries.push({ label, text });
+    }
+  }
+  return { updated: str(r["updated"]), intro: str(r["intro"]), note: str(r["note"]), entries };
+}
+
+export interface MediaKit {
+  note: string;
+  short: string;
+  long: string;
+  facts: { label: string; value: string }[];
+  photo: string;
+  photoCredit: string;
+  credit: string;
+}
+
+export function normalizeMedia(raw: unknown): MediaKit {
+  const r = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  const facts: { label: string; value: string }[] = [];
+  if (Array.isArray(r["facts"])) {
+    for (const f of r["facts"]) {
+      if (!f || typeof f !== "object") continue;
+      const label = str((f as Record<string, unknown>)["label"]);
+      const value = str((f as Record<string, unknown>)["value"]);
+      if (label && value) facts.push({ label, value });
+    }
+  }
+  return { note: str(r["note"]), short: str(r["short"]), long: str(r["long"]), facts, photo: str(r["photo"]), photoCredit: str(r["photoCredit"]), credit: str(r["credit"]) };
 }

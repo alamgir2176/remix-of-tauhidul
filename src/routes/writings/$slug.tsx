@@ -3,7 +3,9 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Link2 } from "lucide-react";
 import { MarkdownView } from "@/components/markdown-view";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
-import { getPost, getPosts } from "@/lib/content";
+import { CiteBox } from "@/components/cite-box";
+import { ReaderTools } from "@/components/reader-tools";
+import { getPost, getPosts, getSeries } from "@/lib/content";
 import { absoluteUrl, bengaliFontLink, pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/writings/$slug")({
@@ -54,6 +56,10 @@ function ArticlePage() {
   const { slug } = Route.useLoaderData();
   const post = getPost(slug);
   if (!post) return null;
+  const series = getSeries(post.series);
+  const at = series.findIndex((p) => p.slug === post.slug);
+  const before = at > 0 ? series[at - 1] : undefined;
+  const after = at >= 0 ? series[at + 1] : undefined;
   // Up to three other articles, those sharing a tag first, then the newest.
   const shared = (p: { tags: string[] }) => p.tags.filter((t) => post.tags.includes(t)).length;
   const next = getPosts()
@@ -70,10 +76,12 @@ function ArticlePage() {
           <header className="reader-head">
             <Link to="/writings" className="reader-back"><ArrowLeft aria-hidden="true" /> All writings</Link>
             <p className="micro-label">{[post.dateLabel, `${post.readingMinutes} min read`].filter(Boolean).join(" · ")}</p>
+            {series.length > 1 && <p className="reader-series">{post.series}: part {at + 1} of {series.length}</p>}
             <h1>{post.title}</h1>
             {post.excerpt && <p className="reader-lede">{post.excerpt}</p>}
             {post.note && <p className="reader-note"><span>About this article</span>{post.note}</p>}
             {post.tags.length > 0 && <ul className="reader-tags">{post.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>}
+            <ReaderTools />
           </header>
           {post.cover && (
             <figure className="reader-cover">
@@ -81,8 +89,15 @@ function ArticlePage() {
             </figure>
           )}
           <MarkdownView blocks={post.blocks} />
+          {(before || after) && (
+            <nav className="series-nav" aria-label={`More from ${post.series}`}>
+              {before ? <Link to="/writings/$slug" params={{ slug: before.slug }}><span>Previous in the series</span>{before.title}</Link> : <span />}
+              {after ? <Link to="/writings/$slug" params={{ slug: after.slug }} className="is-next"><span>Next in the series</span>{after.title}</Link> : <span />}
+            </nav>
+          )}
           <footer className="reader-foot">
             <CopyLink slug={post.slug} title={post.title} />
+            <CiteBox title={post.title} date={post.date} url={absoluteUrl(`/writings/${post.slug}`) ?? (typeof window !== "undefined" ? window.location.href : "")} />
             <div className="reader-foot-links">
               <Link to="/writings"><ArrowLeft aria-hidden="true" /> Back to all writings</Link>
               <Link to="/">Back to the main website</Link>

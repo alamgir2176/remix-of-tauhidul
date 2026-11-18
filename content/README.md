@@ -136,3 +136,10 @@ Every page (writing and work, updates, gallery) lists everything. The homepage o
 ## Sample gallery pictures
 
 `content/activities.json` currently holds nine sample pictures (abstract artwork made by Claude, labelled as samples) so you can see how the gallery looks. To remove them, replace the file's contents with `[]` and delete `public/images/activities/sample-*.jpg`.
+
+## Quotations, Now and Media kit
+
+- `content/quotations.json`: your collection of quotations (`text`, `source`, optional `note`). The first three with `"intro": true` play in the opening sequence; the rest appear on the Quotations page.
+- `content/now.json`: what you are reading, working on and thinking about (`updated`, `intro`, `entries`: label and text). Delete the `note` line once the sample entries are yours.
+- `content/media.json`: approved short and long biography, facts, how to credit, and the photograph for organisers and editors. Delete the `note` line once you have checked the text.
+- Series: give related articles the same `series: "Name"` in their front matter, plus `part: 1`, `part: 2`, and so on. Readers see "part 2 of 5" and previous/next links.

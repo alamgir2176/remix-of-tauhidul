@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as CvRequestRouteImport } from './routes/cv-request'
 import { Route as NoticesRouteImport } from './routes/notices'
+import { Route as MediaRouteImport } from './routes/media'
+import { Route as NowRouteImport } from './routes/now'
+import { Route as QuotationsRouteImport } from './routes/quotations'
 import { Route as LibraryIndexRouteImport } from './routes/library/index'
 import { Route as LibrarySectionRouteImport } from './routes/library/$section'
 import { Route as WritingsIndexRouteImport } from './routes/writings/index'
@@ -36,6 +39,21 @@ const CvRequestRoute = CvRequestRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+const QuotationsRoute = QuotationsRouteImport.update({
+  id: '/quotations',
+  path: '/quotations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NowRoute = NowRouteImport.update({
+  id: '/now',
+  path: '/now',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NoticesRoute = NoticesRouteImport.update({
   id: '/notices',
   path: '/notices',
@@ -71,6 +89,9 @@ export interface FileRoutesByFullPath {
   '/activities': typeof ActivitiesRoute
   '/cv-request': typeof CvRequestRoute
   '/notices': typeof NoticesRoute
+  '/media': typeof MediaRoute
+  '/now': typeof NowRoute
+  '/quotations': typeof QuotationsRoute
   '/library/': typeof LibraryIndexRoute
   '/library/$section': typeof LibrarySectionRoute
   '/writings/': typeof WritingsIndexRoute
@@ -81,6 +102,9 @@ export interface FileRoutesByTo {
   '/activities': typeof ActivitiesRoute
   '/cv-request': typeof CvRequestRoute
   '/notices': typeof NoticesRoute
+  '/media': typeof MediaRoute
+  '/now': typeof NowRoute
+  '/quotations': typeof QuotationsRoute
   '/library': typeof LibraryIndexRoute
   '/library/$section': typeof LibrarySectionRoute
   '/writings': typeof WritingsIndexRoute
@@ -92,6 +116,9 @@ export interface FileRoutesById {
   '/activities': typeof ActivitiesRoute
   '/cv-request': typeof CvRequestRoute
   '/notices': typeof NoticesRoute
+  '/media': typeof MediaRoute
+  '/now': typeof NowRoute
+  '/quotations': typeof QuotationsRoute
   '/library/': typeof LibraryIndexRoute
   '/library/$section': typeof LibrarySectionRoute
   '/writings/': typeof WritingsIndexRoute
@@ -99,10 +126,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/activities' | '/cv-request' | '/notices' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
+  fullPaths: '/' | '/activities' | '/cv-request' | '/notices' | '/media' | '/now' | '/quotations' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/activities' | '/cv-request' | '/notices' | '/library' | '/library/$section' | '/writings' | '/writings/$slug'
-  id: '__root__' | '/' | '/activities' | '/cv-request' | '/notices' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
+  to: '/' | '/activities' | '/cv-request' | '/notices' | '/media' | '/now' | '/quotations' | '/library' | '/library/$section' | '/writings' | '/writings/$slug'
+  id: '__root__' | '/' | '/activities' | '/cv-request' | '/notices' | '/media' | '/now' | '/quotations' | '/library/' | '/library/$section' | '/writings/' | '/writings/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -110,6 +137,9 @@ export interface RootRouteChildren {
   ActivitiesRoute: typeof ActivitiesRoute
   CvRequestRoute: typeof CvRequestRoute
   NoticesRoute: typeof NoticesRoute
+  MediaRoute: typeof MediaRoute
+  NowRoute: typeof NowRoute
+  QuotationsRoute: typeof QuotationsRoute
   LibraryIndexRoute: typeof LibraryIndexRoute
   LibrarySectionRoute: typeof LibrarySectionRoute
   WritingsIndexRoute: typeof WritingsIndexRoute
@@ -137,6 +167,27 @@ declare module '@tanstack/react-router' {
       path: '/cv-request'
       fullPath: '/cv-request'
       preLoaderRoute: typeof CvRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quotations': {
+      id: '/quotations'
+      path: '/quotations'
+      fullPath: '/quotations'
+      preLoaderRoute: typeof QuotationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/now': {
+      id: '/now'
+      path: '/now'
+      fullPath: '/now'
+      preLoaderRoute: typeof NowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notices': {
@@ -182,6 +233,9 @@ const rootRouteChildren: RootRouteChildren = {
   ActivitiesRoute: ActivitiesRoute,
   CvRequestRoute: CvRequestRoute,
   NoticesRoute: NoticesRoute,
+  MediaRoute: MediaRoute,
+  NowRoute: NowRoute,
+  QuotationsRoute: QuotationsRoute,
   LibraryIndexRoute: LibraryIndexRoute,
   LibrarySectionRoute: LibrarySectionRoute,
   WritingsIndexRoute: WritingsIndexRoute,
