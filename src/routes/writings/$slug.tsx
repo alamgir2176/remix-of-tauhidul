@@ -4,8 +4,12 @@ import { ArrowLeft, Link2 } from "lucide-react";
 import { MarkdownView } from "@/components/markdown-view";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { CiteBox } from "@/components/cite-box";
+import { FadeImg } from "@/components/fade-img";
+import { ReaderToc } from "@/components/reader-toc";
+import { ShareLine } from "@/components/share-line";
 import { ReaderTools } from "@/components/reader-tools";
 import { getPost, getPosts, getSeries } from "@/lib/content";
+import { blocksText, inlineText } from "@/lib/markdown";
 import { absoluteUrl, bengaliFontLink, pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/writings/$slug")({
@@ -56,6 +60,9 @@ function ArticlePage() {
   const { slug } = Route.useLoaderData();
   const post = getPost(slug);
   if (!post) return null;
+  const words = blocksText(post.blocks).split(/\s+/).filter(Boolean).length;
+  const firstPara = post.blocks.find((b) => b.t === "p");
+  const dropcap = firstPara && firstPara.t === "p" && /^[A-Za-z]/.test(inlineText(firstPara.c).trim()) ? "latin" : "other";
   const series = getSeries(post.series);
   const at = series.findIndex((p) => p.slug === post.slug);
   const before = at > 0 ? series[at - 1] : undefined;
@@ -72,20 +79,21 @@ function ArticlePage() {
     <div id="top" className="reader">
       <SiteHeader active="library" />
       <main id="main" tabIndex={-1}>
-        <article className="reader-article">
+        <article className="reader-article" data-script={dropcap}>
           <header className="reader-head">
             <Link to="/writings" className="reader-back"><ArrowLeft aria-hidden="true" /> All writings</Link>
-            <p className="micro-label">{[post.dateLabel, `${post.readingMinutes} min read`].filter(Boolean).join(" · ")}</p>
+            <p className="micro-label">{[post.dateLabel, `${post.readingMinutes} min read`, `${words.toLocaleString("en")} words`].filter(Boolean).join(" · ")}</p>
             {series.length > 1 && <p className="reader-series">{post.series}: part {at + 1} of {series.length}</p>}
             <h1>{post.title}</h1>
             {post.excerpt && <p className="reader-lede">{post.excerpt}</p>}
             {post.note && <p className="reader-note"><span>About this article</span>{post.note}</p>}
             {post.tags.length > 0 && <ul className="reader-tags">{post.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>}
             <ReaderTools />
+            <ReaderToc blocks={post.blocks} />
           </header>
           {post.cover && (
             <figure className="reader-cover">
-              <img src={post.cover} alt={post.coverAlt} fetchPriority="high" decoding="async" />
+              <FadeImg src={post.cover} alt={post.coverAlt} fetchPriority="high" decoding="async" />
             </figure>
           )}
           <MarkdownView blocks={post.blocks} />
@@ -123,6 +131,7 @@ function ArticlePage() {
           </aside>
         )}
       </main>
+      <ShareLine title={post.title} url={absoluteUrl(`/writings/${post.slug}`) ?? ""} />
       <SiteFooter />
     </div>
   );

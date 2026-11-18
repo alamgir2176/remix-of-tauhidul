@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Quote } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
+import { ShareLine } from "@/components/share-line";
 import { getQuotations } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 
@@ -38,6 +39,7 @@ function QuotationsPage() {
           <EmptyState icon={<Quote />} title="No quotations yet.">Quotations will appear here once they are added.</EmptyState>
         )}
       </section>
+      <ShareLine title="Quotations" byline="From my notebook · Md Tauhidul Islam" url="" scope=".quote-list blockquote" />
     </PageShell>
   );
 }
