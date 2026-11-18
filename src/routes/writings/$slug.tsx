@@ -5,6 +5,7 @@ import { MarkdownView } from "@/components/markdown-view";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { CiteBox } from "@/components/cite-box";
 import { FadeImg } from "@/components/fade-img";
+import { KeepExploring } from "@/components/keep-exploring";
 import { ReaderToc } from "@/components/reader-toc";
 import { ShareLine } from "@/components/share-line";
 import { ReaderTools } from "@/components/reader-tools";
@@ -96,7 +97,10 @@ function ArticlePage() {
               <FadeImg src={post.cover} alt={post.coverAlt} fetchPriority="high" decoding="async" />
             </figure>
           )}
-          <MarkdownView blocks={post.blocks} />
+          <div className="reader-layout">
+            <aside className="reader-rail"><ReaderToc blocks={post.blocks} rail /></aside>
+            <MarkdownView blocks={post.blocks} />
+          </div>
           {(before || after) && (
             <nav className="series-nav" aria-label={`More from ${post.series}`}>
               {before ? <Link to="/writings/$slug" params={{ slug: before.slug }}><span>Previous in the series</span>{before.title}</Link> : <span />}
@@ -130,6 +134,7 @@ function ArticlePage() {
             </ul>
           </aside>
         )}
+      <KeepExploring page={`article-${post.slug}`} skip={["writing"]} title="Also on this site" />
       </main>
       <ShareLine title={post.title} url={absoluteUrl(`/writings/${post.slug}`) ?? ""} />
       <SiteFooter />

@@ -1512,3 +1512,91 @@ img.is-loading { opacity: .25; background: color-mix(in oklab, var(--foreground)
 .slc-close svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) { .share-line-btn, .slc { animation: none; } }
 @media print { .reader-toc, .share-line-btn, .slc { display: none !important; } }
+
+/* ───────── Polish: header, footer, article, connection, read-aloud ───────── */
+
+/* One search entry, on every screen: a round button that widens into a labelled pill on large screens. */
+.header-search { display: inline-flex; gap: 8px; width: 40px; height: 40px; padding: 0; border: 1px solid var(--input); background: var(--card); box-shadow: var(--shadow-soft); }
+.header-search:hover { border-color: var(--brand); background: var(--card); }
+.header-search-label, .header-search kbd { display: none; }
+@media (min-width: 1280px) {
+  .header-search { width: auto; padding: 0 8px 0 14px; }
+  .header-search-label { display: inline; font-size: 13px; color: var(--muted-foreground); }
+  .header-search kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border: 1px solid var(--border); border-radius: 5px; font: inherit; font-size: 11px; color: var(--muted-foreground); }
+}
+@media (max-width: 639px) { .site-header .header-contact { display: none; } }
+
+/* Footer: two clear lists instead of one long one */
+.footer-main { grid-template-columns: minmax(0, 1.25fr) repeat(3, minmax(0, 1fr)); gap: 40px clamp(24px, 4%, 64px); }
+@media (max-width: 1099px) { .footer-main { grid-template-columns: repeat(3, minmax(0, 1fr)); } .footer-identity { grid-column: 1 / -1; } .footer-identity > p { max-width: 48ch; } }
+@media (max-width: 819px) { .footer-main { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-connect { grid-column: 1 / -1; } }
+@media (max-width: 559px) { .footer-main { grid-template-columns: 1fr; } }
+.footer-more > a:nth-of-type(2) { border-top: 0; }
+
+/* Article: a real reading layout on wide screens */
+.reader-layout { display: block; }
+.reader-rail { display: none; }
+@media (min-width: 1000px) { .reader { --wide: 900px; } .reader-cover img { aspect-ratio: 2 / 1; } }
+@media (min-width: 1180px) {
+  .reader-layout { display: grid; grid-template-columns: minmax(0, 1fr) var(--measure) minmax(0, 1fr); }
+  .reader-layout > .article-body { grid-column: 2; }
+  .reader-rail { display: block; grid-column: 1; justify-self: end; width: 100%; max-width: 250px; padding-right: 44px; margin-top: clamp(32px, 5vw, 48px); }
+  .toc-rail { position: sticky; top: 108px; display: grid; gap: 12px; max-height: calc(100svh - 140px); overflow-y: auto; font-size: 13px; line-height: 1.5; }
+  .toc-rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; border-left: 1px solid var(--border); }
+  .toc-rail li a { display: block; padding: 5px 0 5px 14px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted-foreground); text-decoration: none; transition: color .2s, border-color .2s; }
+  .toc-rail li.is-sub a { padding-left: 26px; font-size: 12.5px; }
+  .toc-rail li a:hover { color: var(--foreground); }
+  .toc-rail li a[aria-current="location"] { color: var(--foreground); border-left-color: var(--brand); }
+  .toc-rail a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .reader-head .reader-toc { display: none; }
+}
+
+/* Read-aloud: the button stays readable in every state, and a bar follows you while it reads */
+.reader-tools .reader-listen[aria-pressed="true"], .reader-tools .reader-listen[aria-pressed="true"]:hover:not(:disabled) { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.article-body .is-speaking { background: color-mix(in oklab, var(--brand) 14%, transparent); box-shadow: 0 0 0 8px color-mix(in oklab, var(--brand) 14%, transparent); border-radius: 3px; transition: background .3s; }
+.listen-bar { position: fixed; z-index: 60; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 6px; max-width: calc(100vw - 24px); padding: 6px 8px 6px 6px; border-radius: 999px; background: var(--foreground); color: var(--background); box-shadow: 0 12px 36px rgb(0 0 0 / .3); animation: listen-in .28s cubic-bezier(.2,.7,.2,1) both; font-size: 13px; }
+.listen-bar button, .listen-bar select { color: inherit; font: inherit; }
+.listen-bar button { display: inline-grid; place-items: center; height: 38px; min-width: 38px; padding: 0 10px; border-radius: 999px; background: transparent; cursor: pointer; transition: background .2s; }
+.listen-bar button:hover { background: color-mix(in oklab, var(--background) 18%, transparent); color: var(--background); }
+.listen-bar .listen-main { background: var(--background); color: var(--foreground); }
+.listen-bar .listen-main:hover { background: color-mix(in oklab, var(--background) 85%, var(--foreground)); color: var(--foreground); }
+.listen-bar svg { width: 16px; height: 16px; }
+.listen-status { padding: 0 8px; white-space: nowrap; }
+.listen-status small { margin-left: 6px; opacity: .65; font-size: 12px; }
+.listen-voice { max-width: 150px; height: 34px; padding: 0 8px; border: 1px solid color-mix(in oklab, var(--background) 30%, transparent); border-radius: 999px; background: transparent; }
+.listen-voice option { color: #222; }
+.listen-bar :focus-visible { outline: 2px solid var(--background); outline-offset: 2px; }
+@keyframes listen-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (max-width: 520px) { .listen-status small, .listen-voice { display: none; } .listen-bar { gap: 2px; } }
+@media (prefers-reduced-motion: reduce) { .listen-bar { animation: none; } }
+@media print { .listen-bar { display: none !important; } }
+
+/* Keep exploring: three doors into the rest of the website */
+.explore { width: min(1100px, calc(100% - 2 * var(--explore-pad, clamp(20px, 6%, 64px)))); margin: 0 auto; padding: clamp(36px, 6vw, 64px) 0 clamp(48px, 8vw, 88px); border-top: 1px solid var(--border); }
+.reader .explore { border-top: 0; padding-top: 0; }
+.explore ul { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .explore ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
+.explore a { position: relative; display: grid; align-content: start; gap: 8px; height: 100%; padding: 20px 22px 22px; border: 1px solid var(--border); border-radius: 10px; background: color-mix(in oklab, var(--card) 80%, transparent); color: inherit; text-decoration: none; transition: border-color .25s, transform .25s, box-shadow .25s; }
+.explore a:hover, .explore a:focus-visible { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+.explore a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.explore img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; margin-bottom: 4px; background: var(--card); }
+.explore-kind { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); }
+.explore strong { font-family: var(--font-editorial); font-weight: 400; font-size: 22px; line-height: 1.25; padding-right: 22px; overflow-wrap: anywhere; }
+.explore strong.is-line { font-style: italic; font-size: 20px; }
+.explore-text { font-size: 14px; line-height: 1.55; color: var(--muted-foreground); }
+.explore a > svg { position: absolute; top: 18px; right: 18px; width: 16px; height: 16px; color: var(--muted-foreground); transition: transform .25s, color .25s; }
+.explore a:hover > svg { transform: translate(2px, -2px); color: var(--brand-ink); }
+.explore a.has-image > svg { top: 28px; right: 28px; color: #fff; filter: drop-shadow(0 1px 3px rgb(0 0 0 / .5)); }
+@media print { .explore { display: none; } }
+
+/* Soft page-to-page fade; the header stays put */
+.site-header { view-transition-name: site-header; }
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: vt-out .16s ease both; }
+  ::view-transition-new(root) { animation: vt-in .3s cubic-bezier(.2,.7,.2,1) both; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+.site-header .header-contact { white-space: nowrap; }
+.listen-voice { max-width: 190px; }
