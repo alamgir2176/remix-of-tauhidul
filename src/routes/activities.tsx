@@ -3,6 +3,7 @@ import { Camera } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { getPhotoGroups } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/activities")({
@@ -17,13 +18,14 @@ export const Route = createFileRoute("/activities")({
 });
 
 function ActivitiesPage() {
+  const { t, date } = useI18n();
   const groups = getPhotoGroups();
   return (
     <PageShell>
       <PageIntro number="06" label="Activities & events" title="Moments from" accent="the field.">
         Photographs from activities, events, programmes and community work.
       </PageIntro>
-      <section className="page-section" aria-label="Photo gallery">
+      <section className="page-section" aria-label={t("Photo gallery")}>
         {groups.length === 0 && (
           <EmptyState kind="photos" icon={<Camera />} title="No photographs yet.">
             Photographs from activities will appear here.
@@ -33,8 +35,8 @@ function ActivitiesPage() {
           <div key={`${group.activity}-${g}`} className="gallery-group">
             {(group.activity || group.dateLabel) && (
               <div className="gallery-head">
-                <h2 className="page-section-title">{group.activity || "More moments"}</h2>
-                {group.dateLabel && <p className="micro-label">{group.dateLabel}</p>}
+                <h2 className="page-section-title">{t(group.activity) || t("More moments")}</h2>
+                {group.dateLabel && <p className="micro-label">{date(group.date, group.dateLabel)}</p>}
               </div>
             )}
             <PhotoGallery photos={group.photos} />

@@ -8,7 +8,7 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -17,22 +17,27 @@ import { ImageGuard } from "../components/image-guard";
 import { ScrollReveal } from "../components/scroll-reveal";
 import { SearchLauncher } from "../components/search-launcher";
 import { SiteFooter, SiteHeader } from "../components/site-chrome";
+import { I18nProvider, Rich, isLang, useI18n, readLangCookie, writeLangCookie, type Dict, type Lang } from "../lib/i18n";
+import { bengaliFontLink } from "../lib/seo";
+import { LANG_BOOT_SCRIPT } from "../lib/lang-boot";
+import { readRequestLang } from "../lib/lang.functions";
 import { INTRO_SKIP_SCRIPT } from "../lib/site-loading";
 import { THEME_BOOT_SCRIPT } from "../lib/theme";
 
 function NotFoundComponent() {
+  const { t } = useI18n();
   return (
     <div className="reader">
       <SiteHeader />
       <main id="main" tabIndex={-1} className="notfound">
-        <p className="micro-label">Error 404</p>
-        <h1>This page <span className="font-editorial italic">isn’t here.</span></h1>
-        <p>The address may have changed, or the page may never have existed. These places are a good way back in.</p>
+        <p className="micro-label">{t("Error 404")}</p>
+        <h1><Rich text={t("This page *isn’t here.*")} /></h1>
+        <p>{t("The address may have changed, or the page may never have existed. These places are a good way back in.")}</p>
         <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/library">Writing &amp; work</Link></li>
-          <li><Link to="/notices">Updates</Link></li>
-          <li><Link to="/activities">Activities</Link></li>
+          <li><Link to="/">{t("Home")}</Link></li>
+          <li><Link to="/library">{t("Writing & work")}</Link></li>
+          <li><Link to="/notices">{t("Updates")}</Link></li>
+          <li><Link to="/activities">{t("Activities")}</Link></li>
         </ul>
       </main>
       <SiteFooter />
@@ -43,6 +48,7 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+  const { t } = useI18n();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -51,10 +57,10 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {t("This page didn't load")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          {t("Something went wrong on our end. You can try refreshing or head back home.")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -64,13 +70,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {t("Try again")}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            {t("Go home")}
           </a>
         </div>
       </div>
@@ -78,7 +84,26 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+/** The visitor's language: an explicit ?lang=, else their saved choice (cookie), else English. Never throws. */
+async function resolveLang(searchStr: string): Promise<{ lang: Lang; dict: Dict }> {
+  let lang: Lang = "en";
+  try {
+    const q = /[?&]lang=(bn|en)\b/.exec(searchStr)?.[1];
+    if (isLang(q)) lang = q;
+    else lang = typeof window === "undefined" ? await readRequestLang() : (readLangCookie() ?? "en");
+  } catch {
+    lang = "en";
+  }
+  try {
+    const mod = lang === "bn" ? await import("../../content/i18n/bn.json") : await import("../../content/i18n/en.json");
+    return { lang, dict: (mod.default ?? {}) as Dict };
+  } catch {
+    return { lang, dict: {} };
+  }
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ location }) => resolveLang(location.searchStr ?? ""),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -100,6 +125,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      // Bengali letter shapes. Google serves these by unicode-range, so English-only pages never download them.
+      bengaliFontLink,
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
@@ -117,6 +144,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} suppressHydrationWarning />
+        <script dangerouslySetInnerHTML={{ __html: LANG_BOOT_SCRIPT }} suppressHydrationWarning />
         <script dangerouslySetInnerHTML={{ __html: INTRO_SKIP_SCRIPT }} suppressHydrationWarning />
       </head>
       <body>
@@ -128,7 +156,25 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
+  const { queryClient, lang, dict } = Route.useRouteContext();
+  const router = useRouter();
+
+  const changeLang = useCallback(
+    (next: Lang) => {
+      writeLangCookie(next);
+      document.documentElement.setAttribute("lang", next);
+      void router.invalidate();
+    },
+    [router],
+  );
+
+  // Keep <html lang> right, and catch a saved choice the server did not see (for instance a cached page).
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", lang);
+    const saved = readLangCookie();
+    if (saved && saved !== lang && !/[?&]lang=/.test(window.location.search)) void router.invalidate();
+    else if (/[?&]lang=(bn|en)\b/.test(window.location.search)) writeLangCookie(lang);
+  }, [lang, router]);
 
   // Installable / offline reading: register once the page has settled, production only.
   useEffect(() => {
@@ -140,12 +186,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+     <I18nProvider lang={lang} dict={dict} onChange={changeLang}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <SiteIntro />
       <ImageGuard />
       <SearchLauncher />
       <ScrollReveal />
+     </I18nProvider>
     </QueryClientProvider>
   );
 }

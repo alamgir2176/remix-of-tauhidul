@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useI18n } from "@/lib/i18n";
 import type { Block } from "@/lib/markdown";
 import { inlineText } from "@/lib/markdown";
 
@@ -7,6 +8,7 @@ import { inlineText } from "@/lib/markdown";
  * wide screens get a quiet sticky list beside the text that follows the section being read.
  */
 export function ReaderToc({ blocks, rail = false }: { blocks: Block[]; rail?: boolean }) {
+  const { t, num } = useI18n();
   const heads = blocks.flatMap((b) => (b.t === "heading" && b.level <= 3 && b.id ? [{ id: b.id, level: b.level, text: inlineText(b.c) }] : []));
   const [current, setCurrent] = useState("");
   useEffect(() => {
@@ -40,15 +42,15 @@ export function ReaderToc({ blocks, rail = false }: { blocks: Block[]; rail?: bo
   );
   if (rail) {
     return (
-      <nav className="toc-rail" aria-label="Contents">
-        <span className="micro-label">Contents</span>
+      <nav className="toc-rail" aria-label={t("Contents")}>
+        <span className="micro-label">{t("Contents")}</span>
         {list}
       </nav>
     );
   }
   return (
     <details className="reader-toc">
-      <summary>Contents <span>{heads.length} sections</span></summary>
+      <summary>{t("Contents")} <span>{t("{n} sections", { n: heads.length })}</span></summary>
       {list}
     </details>
   );

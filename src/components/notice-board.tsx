@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Download } from "lucide-react";
+import { LangTag } from "@/components/language-switch";
+import { useI18n } from "@/lib/i18n";
 import type { Announcement } from "@/lib/content";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -20,6 +22,7 @@ type Kind = "all" | Announcement["kind"];
  * With `filters` it can be narrowed by kind and year (the page); without it it is a plain latest list (the homepage).
  */
 export function NoticeBoard({ items, filters = false, more = 0 }: { items: Announcement[]; filters?: boolean; more?: number }) {
+  const { t, num, la } = useI18n();
   const [kind, setKind] = useState<Kind>("all");
   const [year, setYear] = useState("all");
   const years = useMemo(() => [...new Set(items.map((i) => dateParts(i).year).filter(Boolean))], [items]);
@@ -30,11 +33,11 @@ export function NoticeBoard({ items, filters = false, more = 0 }: { items: Annou
   return (
     <div className="notice-board">
       {showFilters && (
-        <div className="notice-filters" role="group" aria-label="Filter updates">
+        <div className="notice-filters" role="group" aria-label={t("Filter updates")}>
           <div className="notice-filter-set">
             {(["all", ...kinds] as Kind[]).map((k) => (
               <button key={k} type="button" className="notice-chip" aria-pressed={kind === k} onClick={() => setKind(k)}>
-                {k === "all" ? "All" : k === "Notice" ? "Notices" : "Press releases"}
+                {k === "all" ? t("All") : k === "Notice" ? t("Notices") : t("Press releases")}
               </button>
             ))}
           </div>
@@ -42,46 +45,46 @@ export function NoticeBoard({ items, filters = false, more = 0 }: { items: Annou
             <div className="notice-filter-set">
               {["all", ...years].map((y) => (
                 <button key={y} type="button" className="notice-chip" aria-pressed={year === y} onClick={() => setYear(y)}>
-                  {y === "all" ? "Any year" : y}
+                  {y === "all" ? t("Any year") : num(y)}
                 </button>
               ))}
             </div>
           )}
         </div>
       )}
-      <p role="status" aria-live="polite" className="sr-only">{`Showing ${rows.length} of ${items.length} updates`}</p>
-      <div className="notice-head" aria-hidden="true"><span>Date</span><span>Subject</span><span>Document</span></div>
+      <p role="status" aria-live="polite" className="sr-only">{t("Showing {shown} of {total} updates", { shown: rows.length, total: items.length })}</p>
+      <div className="notice-head" aria-hidden="true"><span>{t("Date")}</span><span>{t("Subject")}</span><span>{t("Document")}</span></div>
       <ol className="notice-list">
         {rows.map((item, i) => {
           const { day, month, year: y } = dateParts(item);
           return (
             <li key={`${item.title}-${i}`} className="notice-row">
               <time className="notice-date" dateTime={item.date || undefined}>
-                {day && <span className="notice-day">{day}</span>}
-                <span className="notice-month">{[month, y].filter(Boolean).join(" ")}</span>
+                {day && <span className="notice-day">{num(day)}</span>}
+                <span className="notice-month">{[month ? t(month) : "", y ? num(y) : ""].filter(Boolean).join(" ") || item.dateLabel}</span>
               </time>
               <div className="notice-main">
-                <p className={`notice-kind${item.kind === "Press release" ? " is-press" : ""}`}>{item.kind}</p>
-                <h3 className="notice-title">{item.title}</h3>
-                {item.description && <p className="notice-text">{item.description}</p>}
+                <p className={`notice-kind${item.kind === "Press release" ? " is-press" : ""}`}>{t(item.kind)} <LangTag text={item.title} /></p>
+                <h3 className="notice-title" {...la(t(item.title))}>{t(item.title)}</h3>
+                {item.description && <p className="notice-text" {...la(t(item.description))}>{t(item.description)}</p>}
               </div>
               <div className="notice-action">
                 {item.pdf ? (
-                  <a href={item.pdf} download={item.fileName || true} target="_blank" rel="noopener noreferrer" className="notice-pdf" aria-label={`Download PDF: ${item.title}`}>
-                    <Download aria-hidden="true" /> <span>PDF</span>
+                  <a href={item.pdf} download={item.fileName || true} target="_blank" rel="noopener noreferrer" className="notice-pdf" aria-label={t("Download PDF: {title}", { title: t(item.title) })}>
+                    <Download aria-hidden="true" /> <span>{t("PDF")}</span>
                   </a>
                 ) : (
-                  <span className="notice-nofile">No file</span>
+                  <span className="notice-nofile">{t("No file")}</span>
                 )}
               </div>
             </li>
           );
         })}
       </ol>
-      {rows.length === 0 && <p className="notice-empty">Nothing matches this filter.</p>}
+      {rows.length === 0 && <p className="notice-empty">{t("Nothing matches this filter.")}</p>}
       {more > 0 && (
         <Link to="/notices" className="notice-more">
-          <span>{more} more {more === 1 ? "update" : "updates"}</span>
+          <span>{more === 1 ? t("1 more update") : t("{n} more updates", { n: more })}</span>
           <ArrowUpRight aria-hidden="true" />
         </Link>
       )}

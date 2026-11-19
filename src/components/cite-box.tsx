@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, Copy, Quote } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MLA_MONTHS = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
@@ -22,6 +23,7 @@ function formats({ title, date, url }: Props): { name: string; text: string }[] 
 
 /** "Cite this article" in the three common styles, built in the browser. */
 export function CiteBox(props: Props) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState<string | null>(null);
   async function copy(name: string, text: string) {
@@ -29,14 +31,14 @@ export function CiteBox(props: Props) {
   }
   return (
     <div className="cite-box">
-      <button type="button" className="reader-share" aria-expanded={open} onClick={() => setOpen(!open)}><Quote aria-hidden="true" /><span>Cite this article</span></button>
+      <button type="button" className="reader-share" aria-expanded={open} onClick={() => setOpen(!open)}><Quote aria-hidden="true" /><span>{t("Cite this article")}</span></button>
       {open && (
         <ul className="cite-list">
           {formats(props).map((f) => (
             <li key={f.name}>
               <span className="micro-label">{f.name}</span>
               <p>{f.text}</p>
-              <button type="button" onClick={() => copy(f.name, f.text)} aria-label={`Copy ${f.name} citation`}>{done === f.name ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}<span role="status">{done === f.name ? "Copied" : "Copy"}</span></button>
+              <button type="button" onClick={() => copy(f.name, f.text)} aria-label={t("Copy {name} citation", { name: f.name })}>{done === f.name ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}<span role="status">{done === f.name ? t("Copied") : t("Copy")}</span></button>
             </li>
           ))}
         </ul>

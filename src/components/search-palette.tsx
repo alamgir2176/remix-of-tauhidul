@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { getAnnouncements, getFeed, getPhotos, getPosts, getQuotations } from "@/lib/content";
+import { useI18n, type Lang } from "@/lib/i18n";
 import { blocksText } from "@/lib/markdown";
 import { applyTheme, type ThemeId } from "@/lib/theme";
 
@@ -17,6 +18,8 @@ interface Entry {
   hash?: string;
   href?: string;
   theme?: ThemeId;
+  /** Untranslated kind, for grouping logic. */
+  group?: string;
 }
 
 const PAGES: Entry[] = [
@@ -38,21 +41,22 @@ const PAGES: Entry[] = [
 /** Lower-case and drop Latin accents; Bengali letters and vowel signs are kept as they are. */
 const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
 
-function buildEntries(): Entry[] {
-  const out: Entry[] = [...PAGES];
-  for (const p of getPosts()) {
-    out.push({ id: `w-${p.slug}`, kind: "Writing", title: p.title, desc: p.excerpt, text: `${p.tags.join(" ")} ${blocksText(p.blocks)}`, to: "/writings/$slug", params: { slug: p.slug } });
+function buildEntries(lang: Lang, t: (s: string) => string): Entry[] {
+  // Pages and actions are searchable by their English name too, so "home" works in Bengali mode.
+  const out: Entry[] = PAGES.map((e) => ({ ...e, group: e.kind, kind: t(e.kind), title: t(e.title), desc: t(e.desc), text: `${e.text} ${e.title} ${e.desc}` }));
+  for (const p of getPosts(lang)) {
+    out.push({ id: `w-${p.slug}`, kind: t("Writing"), title: p.title, desc: p.excerpt, text: `${p.tags.join(" ")} ${blocksText(p.blocks)}`, to: "/writings/$slug", params: { slug: p.slug } });
   }
-  for (const item of getFeed()) {
+  for (const item of getFeed(lang)) {
     if (item.slug) continue;
-    out.push({ id: `f-${item.key}`, kind: item.type, title: item.title, desc: item.description, text: "", ...(item.url ? { href: item.url } : { to: "/library" }) });
+    out.push({ id: `f-${item.key}`, kind: t(item.type), title: t(item.title), desc: t(item.description), text: "", ...(item.url ? { href: item.url } : { to: "/library" }) });
   }
   for (const a of getAnnouncements()) {
-    out.push({ id: `n-${a.title}-${a.date}`, kind: "Update", title: a.title, desc: a.description, text: a.dateLabel, ...(a.pdf ? { href: a.pdf } : { to: "/notices" }) });
+    out.push({ id: `n-${a.title}-${a.date}`, kind: t("Update"), title: t(a.title), desc: t(a.description), text: a.dateLabel, ...(a.pdf ? { href: a.pdf } : { to: "/notices" }) });
   }
-  getQuotations().forEach((q, i) => out.push({ id: `q-${i}`, kind: "Quotation", title: q.text, desc: q.source, text: q.note, to: "/quotations" }));
+  getQuotations().forEach((q, i) => out.push({ id: `q-${i}`, kind: t("Quotation"), title: t(q.text), desc: t(q.source), text: q.note, to: "/quotations" }));
   for (const ph of getPhotos()) {
-    out.push({ id: `ph-${ph.image}`, kind: "Photo", title: ph.caption || ph.activity || "Photograph", desc: [ph.activity, ph.dateLabel, ph.location].filter(Boolean).join(" · "), text: ph.alt, to: "/activities" });
+    out.push({ id: `ph-${ph.image}`, kind: t("Photo"), title: t(ph.caption || ph.activity || "Photograph"), desc: [t(ph.activity), ph.dateLabel, t(ph.location)].filter(Boolean).join(" · "), text: ph.alt, to: "/activities" });
   }
   return out;
 }
@@ -61,7 +65,7 @@ interface Hit { entry: Entry; snippet: string }
 
 function search(entries: Entry[], query: string): Hit[] {
   const tokens = norm(query).split(/\s+/).filter(Boolean);
-  if (tokens.length === 0) return entries.filter((e) => e.kind === "Page" || e.kind === "Action").map((entry) => ({ entry, snippet: entry.desc }));
+  if (tokens.length === 0) return entries.filter((e) => e.group === "Page" || e.group === "Action").map((entry) => ({ entry, snippet: entry.desc }));
   const hits: { hit: Hit; score: number }[] = [];
   for (const entry of entries) {
     const title = norm(entry.title);
@@ -94,11 +98,12 @@ function search(entries: Entry[], query: string): Hit[] {
 
 export default function SearchPalette({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const { t, lang } = useI18n();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const input = useRef<HTMLInputElement>(null);
   const list = useRef<HTMLUListElement>(null);
-  const entries = useMemo(buildEntries, []);
+  const entries = useMemo(() => buildEntries(lang, t), [lang, t]);
   const hits = useMemo(() => search(entries, query), [entries, query]);
 
   useEffect(() => { input.current?.focus(); document.documentElement.classList.add("search-open"); return () => document.documentElement.classList.remove("search-open"); }, []);
@@ -124,7 +129,7 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
 
   let lastKind = "";
   return (
-    <div className="sp" role="dialog" aria-modal="true" aria-label="Search this website" onKeyDown={onKeyDown}>
+    <div className="sp" role="dialog" aria-modal="true" aria-label={t("Search this website")} onKeyDown={onKeyDown}>
       <div className="sp-backdrop" onClick={onClose} aria-hidden="true" />
       <div className="sp-panel">
         <div className="sp-field">
@@ -134,7 +139,7 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search writing, updates, photos, quotations…"
+            placeholder={t("Search writing, updates, photos, quotations…")}
             role="combobox"
             aria-expanded="true"
             aria-controls="sp-list"
@@ -146,7 +151,7 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
           />
           <kbd aria-hidden="true">Esc</kbd>
         </div>
-        <ul id="sp-list" ref={list} role="listbox" aria-label="Results" className="sp-list">
+        <ul id="sp-list" ref={list} role="listbox" aria-label={t("Results")} className="sp-list">
           {hits.map((hit, i) => {
             const showKind = hit.entry.kind !== lastKind;
             lastKind = hit.entry.kind;
@@ -161,8 +166,8 @@ export default function SearchPalette({ onClose }: { onClose: () => void }) {
             );
           })}
         </ul>
-        {hits.length === 0 && <p className="sp-empty" role="status">Nothing found for “{query}”. Try a shorter word.</p>}
-        <p className="sp-hint" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> to move</span><span><kbd>Enter</kbd> to open</span></p>
+        {hits.length === 0 && <p className="sp-empty" role="status">{t("Nothing found for “{query}”. Try a shorter word.", { query })}</p>}
+        <p className="sp-hint" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> {t("to move")}</span><span><kbd>Enter</kbd> {t("to open")}</span></p>
       </div>
     </div>
   );

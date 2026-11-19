@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
 import { PhotoFigure } from "@/components/content-cards";
+import { useI18n } from "@/lib/i18n";
 import type { Photo } from "@/lib/content-utils";
 
 /**
@@ -34,6 +35,7 @@ export function PhotoGallery({ photos, className = "gallery-wall", tail }: { pho
  * own proportions, its details beside or below it, and the rest of the album following as you scroll.
  */
 function Viewer({ photos, index, trigger, onClose }: { photos: Photo[]; index: number; trigger: HTMLElement | null; onClose: () => void }) {
+  const { t, num, date } = useI18n();
   const sheet = useRef<HTMLDivElement>(null);
   const hero = useRef<HTMLImageElement>(null);
   const closing = useRef(false);
@@ -104,26 +106,26 @@ function Viewer({ photos, index, trigger, onClose }: { photos: Photo[]; index: n
 
   if (!first) return null;
   return (
-    <div ref={sheet} className="viewer" role="dialog" aria-modal="true" aria-label={first.activity || "Photo"} onKeyDown={trap}>
+    <div ref={sheet} className="viewer" role="dialog" aria-modal="true" aria-label={t(first.activity) || t("Photo")} onKeyDown={trap}>
       <header className="viewer-bar">
-        <button type="button" className="viewer-back" data-viewer-close onClick={close}><ArrowLeft aria-hidden="true" /> Gallery</button>
-        <p>{first.activity}</p>
+        <button type="button" className="viewer-back" data-viewer-close onClick={close}><ArrowLeft aria-hidden="true" /> {t("Gallery")}</button>
+        <p>{t(first.activity)}</p>
       </header>
       <div className="viewer-story">
         {story.map((photo, i) => {
-          const meta = [photo.dateLabel, photo.location].filter(Boolean).join(" · ");
+          const meta = [date(photo.date, photo.dateLabel), t(photo.location)].filter(Boolean).join(" · ");
           return (
             <figure key={`${photo.image}-${i}`} className="viewer-item">
-              <img ref={i === 0 ? hero : undefined} src={photo.image} alt={photo.alt} decoding="async" loading={i < 2 ? "eager" : "lazy"} />
+              <img ref={i === 0 ? hero : undefined} src={photo.image} alt={t(photo.alt)} decoding="async" loading={i < 2 ? "eager" : "lazy"} />
               <figcaption>
                 {meta && <span className="viewer-meta">{meta}</span>}
-                {photo.caption && <span className="viewer-caption">{photo.caption}</span>}
-                <span className="viewer-index" aria-hidden="true">{String(((photos.indexOf(photo) + 1) || i + 1)).padStart(2, "0")} / {String(photos.length).padStart(2, "0")}</span>
+                {photo.caption && <span className="viewer-caption">{t(photo.caption)}</span>}
+                <span className="viewer-index" aria-hidden="true">{num(String(((photos.indexOf(photo) + 1) || i + 1)).padStart(2, "0"))} / {num(String(photos.length).padStart(2, "0"))}</span>
               </figcaption>
             </figure>
           );
         })}
-        <button type="button" className="viewer-end" onClick={close}><ArrowLeft aria-hidden="true" /> Back to the gallery</button>
+        <button type="button" className="viewer-end" onClick={close}><ArrowLeft aria-hidden="true" /> {t("Back to the gallery")}</button>
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ import {
   EXTERNAL_SECTIONS,
   buildPosts,
   dateValue,
+  buildPost,
+  slugFromPath,
   groupPhotos,
   normalizeDocuments,
   normalizeExternal,
@@ -25,31 +27,67 @@ import {
   type Quotation,
   type Post,
 } from "./content-utils";
+import type { Lang } from "./i18n";
 
-const markdownFiles = import.meta.glob("/content/blog/*.md", {
+const allMarkdown = import.meta.glob("/content/blog/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
 }) as Record<string, string>;
 
 // Files and folders starting with "_" (such as content/_examples) are templates and never published.
-const jsonFiles = import.meta.glob(["/content/**/*.json", "!/content/_*/**"], {
+const jsonFiles = import.meta.glob(["/content/**/*.json", "!/content/_*/**", "!/content/i18n/**"], {
   import: "default",
   eager: true,
 }) as Record<string, unknown>;
 
+// "name.bn.md" / "name.en.md" are translations of "name.md": same article, other language.
+const TRANSLATION = /\.(bn|en)\.md$/;
+const markdownFiles: Record<string, string> = {};
+const translationFiles: Record<Lang, Record<string, string>> = { en: {}, bn: {} };
+for (const [path, raw] of Object.entries(allMarkdown)) {
+  const m = TRANSLATION.exec(path);
+  if (m) translationFiles[m[1] as Lang][path.replace(TRANSLATION, ".md")] = raw;
+  else markdownFiles[path] = raw;
+}
+
 const posts: Post[] = buildPosts(markdownFiles);
+const translatedPosts: Record<Lang, Post[]> = {
+  en: applyTranslations("en"),
+  bn: applyTranslations("bn"),
+};
+
+/** The article in the visitor's language where a translation file exists; otherwise the original, unchanged. */
+function applyTranslations(lang: Lang): Post[] {
+  const files = translationFiles[lang];
+  return posts.map((post) => {
+    const entry = Object.entries(files).find(([path]) => slugFromPath(path) === post.slug || buildPost(path, files[path] ?? "")?.slug === post.slug);
+    if (!entry) return post;
+    const tr = buildPost(entry[0], entry[1]);
+    if (!tr) return post;
+    return {
+      ...post,
+      title: tr.title,
+      excerpt: tr.excerpt,
+      blocks: tr.blocks,
+      readingMinutes: tr.readingMinutes,
+      coverAlt: tr.coverAlt === tr.title ? tr.title : tr.coverAlt,
+      note: tr.note || post.note,
+      tags: tr.tags.length > 0 ? tr.tags : post.tags,
+    };
+  });
+}
 
 function jsonAt(path: string): unknown {
   return jsonFiles[`/content/${path}`];
 }
 
-export function getPosts(): Post[] {
-  return posts;
+export function getPosts(lang: Lang = "en"): Post[] {
+  return translatedPosts[lang];
 }
 
-export function getPost(slug: string): Post | undefined {
-  return posts.find((p) => p.slug === slug);
+export function getPost(slug: string, lang: Lang = "en"): Post | undefined {
+  return translatedPosts[lang].find((p) => p.slug === slug);
 }
 
 export function getExternalItems(section: ExternalSection): ExternalItem[] {
@@ -115,8 +153,8 @@ export function getSectionFeed(section: ExternalSection): FeedItem[] {
 }
 
 /** Blog posts and every external-link section in one list, newest first. */
-export function getFeed(): FeedItem[] {
-  const feed: FeedItem[] = posts.map((post) => ({
+export function getFeed(lang: Lang = "en"): FeedItem[] {
+  const feed: FeedItem[] = translatedPosts[lang].map((post) => ({
     key: `post-${post.slug}`,
     type: "Blog",
     title: post.title,
@@ -159,7 +197,7 @@ export function getMedia(): MediaKit {
 }
 
 /** The articles of one series, in reading order. */
-export function getSeries(name: string): Post[] {
+export function getSeries(name: string, lang: Lang = "en"): Post[] {
   if (!name) return [];
-  return posts.filter((p) => p.series === name).sort((a, b) => a.part - b.part || dateValue(a.date) - dateValue(b.date));
+  return translatedPosts[lang].filter((p) => p.series === name).sort((a, b) => a.part - b.part || dateValue(a.date) - dateValue(b.date));
 }

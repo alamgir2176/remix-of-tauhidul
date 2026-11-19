@@ -2,6 +2,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getQuotations } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { QUOTATION_COUNT } from "@/lib/site-loading";
 
 const FALLBACK = [
@@ -21,6 +22,7 @@ function openingQuotations() {
 const QUOTATIONS = openingQuotations();
 
 export function SiteIntro() {
+  const { t, num } = useI18n();
   const [index, setIndex] = useState(0);
   const [gone, setGone] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -54,7 +56,7 @@ export function SiteIntro() {
   if (gone) return null;
   const ready = progress === 100;
   return (
-    <div className="site-intro" aria-label="Website loading">
+    <div className="site-intro" aria-label={t("Website loading")}>
       <span className="intro-mark" aria-hidden="true">tauhidul<span>.</span></span>
       <div className="intro-stage">
         <div className="intro-quotes" aria-live="off">
@@ -67,17 +69,17 @@ export function SiteIntro() {
         </div>
         <div className="intro-meter">
           <div className={`intro-meter-label${ready ? " is-ready" : ""}`}>
-            <span className="intro-counter" aria-hidden="true">{ready ? "Ready" : `${String(index + 1).padStart(2, "0")} / ${String(QUOTATION_COUNT).padStart(2, "0")}`}</span>
-            <span className="intro-percent">{progress}<span>%</span></span>
+            <span className="intro-counter" aria-hidden="true">{ready ? t("Ready") : `${num(String(index + 1).padStart(2, "0"))} / ${num(String(QUOTATION_COUNT).padStart(2, "0"))}`}</span>
+            <span className="intro-percent">{num(progress)}<span>%</span></span>
           </div>
-          <div className="intro-progress" role="progressbar" aria-label="Opening sequence progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={`${progress}% of the opening quotations shown`} data-full={ready ? "" : undefined} style={{ "--intro-fill": `${progress}%` } as CSSProperties}>
+          <div className="intro-progress" role="progressbar" aria-label={t("Opening sequence progress")} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={t("{n}% of the opening quotations shown", { n: progress })} data-full={ready ? "" : undefined} style={{ "--intro-fill": `${progress}%` } as CSSProperties}>
             <span style={{ transform: `scaleX(${progress / 100})` }} />
           </div>
         </div>
       </div>
       <div className="intro-bottom">
-        <Button variant="ghost" className={`intro-skip-btn${ready ? " is-ready" : ""}`} onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>Enter site <ArrowUpRight aria-hidden="true" /></Button>
-        <span className="intro-hint" aria-hidden="true">or press Esc</span>
+        <Button variant="ghost" className={`intro-skip-btn${ready ? " is-ready" : ""}`} onClick={() => window.dispatchEvent(new Event("intro-dismiss"))}>{t("Enter site")} <ArrowUpRight aria-hidden="true" /></Button>
+        <span className="intro-hint" aria-hidden="true">{t("or press Esc")}</span>
       </div>
     </div>
   );

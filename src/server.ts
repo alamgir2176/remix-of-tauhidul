@@ -50,6 +50,8 @@ function withSecurityHeaders(response: Response): Response {
     const headers = new Headers(response.headers);
     headers.set("X-Content-Type-Options", "nosniff");
     headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    // Pages differ by the saved language, so shared caches must not mix them up.
+    if ((headers.get("content-type") ?? "").includes("text/html")) headers.append("Vary", "Cookie");
     headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   } catch {

@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
 import { CvRequestForm } from "@/components/cv-request-form";
+import { Rich, useI18n } from "@/lib/i18n";
 import { LINKEDIN } from "@/components/site-chrome";
 
 /**
@@ -12,6 +13,7 @@ import { LINKEDIN } from "@/components/site-chrome";
  * when they switch, and the existing contact form is used exactly as it was.
  */
 export function ContactPanel() {
+  const { t } = useI18n();
   const hash = useLocation({ select: (l) => l.hash });
   // The server cannot see the #fragment, so the CV view only opens once the page is running in the browser.
   const [ready, setReady] = useState(false);
@@ -36,17 +38,17 @@ export function ContactPanel() {
     <div id="request-cv" className="contact-layout">
       <div className="scroll-reveal">
         <div hidden={cv}>
-          <h2 className="section-heading">Say<br /><span className="font-editorial italic">hello.</span></h2>
-          <p className="section-intro">A question, a project, a collaboration,<br />or a different way of seeing something.<br />Write to me.</p>
-          <Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button>
-          <Button asChild variant="link" className="text-link"><Link ref={cvLink} to="/" hash="request-cv">Request my CV <ArrowUpRight /></Link></Button>
+          <h2 className="section-heading"><Rich text={t("Say\n*hello.*")} /></h2>
+          <p className="section-intro"><Rich text={t("A question, a project, a collaboration,\nor a different way of seeing something.\nWrite to me.")} /></p>
+          <Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">{t("Find me on LinkedIn")} <ArrowUpRight /></a></Button>
+          <Button asChild variant="link" className="text-link"><Link ref={cvLink} to="/" hash="request-cv">{t("Request my CV")} <ArrowUpRight /></Link></Button>
         </div>
         <div hidden={!cv}>
-          <h2 ref={cvHeading} tabIndex={-1} className="section-heading">Request my<br /><span className="font-editorial italic">CV.</span></h2>
-          <p className="section-intro">My CV is not published online. Tell me a little about yourself and why you would like it. I review every request personally and reply by email if I am able to share it.</p>
-          <Button asChild variant="link" className="text-link"><Link to="/" hash="contact"><ArrowLeft /> Back to contact</Link></Button>
+          <h2 ref={cvHeading} tabIndex={-1} className="section-heading"><Rich text={t("Request my\n*CV.*")} /></h2>
+          <p className="section-intro">{t("My CV is not published online. Tell me a little about yourself and why you would like it. I review every request personally and reply by email if I am able to share it.")}</p>
+          <Button asChild variant="link" className="text-link"><Link to="/" hash="contact"><ArrowLeft /> {t("Back to contact")}</Link></Button>
         </div>
-        <p className="contact-location">Based in Dhaka, Bangladesh.<br />Open to connections everywhere.</p>
+        <p className="contact-location"><Rich text={t("Based in Dhaka, Bangladesh.\nOpen to connections everywhere.")} /></p>
       </div>
       <div className="contact-form-wrap scroll-reveal">
         <div hidden={cv}><ContactForm /></div>
