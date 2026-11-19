@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useI18n } from "@/lib/i18n";
 import { KeepExploring } from "@/components/keep-exploring";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 
@@ -37,15 +38,16 @@ export function PageShell({ children }: { children: ReactNode }) {
 }
 
 export function PageIntro({ number, label, title, accent, children }: { number: string; label: string; title: string; accent?: string; children?: ReactNode }) {
+  const { t, num } = useI18n();
   return (
     <section className="page-intro">
-      <span className="section-mark" aria-hidden="true">{number}</span>
-      <div className="section-label"><span>{number} — {label}</span><Link to="/" hash="top" className="page-intro-link">Back to home</Link></div>
+      <span className="section-mark" aria-hidden="true">{num(number)}</span>
+      <div className="section-label"><span>{num(number)} — {t(label)}</span><Link to="/" hash="top" className="page-intro-link">{t("Back to home")}</Link></div>
       <h1 className="section-heading">
-        {title}
-        {accent && <><br /><span className="font-editorial italic">{accent}</span></>}
+        {t(title)}
+        {accent && <><br /><span className="font-editorial italic">{t(accent)}</span></>}
       </h1>
-      {children && <p className="section-intro">{children}</p>}
+      {children && <p className="section-intro">{typeof children === "string" ? t(children) : children}</p>}
     </section>
   );
 }
@@ -56,15 +58,16 @@ const GHOST_HUES = [285, 20, 190];
 
 /** A calm "nothing here yet" panel with a faint preview of how entries will look once published. */
 export function EmptyState({ title, icon, kind = "cards", children }: { title: string; icon: ReactNode; kind?: EmptyKind; children?: ReactNode }) {
+  const { t } = useI18n();
   return (
     <div className="empty" role="status">
       <div className="empty-head">
         <span className="empty-icon" aria-hidden="true">{icon}</span>
         <div>
-          <p className="empty-title">{title}</p>
-          {children && <p className="empty-text">{children}</p>}
+          <p className="empty-title">{t(title)}</p>
+          {children && <p className="empty-text">{typeof children === "string" ? t(children) : children}</p>}
         </div>
-        <span className="empty-pill">Coming soon</span>
+        <span className="empty-pill">{t("Coming soon")}</span>
       </div>
       <div className={`ghost ghost-${kind}`} aria-hidden="true">
         {kind === "cards" && GHOST_HUES.map((hue) => (

@@ -3,6 +3,7 @@ import { FileText } from "lucide-react";
 import { EmptyState, PageIntro, PageShell } from "@/components/page-shell";
 import { NoticeBoard } from "@/components/notice-board";
 import { getAnnouncements } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/notices")({
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/notices")({
 });
 
 function NoticesPage() {
+  const { t } = useI18n();
   const announcements = getAnnouncements();
   return (
     <PageShell>
@@ -34,9 +36,9 @@ function NoticesPage() {
       >
         <div className="announcement-intro">
           <h2 id="notices-title" className="page-section-title">
-            All updates
+            {t("All updates")}
           </h2>
-          <p>Everything in one place, newest first.</p>
+          <p>{t("Everything in one place, newest first.")}</p>
         </div>
         {announcements.length > 0 ? (
           <NoticeBoard items={announcements} filters />

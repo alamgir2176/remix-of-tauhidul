@@ -8,6 +8,7 @@ import { ContactPanel } from "@/components/contact-panel";
 import { ActivitiesSection, NoticesSection, WritingSection } from "@/components/home-sections";
 import { SiteFooter, SiteHeader, LINKEDIN } from "@/components/site-chrome";
 import { VisitorFaq } from "@/components/visitor-faq";
+import { Rich, useI18n } from "@/lib/i18n";
 import { portraitUrl } from "@/lib/portrait-url";
 import { profileJsonLd, publicHomepage } from "@/lib/site-metadata";
 
@@ -43,6 +44,7 @@ const PERSPECTIVES = [
 ];
 
 function Index() {
+  const { t, num } = useI18n();
   const [expanded, setExpanded] = useState<number | null>(0);
   const [backgroundOpen, setBackgroundOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -87,10 +89,10 @@ function Index() {
 
   return (
     <div id="top">
-      <Link to="/" hash="main" className="skip-link" onClick={() => document.getElementById("main")?.focus()}>Skip to content</Link>
+      <Link to="/" hash="main" className="skip-link" onClick={() => document.getElementById("main")?.focus()}>{t("Skip to content")}</Link>
       <SiteHeader active={active} scrolled={scrolled} hidden={hidden} progressRef={progress} />
       <main id="main" tabIndex={-1}>
-        <section className="identity-hero" aria-label="Introduction">
+        <section className="identity-hero" aria-label={t("Introduction")}>
           <div className="hero-art" aria-hidden="true">
             <svg viewBox="0 0 800 800" preserveAspectRatio="xMaxYMid slice" focusable="false">
               <path className="art-blob" d="M330 80C470-10 700 30 790 190L800 800H240C200 640 130 520 170 360 200 230 230 150 330 80Z" />
@@ -100,20 +102,20 @@ function Index() {
               <path className="art-arc art-arc-2" pathLength="1" d="M190 740C150 480 250 250 470 150" />
             </svg>
           </div>
-          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(HERO_CUTOUT)} alt="Portrait of Md Tauhidul Islam wearing a navy suit and tie" fetchPriority="high" className="photo-mono" /></div>
+          <div className="hero-image"><img ref={heroPhoto} src={portraitUrl(HERO_CUTOUT)} alt={t("Portrait of Md Tauhidul Islam wearing a navy suit and tie")} fetchPriority="high" className="photo-mono" /></div>
           <div className="hero-shade" aria-hidden="true" />
-          <div className="hero-topline"><span>A personal perspective</span><span>Dhaka, Bangladesh</span></div>
+          <div className="hero-topline"><span>{t("A personal perspective")}</span><span>{t("Dhaka, Bangladesh")}</span></div>
           <div className="hero-copy">
-            <p className="hero-intro enter">BA &amp; MA in Philosophy · Jahangirnagar University</p>
-            <h1 className="enter">Md Tauhidul<br /><span className="font-editorial italic">Islam.</span></h1>
-            <div className="hero-bottom enter"><p>Philosophy, theatre, and everyday life.<br />A story rooted in Bangladesh.</p><Link to="/" hash="about" className="hero-cta" aria-label="View my journey: discover my story">View My Journey <ArrowRight aria-hidden="true" /></Link></div>
+            <p className="hero-intro enter">{t("BA & MA in Philosophy · Jahangirnagar University")}</p>
+            <h1 className="enter"><Rich text={t("Md Tauhidul\n*Islam.*")} /></h1>
+            <div className="hero-bottom enter"><p><Rich text={t("Philosophy, theatre, and everyday life.\nA story rooted in Bangladesh.")} /></p><Link to="/" hash="about" className="hero-cta" aria-label={t("View my journey: discover my story")}>{t("View My Journey")} <ArrowRight aria-hidden="true" /></Link></div>
           </div>
-          <span className="hero-index">01 / A life in progress</span>
+          <span className="hero-index">{num("01")} / {t("A life in progress")}</span>
         </section>
 
-        <section id="about" className="about-section section-space"><span className="section-mark" aria-hidden="true">01</span><div className="section-label"><span>01 — The person</span><span>More than a title</span></div>
+        <section id="about" className="about-section section-space"><span className="section-mark" aria-hidden="true">{num("01")}</span><div className="section-label"><span>{num("01")} — {t("The person")}</span><span>{t("More than a title")}</span></div>
           <div className="about-layout">
-            <div className="scroll-reveal"><h2 className="statement">Philosophy, books<br />and <span className="font-editorial italic">people.</span></h2><p className="about-lead">I’m Tauhidul. I studied philosophy at Jahangirnagar University, both my BA and MA, and I’m still interested in the same few questions: how we think, how we live together, and what technology is doing to both.</p><div className="about-body"><p>Outside lectures I spent a few years with student groups, running admission helpdesks, organising welcome events and handing out winter clothes. I also spent some time on stage with Jahangirnagar Theatre.</p><p>I’m from Bangladesh. I read mostly Bengali novels, I like seeing how people live in places I haven’t been, and I’m happy to talk about any of it.</p></div><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">Find me on LinkedIn <ArrowUpRight /></a></Button></div>
+            <div className="scroll-reveal"><h2 className="statement"><Rich text={t("Philosophy, books\nand *people.*")} /></h2><p className="about-lead">{t("I’m Tauhidul. I studied philosophy at Jahangirnagar University, both my BA and MA, and I’m still interested in the same few questions: how we think, how we live together, and what technology is doing to both.")}</p><div className="about-body"><p>{t("Outside lectures I spent a few years with student groups, running admission helpdesks, organising welcome events and handing out winter clothes. I also spent some time on stage with Jahangirnagar Theatre.")}</p><p>{t("I’m from Bangladesh. I read mostly Bengali novels, I like seeing how people live in places I haven’t been, and I’m happy to talk about any of it.")}</p></div><Button asChild variant="link" className="text-link"><a href={LINKEDIN} target="_blank" rel="noreferrer">{t("Find me on LinkedIn")} <ArrowUpRight /></a></Button></div>
           </div>
         </section>
 
@@ -121,32 +123,32 @@ function Index() {
 
         <section id="perspective" className="perspective-section">
           <div className="perspective-banner section-space">
-            <span className="section-mark" aria-hidden="true">03</span>
-            <div className="section-label"><span>03 — Perspective</span><span>A way of approaching the world</span></div>
+            <span className="section-mark" aria-hidden="true">{num("03")}</span>
+            <div className="section-label"><span>{num("03")} — {t("Perspective")}</span><span>{t("A way of approaching the world")}</span></div>
             <div className="perspective-banner-grid">
-              <div className="perspective-banner-copy scroll-reveal"><h2 className="section-heading">How I see<br /><span className="font-editorial italic">things.</span></h2><p className="section-intro">Not a list of skills. Three habits that<br className="hidden sm:block" /> shape how I think and work.</p></div>
-              <figure className="perspective-figure scroll-reveal"><img src="/images/site/perspective-banner.jpg" alt="Two paperback classics, Kafka’s The Trial and Orwell’s 1984, with a small plant on a white table" width={1376} height={768} loading="lazy" decoding="async" onError={(e) => { const f = e.currentTarget.closest("figure"); if (f) (f as HTMLElement).style.display = "none"; }} /></figure>
+              <div className="perspective-banner-copy scroll-reveal"><h2 className="section-heading"><Rich text={t("How I see\n*things.*")} /></h2><p className="section-intro">{t("Not a list of skills. Three habits that shape how I think and work.")}</p></div>
+              <figure className="perspective-figure scroll-reveal"><img src="/images/site/perspective-banner.jpg" alt={t("Two paperback classics, Kafka’s The Trial and Orwell’s 1984, with a small plant on a white table")} width={1376} height={768} loading="lazy" decoding="async" onError={(e) => { const f = e.currentTarget.closest("figure"); if (f) (f as HTMLElement).style.display = "none"; }} /></figure>
             </div>
           </div>
           <div className="perspective-body section-space">
-            <div className="perspective-list scroll-reveal">{PERSPECTIVES.map((item, i) => <article key={item.title} className="perspective-item"><Button variant="ghost" className="perspective-trigger" aria-expanded={expanded === i} aria-controls={`perspective-${i}`} onClick={() => setExpanded(expanded === i ? null : i)}><span className="item-number">0{i + 1}</span><span>{item.title}</span>{expanded === i ? <Minus /> : <Plus />}</Button><div id={`perspective-${i}`} hidden={expanded !== i} className="perspective-detail"><p className="micro-label">{item.subtitle}</p><p>{item.text}</p><p className="detail-tools">{item.detail}</p></div></article>)}</div>
+            <div className="perspective-list scroll-reveal">{PERSPECTIVES.map((item, i) => <article key={item.title} className="perspective-item"><Button variant="ghost" className="perspective-trigger" aria-expanded={expanded === i} aria-controls={`perspective-${i}`} onClick={() => setExpanded(expanded === i ? null : i)}><span className="item-number">{num(0)}{num(i + 1)}</span><span>{t(item.title)}</span>{expanded === i ? <Minus /> : <Plus />}</Button><div id={`perspective-${i}`} hidden={expanded !== i} className="perspective-detail"><p className="micro-label">{t(item.subtitle)}</p><p>{t(item.text)}</p><p className="detail-tools">{t(item.detail)}</p></div></article>)}</div>
           </div>
         </section>
 
-        <section id="beyond" className="beyond-section section-space"><span className="section-mark" aria-hidden="true">04</span>
-          <div className="section-label"><span>04 — Beyond the page</span><span>Stage, community and books</span></div>
-          <h2 className="section-heading scroll-reveal">Beyond<br />the <span className="font-editorial italic">classroom.</span></h2>
-          <div className="beyond-layout"><figure className="beyond-portrait scroll-reveal"><img src={portraitUrl(navy)} alt="Portrait of Md Tauhidul Islam in a navy suit with a maroon tie" loading="lazy" className="photo-mono" /><figcaption>Still learning. Still listening.</figcaption></figure><div className="experience-stories"><article className="scroll-reveal"><span className="micro-label">On the stage</span><h3>Jahangirnagar Theatre.</h3><p>In 2018 I helped organise a theatre festival that brought university and other groups from across Bangladesh to Jahangirnagar, and I acted in “Nikhoj Songbad” at Selim Al Din Muktomoncho.</p></article><article className="scroll-reveal"><span className="micro-label">In the community</span><h3>Student and community work.</h3><p>With the Barishal Divisional Students Welfare Association I helped give winter clothes to 300 people and ran admission-test helpdesks. With Bandhan I donated blood and helped connect people who needed it with donors.</p></article><article className="scroll-reveal"><span className="micro-label">In the everyday</span><h3>Books and places.</h3><p>I collect Bengali novels, mostly, and I like travelling to see how people live somewhere new.</p></article></div></div>
-          <div className="background-row"><div><span className="micro-label">The foundation</span><p>BA and MA in Philosophy.<br /><span className="text-muted-foreground">Jahangirnagar University.</span></p></div><Button variant="ghost" className="background-toggle" aria-expanded={backgroundOpen} aria-controls="background-details" onClick={() => setBackgroundOpen(!backgroundOpen)}>Education & continued learning {backgroundOpen ? <Minus /> : <Plus />}</Button></div>
-          <div id="background-details" hidden={!backgroundOpen} className="background-details"><div><h3>Education</h3>{[["M.A. in Philosophy", "Jahangirnagar University, Dhaka"],["B.A. in Philosophy", "Jahangirnagar University, Dhaka"],["HSC, Humanities", "Govt. Syed Hatem Ali College, Barishal"],["SSC, Humanities", "Amua Bandar Amir Molla Secondary School, Jhalokati"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div><div><h3>Continued learning</h3>{[["Generative AI Mastermind", "Outskill · 2025"],["Fundamentals of Digital Marketing", "Google Digital Garage · 2021"],["Elements of AI", "University of Helsinki & Reaktor · 2021"],["Learn Blockchain Features in a Simple Way", "upGrad · 2021"],["Covid-19 Awareness and Prevention", "Muktopaath"]].map(([title, school]) => <div key={title}><p>{title}</p><span>{school}</span></div>)}</div></div>
+        <section id="beyond" className="beyond-section section-space"><span className="section-mark" aria-hidden="true">{num("04")}</span>
+          <div className="section-label"><span>{num("04")} — {t("Beyond the page")}</span><span>{t("Stage, community and books")}</span></div>
+          <h2 className="section-heading scroll-reveal"><Rich text={t("Beyond\nthe *classroom.*")} /></h2>
+          <div className="beyond-layout"><figure className="beyond-portrait scroll-reveal"><img src={portraitUrl(navy)} alt={t("Portrait of Md Tauhidul Islam in a navy suit with a maroon tie")} loading="lazy" className="photo-mono" /><figcaption>{t("Still learning. Still listening.")}</figcaption></figure><div className="experience-stories"><article className="scroll-reveal"><span className="micro-label">{t("On the stage")}</span><h3>{t("Jahangirnagar Theatre.")}</h3><p>{t("In 2018 I helped organise a theatre festival that brought university and other groups from across Bangladesh to Jahangirnagar, and I acted in “Nikhoj Songbad” at Selim Al Din Muktomoncho.")}</p></article><article className="scroll-reveal"><span className="micro-label">{t("In the community")}</span><h3>{t("Student and community work.")}</h3><p>{t("With the Barishal Divisional Students Welfare Association I helped give winter clothes to 300 people and ran admission-test helpdesks. With Bandhan I donated blood and helped connect people who needed it with donors.")}</p></article><article className="scroll-reveal"><span className="micro-label">{t("In the everyday")}</span><h3>{t("Books and places.")}</h3><p>{t("I collect Bengali novels, mostly, and I like travelling to see how people live somewhere new.")}</p></article></div></div>
+          <div className="background-row"><div><span className="micro-label">{t("The foundation")}</span><p>{t("BA and MA in Philosophy.")}<br /><span className="text-muted-foreground">{t("Jahangirnagar University.")}</span></p></div><Button variant="ghost" className="background-toggle" aria-expanded={backgroundOpen} aria-controls="background-details" onClick={() => setBackgroundOpen(!backgroundOpen)}>{t("Education & continued learning")} {backgroundOpen ? <Minus /> : <Plus />}</Button></div>
+          <div id="background-details" hidden={!backgroundOpen} className="background-details"><div><h3>{t("Education")}</h3>{[["M.A. in Philosophy", "Jahangirnagar University, Dhaka"],["B.A. in Philosophy", "Jahangirnagar University, Dhaka"],["HSC, Humanities", "Govt. Syed Hatem Ali College, Barishal"],["SSC, Humanities", "Amua Bandar Amir Molla Secondary School, Jhalokati"]].map(([title, school]) => <div key={title}><p>{t(title ?? "")}</p><span>{t(school ?? "")}</span></div>)}</div><div><h3>{t("Continued learning")}</h3>{[["Generative AI Mastermind", "Outskill · 2025"],["Fundamentals of Digital Marketing", "Google Digital Garage · 2021"],["Elements of AI", "University of Helsinki & Reaktor · 2021"],["Learn Blockchain Features in a Simple Way", "upGrad · 2021"],["Covid-19 Awareness and Prevention", "Muktopaath"]].map(([title, school]) => <div key={title}><p>{t(title ?? "")}</p><span>{t(school ?? "")}</span></div>)}</div></div>
         </section>
 
         <NoticesSection />
         <ActivitiesSection />
 
-        <section className="interlude" aria-label="A continuing story"><div className="interlude-bg" aria-hidden="true"><img ref={interludeBg} src={portraitUrl(studioWide)} alt="" loading="lazy" className="photo-mono" /></div><div className="interlude-inner scroll-reveal"><span className="micro-label">A continuing story</span><p>Still reading.<br />Still <span className="font-editorial italic">asking.</span></p><span>Questions are always welcome.</span></div></section>
+        <section className="interlude" aria-label={t("A continuing story")}><div className="interlude-bg" aria-hidden="true"><img ref={interludeBg} src={portraitUrl(studioWide)} alt="" loading="lazy" className="photo-mono" /></div><div className="interlude-inner scroll-reveal"><span className="micro-label">{t("A continuing story")}</span><p><Rich text={t("Still reading.\nStill *asking.*")} /></p><span>{t("Questions are always welcome.")}</span></div></section>
 
-        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">07</span><div className="section-label"><span>07 — Get in touch</span><span>Work, ideas, or just hello</span></div><ContactPanel /><VisitorFaq /></section>
+        <section id="contact" className="contact-section section-space"><span className="section-mark" aria-hidden="true">{num("07")}</span><div className="section-label"><span>{num("07")} — {t("Get in touch")}</span><span>{t("Work, ideas, or just hello")}</span></div><ContactPanel /><VisitorFaq /></section>
       </main>
       <SiteFooter />
     </div>

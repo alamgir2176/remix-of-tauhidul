@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import { FadeImg } from "@/components/fade-img";
-import { safeUrl, type Block, type Inline } from "@/lib/markdown";
+import { useI18n } from "@/lib/i18n";
+import { inlineText, safeUrl, type Block, type Inline } from "@/lib/markdown";
+
+type LangOf = (text: string) => { lang?: string; dir?: "rtl" };
 
 function renderInline(nodes: Inline[]): ReactNode[] {
   return nodes.map((node, i) => {
@@ -36,22 +39,22 @@ function Caption({ text }: { text: string }) {
   return text ? <figcaption>{text}</figcaption> : null;
 }
 
-function renderBlocks(blocks: Block[], shift: number): ReactNode[] {
+function renderBlocks(blocks: Block[], shift: number, la: LangOf): ReactNode[] {
   return blocks.map((block, i) => {
     switch (block.t) {
       case "heading": {
         const level = Math.min(6, block.level + shift);
         const Tag = `h${level}` as "h2";
         return (
-          <Tag key={i} id={block.id}>
+          <Tag key={i} id={block.id} {...la(inlineText(block.c))}>
             {renderInline(block.c)}
           </Tag>
         );
       }
       case "p":
-        return <p key={i}>{renderInline(block.c)}</p>;
+        return <p key={i} {...la(inlineText(block.c))}>{renderInline(block.c)}</p>;
       case "quote":
-        return <blockquote key={i}>{renderBlocks(block.c, shift)}</blockquote>;
+        return <blockquote key={i}>{renderBlocks(block.c, shift, la)}</blockquote>;
       case "hr":
         return <hr key={i} />;
       case "code":
@@ -64,7 +67,7 @@ function renderBlocks(blocks: Block[], shift: number): ReactNode[] {
         const items = block.items.map((item, k) => (
           <li key={k}>
             {renderInline(item.c)}
-            {item.children.length > 0 && renderBlocks(item.children, shift)}
+            {item.children.length > 0 && renderBlocks(item.children, shift, la)}
           </li>
         ));
         return block.ordered ? (
@@ -150,7 +153,8 @@ function renderBlocks(blocks: Block[], shift: number): ReactNode[] {
 
 /** Renders parsed Markdown blocks. If the article uses `#` headings they are demoted below the page title. */
 export function MarkdownView({ blocks }: { blocks: Block[] }) {
+  const { la } = useI18n();
   const levels = blocks.flatMap((b) => (b.t === "heading" ? [b.level] : []));
   const shift = levels.length > 0 && Math.min(...levels) === 1 ? 1 : 0;
-  return <div className="article-body">{renderBlocks(blocks, shift)}</div>;
+  return <div className="article-body">{renderBlocks(blocks, shift, la)}</div>;
 }

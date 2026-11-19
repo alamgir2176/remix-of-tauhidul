@@ -2,6 +2,8 @@ import type { CSSProperties, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { FeedCard, TYPE_HUE } from "@/components/content-cards";
+import { LangTag } from "@/components/language-switch";
+import { useI18n } from "@/lib/i18n";
 import { formatDate, hostOf } from "@/lib/content-utils";
 import type { FeedItem } from "@/lib/content";
 
@@ -16,18 +18,23 @@ function ItemLink({ item, className, children }: { item: FeedItem; className: st
 }
 
 function Meta({ item }: { item: FeedItem }) {
-  const date = formatDate(item.date);
+  const { t, date: fmt } = useI18n();
+  const date = fmt(item.date, formatDate(item.date));
   const host = !item.slug && item.url ? hostOf(item.url) : "";
   return (
     <p className="portal-meta">
-      <span className="portal-type">{item.type}</span>
+      <span className="portal-type">{t(item.type)}</span>
       {date && <span>{date}</span>}
       {host && <span className="portal-host">{host}</span>}
+      <LangTag text={item.title} />
     </p>
   );
 }
 
 function Lead({ item }: { item: FeedItem }) {
+  const { t, la } = useI18n();
+  const title = t(item.title);
+  const description = t(item.description);
   return (
     <ItemLink item={item} className="portal-lead">
       <div className="portal-lead-media">
@@ -39,20 +46,22 @@ function Lead({ item }: { item: FeedItem }) {
       </div>
       <div className="portal-lead-body">
         <Meta item={item} />
-        <h3 className="portal-lead-title">{item.title}</h3>
-        {item.description && <p className="portal-lead-text">{item.description}</p>}
-        <span className="portal-read">{item.slug ? "Read" : "Open"} <ArrowUpRight aria-hidden="true" /></span>
+        <h3 className="portal-lead-title" {...la(title)}>{title}</h3>
+        {description && <p className="portal-lead-text" {...la(description)}>{description}</p>}
+        <span className="portal-read">{item.slug ? t("Read") : t("Open")} <ArrowUpRight aria-hidden="true" /></span>
       </div>
     </ItemLink>
   );
 }
 
 function Row({ item }: { item: FeedItem }) {
+  const { t, la } = useI18n();
+  const title = t(item.title);
   return (
     <ItemLink item={item} className="portal-row">
       <div className="portal-row-body">
         <Meta item={item} />
-        <h3 className="portal-row-title">{item.title}</h3>
+        <h3 className="portal-row-title" {...la(title)}>{title}</h3>
       </div>
       {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" className="photo-mono" />}
     </ItemLink>
@@ -84,6 +93,7 @@ export function PortalFeed({ items, more }: { items: FeedItem[]; more?: ReactNod
 
 /** A full listing page: the front-page layout for the newest few, then a grid for everything else. */
 export function PortalPage({ items }: { items: FeedItem[] }) {
+  const { t } = useI18n();
   const front = items.slice(0, 4);
   const rest = items.slice(4);
   return (
@@ -91,7 +101,7 @@ export function PortalPage({ items }: { items: FeedItem[] }) {
       <PortalFeed items={front} />
       {rest.length > 0 && (
         <>
-          <p className="portal-earlier micro-label">Earlier</p>
+          <p className="portal-earlier micro-label">{t("Earlier")}</p>
           <div className="portal-grid">
             {rest.map((item) => (
               <FeedCard key={item.key} item={item} />

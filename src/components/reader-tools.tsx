@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n";
 import { Headphones, Minus, Pause, Play, Plus, Square } from "lucide-react";
 
 const SCALE_KEY = "tauhidul-reader-scale";
@@ -53,6 +54,7 @@ interface Unit {
 
 /** Reading comfort: a thin progress line, text size, and the browser's own read-aloud. Nothing is downloaded. */
 export function ReaderTools() {
+  const { t, num } = useI18n();
   const [scale, setScale] = useState(1);
   const [state, setState] = useState<"idle" | "playing" | "paused">("idle");
   const [canSpeak, setCanSpeak] = useState(false);
@@ -203,30 +205,30 @@ export function ReaderTools() {
   return (
     <>
       <div className="reader-progress" aria-hidden="true"><span ref={bar} /></div>
-      <div className="reader-tools" role="group" aria-label="Reading options">
-        <button type="button" onClick={() => change(-1)} disabled={scale <= SCALES[0]!} aria-label="Smaller text"><Minus aria-hidden="true" /></button>
+      <div className="reader-tools" role="group" aria-label={t("Reading options")}>
+        <button type="button" onClick={() => change(-1)} disabled={scale <= SCALES[0]!} aria-label={t("Smaller text")}><Minus aria-hidden="true" /></button>
         <span aria-hidden="true">Aa</span>
-        <button type="button" onClick={() => change(1)} disabled={scale >= SCALES[SCALES.length - 1]!} aria-label="Larger text"><Plus aria-hidden="true" /></button>
+        <button type="button" onClick={() => change(1)} disabled={scale >= SCALES[SCALES.length - 1]!} aria-label={t("Larger text")}><Plus aria-hidden="true" /></button>
         {canSpeak && (
           <button type="button" className="reader-listen" onClick={listen} aria-pressed={active}>
             {active ? <Square aria-hidden="true" /> : <Headphones aria-hidden="true" />}
-            <span>{active ? "Stop" : "Listen"}</span>
+            <span>{active ? t("Stop") : t("Listen")}</span>
           </button>
         )}
       </div>
       {active && (
-        <div className="listen-bar" role="group" aria-label="Read-aloud controls">
-          <button type="button" className="listen-main" onClick={togglePause} aria-label={state === "playing" ? "Pause" : "Resume"}>
+        <div className="listen-bar" role="group" aria-label={t("Read-aloud controls")}>
+          <button type="button" className="listen-main" onClick={togglePause} aria-label={state === "playing" ? t("Pause") : t("Resume")}>
             {state === "playing" ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
           </button>
-          <span className="listen-status" role="status">{state === "playing" ? "Reading aloud" : "Paused"} <small>{position.at} / {position.of}</small></span>
-          <button type="button" className="listen-rate" onClick={chooseRate} aria-label={`Speed ${rate}. Change speed`}>{rate === 0.92 ? "Calm" : rate < 0.92 ? "Slow" : rate < 1.1 ? "Normal" : "Quick"}</button>
+          <span className="listen-status" role="status">{state === "playing" ? t("Reading aloud") : t("Paused")} <small>{num(position.at)} / {num(position.of)}</small></span>
+          <button type="button" className="listen-rate" onClick={chooseRate} aria-label={t("Change speed")}>{rate === 0.92 ? t("Calm") : rate < 0.92 ? t("Slow") : rate < 1.1 ? t("Normal") : t("Quick")}</button>
           {choices.length > 1 && (
-            <select className="listen-voice" aria-label="Voice" value={voice?.name ?? ""} onChange={(e) => chooseVoice(e.target.value)}>
+            <select className="listen-voice" aria-label={t("Voice")} value={voice?.name ?? ""} onChange={(e) => chooseVoice(e.target.value)}>
               {choices.slice(0, 8).map((v) => <option key={v.name} value={v.name}>{v.name.replace(/^(Microsoft|Google)\s+/, "")}</option>)}
             </select>
           )}
-          <button type="button" className="listen-stop" onClick={stop} aria-label="Stop reading"><Square aria-hidden="true" /></button>
+          <button type="button" className="listen-stop" onClick={stop} aria-label={t("Stop reading")}><Square aria-hidden="true" /></button>
         </div>
       )}
     </>

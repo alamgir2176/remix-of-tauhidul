@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { ImageDown } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 const ShareLineCard = lazy(() => import("@/components/share-line-card"));
 
@@ -14,6 +15,7 @@ interface Picked {
  * The picture is drawn in the browser on a canvas (code loads only when it is used).
  */
 export function ShareLine({ title, url, scope = ".article-body", byline = "Md Tauhidul Islam" }: { title: string; url: string; scope?: string; byline?: string }) {
+  const { t } = useI18n();
   const [picked, setPicked] = useState<Picked | null>(null);
   const [open, setOpen] = useState<string | null>(null);
 
@@ -58,7 +60,7 @@ export function ShareLine({ title, url, scope = ".article-body", byline = "Md Ta
             setPicked(null);
           }}
         >
-          <ImageDown aria-hidden="true" /> Share as image
+          <ImageDown aria-hidden="true" /> {t("Share as image")}
         </button>
       )}
       {open && (

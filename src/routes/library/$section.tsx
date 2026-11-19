@@ -5,6 +5,7 @@ import { PortalPage } from "@/components/portal";
 import { TypeChips } from "@/components/type-chips";
 import { getSectionFeed } from "@/lib/content";
 import { findExternalSection } from "@/lib/content-utils";
+import { useI18n } from "@/lib/i18n";
 import { pageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/library/$section")({
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/library/$section")({
 });
 
 function SectionPage() {
+  const { t } = useI18n();
   const { slug } = Route.useLoaderData();
   const section = findExternalSection(slug);
   if (!section) return null;
@@ -34,12 +36,12 @@ function SectionPage() {
       <PageIntro number="02" label={section.title} title={section.title}>
         {section.blurb}
       </PageIntro>
-      <section className="page-section" aria-label={section.title}>
+      <section className="page-section" aria-label={t(section.title)}>
         <TypeChips active={section.slug} />
         {items.length > 0 ? (
           <PortalPage items={items} />
         ) : (
-          <EmptyState icon={<PenLine />} title={`No ${section.title.toLowerCase()} yet.`}>
+          <EmptyState icon={<PenLine />} title={t("No {name} yet.", { name: t(section.title).toLowerCase() })}>
             Entries will appear here as soon as they are added.
           </EmptyState>
         )}

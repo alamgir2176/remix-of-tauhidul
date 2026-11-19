@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, X } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 const SIZE = 1080;
 
@@ -69,6 +70,7 @@ function draw(canvas: HTMLCanvasElement, text: string, title: string, byline: st
 
 /** The picture itself: drawn on a canvas in the visitor's current theme colours. */
 export default function ShareLineCard({ text, title, byline, url, onClose }: { text: string; title: string; byline: string; url: string; onClose: () => void }) {
+  const { t } = useI18n();
   const canvas = useRef<HTMLCanvasElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const [canShare, setCanShare] = useState(false);
@@ -116,16 +118,16 @@ export default function ShareLineCard({ text, title, byline, url, onClose }: { t
   }
 
   return (
-    <div className="slc" role="dialog" aria-modal="true" aria-label="Share this line as an image">
+    <div className="slc" role="dialog" aria-modal="true" aria-label={t("Share this line as an image")}>
       <div className="slc-backdrop" onClick={onClose} />
       <div className="slc-panel">
-        <button ref={closeBtn} type="button" className="slc-close" onClick={onClose} aria-label="Close">
+        <button ref={closeBtn} type="button" className="slc-close" onClick={onClose} aria-label={t("Close")}>
           <X aria-hidden="true" />
         </button>
-        <canvas ref={canvas} role="img" aria-label={`Quote card: ${text}`} />
+        <canvas ref={canvas} role="img" aria-label={t("Quote card: {text}", { text })} />
         <div className="slc-actions">
-          <button type="button" onClick={save}><Download aria-hidden="true" /> Save image</button>
-          {canShare && <button type="button" onClick={share}>Share…</button>}
+          <button type="button" onClick={save}><Download aria-hidden="true" /> {t("Save image")}</button>
+          {canShare && <button type="button" onClick={share}>{t("Share…")}</button>}
         </div>
       </div>
     </div>
